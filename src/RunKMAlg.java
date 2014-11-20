@@ -55,7 +55,6 @@ public class RunKMAlg {
         }
 
         
-        
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
         System.out.println("\nTime taken: " + duration/1000 + " seconds");
