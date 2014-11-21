@@ -37,6 +37,7 @@ public class FourierLeaner {
         this.currentSample = null;
     }
     
+    
     /**
      * Section 1: Utility functions.
      */
