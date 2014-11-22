@@ -1,4 +1,7 @@
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import org.ejml.simple.SimpleMatrix;
 
 /*
@@ -26,7 +29,7 @@ public class FourierResult {
         return(fCoefs);
     }
     
-    public double h(double[] x){
+    public double h(SimpleMatrix x){
         
         double val = 0;
         
@@ -36,16 +39,37 @@ public class FourierResult {
         
         for(int i = 0; i < m;++i){
             
-            double [] input = new double[n];
-            for(int j = 0; j < n; ++j){
-                input[j] = this.fCoefs.get(i, j);
-            }
-            
+            SimpleMatrix input = this.fCoefs.extractMatrix(i, i+1, 0, n);
             val = val + FourierLeaner.character(input, x)*this.fCoefs.get(i, n);
         }
-        
-        
+
         return(val);
     }
+    
+    public void estimateAllSample(String sysName, String sampleLoc){
+        
+        try{
+            SimpleMatrix allSample = SimpleMatrix.loadCSV(sampleLoc);
+            
+            int m = allSample.numRows();
+            int n = allSample.numCols() - 1;
+            
+            for(int i = 0; i < m;++i){
+                SimpleMatrix input = allSample.extractMatrix(i, i+1, 0, n);
+                
+                allSample.set(i, n , this.h(input));
+            }
+            
+            String newName = sysName + "Estimated.csv";
+            allSample.saveToFileCSV(newName);
+            
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+
+        
+        
+    }
+    
     
 }

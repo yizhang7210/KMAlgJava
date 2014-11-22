@@ -30,8 +30,8 @@ public class FourierLeaner {
     public FourierLeaner(String sysName, String sampleLoc){
         this.sysName = sysName;
         this.sampleLoc = sampleLoc;
-        this.numObs = this.getSampleDim(sampleLoc)[0];
-        this.numFeatures = this.getSampleDim(sampleLoc)[1] - 1;
+        this.numObs = FourierLeaner.getSampleDim(sampleLoc)[0];
+        this.numFeatures = FourierLeaner.getSampleDim(sampleLoc)[1] - 1;
         this.allSampleMap = this.readSampleToMap(sampleLoc);
         this.currentSample = null;
     }
@@ -57,7 +57,7 @@ public class FourierLeaner {
      * @param sampleLoc
      * @return [numFeatures, numObservations]
      */
-    private int[] getSampleDim(String sampleLoc){
+    public static int[] getSampleDim(String sampleLoc){
         try{
             FileReader r = new FileReader(sampleLoc);
             BufferedReader in = new BufferedReader(r);
@@ -125,9 +125,14 @@ public class FourierLeaner {
         for(int i = 0; i < z.length; ++i){
             sum = sum + z[i]*alpha[i];
         }
-        
         return(int) (Math.pow(-1, (int) sum%2));
     }
+    
+    public static int character(SimpleMatrix z, SimpleMatrix alpha){
+        
+        return( (int) (Math.pow(-1, z.dot(alpha))));
+    }
+    
     
     /**
      * Lookup the value of the input vec in the HashMap, return 0 if not found.
@@ -174,8 +179,8 @@ public class FourierLeaner {
         // k index the length of alpha, n rounds
         for(int k = 1; k <= this.numFeatures;++k){
             
-            int mm1 = (int) Math.min(m1, 10*Math.pow(2, this.numFeatures - k));
-            int mm2 = (int) Math.min(m2, 10*Math.pow(2, k));
+            int mm1 = (int) Math.min(m1, 50*Math.pow(2, this.numFeatures - k));
+            int mm2 = (int) Math.min(m2, 50*Math.pow(2, k));
             
             double [][] thisX = new double[mm1][this.numFeatures - k];
             double [][] thisY = new double[mm2][k];
