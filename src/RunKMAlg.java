@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.util.Arrays;
 import org.ejml.simple.SimpleMatrix;
 
 
@@ -29,31 +30,21 @@ public class RunKMAlg {
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/LLVMProcessed.csv"};
         
         
-        FourierLeaner K = new FourierLeaner("Apache", sampleLocs[2]);
+        FourierLeaner K = new FourierLeaner("Apache", sampleLocs[0]);
               
         
-        //K.print();
-        
-        /*SimpleMatrix AA = new SimpleMatrix(0, 0);
-        
-        SimpleMatrix A = SimpleMatrix.diag(1);
-        SimpleMatrix B = SimpleMatrix.diag(3);
-        
-        SimpleMatrix D = A.combine(0, 1, B);
-        
-        D.print();
+        K.print();
 
-        */
         SimpleMatrix fCoefs = K.learnByKM(1, 0.1);
         
         fCoefs.print();
-        
+        /*
         try{
             fCoefs.saveToFileCSV("fCoefs.csv");
         }catch(IOException e){
             throw new RuntimeException(e);
         }
-
+        */  
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;

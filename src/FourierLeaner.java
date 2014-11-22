@@ -21,7 +21,7 @@ public class FourierLeaner {
     private final String sysName;
     private final String sampleLoc;
     private final HashMap<String, Double> allSampleMap;
-    private SimpleMatrix[][] currentSample;
+    private double[][][][] currentSample;
     
     /**
      * Constructor: provide the name of the system and the location of samples
@@ -115,8 +115,19 @@ public class FourierLeaner {
      * @param alpha
      * @return char(z, alpha)
      */
-    private int character(SimpleMatrix z, SimpleMatrix alpha){
-        return(int) (Math.pow(-1, z.dot(alpha)));
+    private int character(double[] z, double[] alpha){
+        
+        if(z.length != alpha.length){
+            throw new RuntimeException("Character: length of vectors differ");
+        }
+        
+        double sum = 0;
+        
+        for(int i = 0; i < z.length; ++i){
+            sum = sum + z[i]*alpha[i];
+        }
+        
+        return(int) (Math.pow(-1, (int) sum%2));
     }
     
     /**
@@ -124,18 +135,28 @@ public class FourierLeaner {
      * @param vec
      * @return f(vec) or 0 if not sampled.
      */
-    private double lookup(SimpleMatrix vec){
+    private double lookup(double[] vec){
     
         String key = "";
         
-        for(int i = 0; i < vec.numCols();++i){
-            key += Integer.toString((int) vec.get(0, i));
+        for(int i = 0; i < vec.length ;++i){
+            key += Integer.toString((int) vec[i]);
         }
     
         double val = this.allSampleMap.getOrDefault(key, 0.0);
         
         return val;
     }
+    
+    
+    public double[] concat(double[] a, double[] b){
+        int length = a.length + b.length;
+        double[] result = new double[length];
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+    }
+
     
     /**
      * Generate the n pairs of samples for both the prefix and suffix.
@@ -145,32 +166,32 @@ public class FourierLeaner {
      * of samples for a prefix of length k. First column is the sample of
      * prefixes and the second column is the sample of the suffixes.
      */
-    private SimpleMatrix[][] generateSample(int m1, int m2){
+    private double[][][][] generateSample(int m1, int m2){
     
-        SimpleMatrix [][] theSample = new SimpleMatrix[this.numFeatures][2];
+        double [][][][] theSample = new double [this.numFeatures][2][][];
         
         Random gen = new Random();
         
         // k index the length of alpha, n rounds
         for(int k = 1; k <= this.numFeatures;++k){
             
-            int mm1 = (int) Math.min(m1, 2*Math.pow(2, this.numFeatures - k));
-            int mm2 = (int) Math.min(m2, 2*Math.pow(2, k));
+            int mm1 = (int) Math.min(m1, 10*Math.pow(2, this.numFeatures - k));
+            int mm2 = (int) Math.min(m2, 10*Math.pow(2, k));
             
-            SimpleMatrix thisX = new SimpleMatrix(mm1, this.numFeatures - k);
-            SimpleMatrix thisY = new SimpleMatrix(mm2, k);
+            double [][] thisX = new double[mm1][this.numFeatures - k];
+            double [][] thisY = new double[mm2][k];
             
             // initialize thisX
-            for(int i = 0; i < thisX.numRows(); ++i){
-                for(int j = 0; j < this.numFeatures - k; ++j){
-                    thisX.set(i, j, gen.nextInt(2));
+            for(int i = 0; i < thisX.length; ++i){
+                for(int j = 0; j < thisX[0].length; ++j){
+                    thisX[i][j] = gen.nextInt(2);
                 }
             }
             
             // initialize thisY
-            for(int i = 0; i < thisY.numRows(); ++i){
-                for(int j = 0; j < k; ++j){
-                    thisY.set(i, j, gen.nextInt(2));
+            for(int i = 0; i < thisY.length; ++i){
+                for(int j = 0; j < thisY[0].length; ++j){
+                    thisY[i][j] = gen.nextInt(2);
                 }
             }
             
@@ -189,9 +210,9 @@ public class FourierLeaner {
      * @param alpha
      * @return The sum of the squares.
      */
-    private double approx(SimpleMatrix alpha){
+    private double approx(double[] alpha){
         
-        int k = alpha.numCols();
+        int k = alpha.length;
         
         if(k == 0){
             return(Double.POSITIVE_INFINITY);
@@ -201,16 +222,16 @@ public class FourierLeaner {
         // sampleY has m2 rows and k columns
         
         if(k < this.numFeatures){
-            SimpleMatrix sampleX = this.currentSample[k-1][0];
-            SimpleMatrix sampleY = this.currentSample[k-1][1];
+            double[][] sampleX = this.currentSample[k-1][0];
+            double[][] sampleY = this.currentSample[k-1][1];
             
-            int m1 = sampleX.numRows();
-            int m2 = sampleY.numRows();
+            int m1 = sampleX.length;
+            int m2 = sampleY.length;
             
             int [] charYs = new int[m2];
             
             for(int i = 0; i < m2; ++i){
-                charYs[i] = this.character(alpha, sampleY.extractVector(true, i));
+                charYs[i] = this.character(alpha, sampleY[i]);
             }
             
             double A = 0;
@@ -218,11 +239,12 @@ public class FourierLeaner {
             
             for(int i = 0; i < m1;++i){
             
-                SimpleMatrix thisX = sampleX.extractVector(true, i);
+                double[] thisX = sampleX[i];
                 
                 for(int j = 0; j < m2; ++j){
-                    SimpleMatrix thisY = sampleY.extractVector(true, j);
-                    A += this.lookup(thisY.combine(0, thisY.numCols(), thisX))*charYs[j];
+                    double[] thisY = sampleY[j];
+                    
+                    A += this.lookup(this.concat(thisY, thisX))*charYs[j];
                 }
             
                 B += (A/m2)*(A/m2);
@@ -230,21 +252,19 @@ public class FourierLeaner {
             
             return(B/m1);
         }else{// k = n
-            this.count += 1;
-            System.out.println(this.count + "th coef");
             
-            SimpleMatrix sampleY = this.currentSample[k-1][1];
+            double[][] sampleY = this.currentSample[k-1][1];
             
-            int m2 = sampleY.numRows();
+            int m2 = sampleY.length;
             int [] charYs = new int[m2];
             
             for(int i = 0; i < m2; ++i){
-                charYs[i] = this.character(alpha, sampleY.extractVector(true, i));
+                charYs[i] = this.character(alpha, sampleY[i]);
             }
             
             double A = 0;
             for(int j = 0; j < m2; ++j){
-                SimpleMatrix thisY = sampleY.extractVector(true, j);
+                double[] thisY = sampleY[j];
                 A += this.lookup(thisY)*charYs[j];
             }
                 double B = A/m2;
@@ -277,9 +297,9 @@ public class FourierLeaner {
         
         this.currentSample = this.generateSample(m1, m2);
         
-        SimpleMatrix nullMat = new SimpleMatrix(0, 0);
+        double[] emptyAlpha = new double [0];
         
-        fCoefs = this.learnByKMImp(theta, delta, nullMat, fCoefs);
+        fCoefs = this.learnByKMImp(theta, delta, emptyAlpha, fCoefs);
         
         return(fCoefs);
     }
@@ -293,22 +313,26 @@ public class FourierLeaner {
      * @return Recursively return the intermediate list of Fourier coefficients.
      */
     private SimpleMatrix learnByKMImp(double theta, double delta, 
-                    SimpleMatrix alpha, SimpleMatrix fCoefs){
+                    double[] alpha, SimpleMatrix fCoefs){
     
         double bucketWeight = this.approx(alpha);
         
-        SimpleMatrix bucketWeightMat = SimpleMatrix.diag(
-                Math.signum(bucketWeight)*Math.sqrt(Math.abs(bucketWeight)));
+        double [] bucketWeightMat = {Math.signum(bucketWeight)*Math.sqrt(Math.abs(bucketWeight))};
         
         if(Math.abs(bucketWeight) >= theta*theta/2){
-            if(alpha.numCols() == this.numFeatures){
-                SimpleMatrix newRow = alpha.combine(0, this.numFeatures, bucketWeightMat);
+            if(alpha.length == this.numFeatures){
                 
-                fCoefs = fCoefs.combine(fCoefs.numRows(), 0, newRow);
+                double[][] newRow = {this.concat(alpha, bucketWeightMat)};
+                
+                SimpleMatrix newRowMat = new SimpleMatrix(newRow);
+                
+                fCoefs = fCoefs.combine(fCoefs.numRows(), 0, newRowMat);
             }else{
                 
-                SimpleMatrix newAlpha1 = alpha.combine(0, alpha.numCols(), SimpleMatrix.diag(0));
-                SimpleMatrix newAlpha2 = alpha.combine(0, alpha.numCols(), SimpleMatrix.diag(1));
+                double [] zero = {0};
+                double [] one = {1};
+                double[] newAlpha1 = this.concat(alpha, zero);
+                double[] newAlpha2 = this.concat(alpha, one);
                 
                 SimpleMatrix table1 = this.learnByKMImp(theta, delta, newAlpha1, fCoefs);
                 SimpleMatrix table2 = this.learnByKMImp(theta, delta, newAlpha2, fCoefs);

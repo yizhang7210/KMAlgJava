@@ -18,5 +18,10 @@ public class FourierTransformer {
         return(fCoefs);
     }
     
+    public static SimpleMatrix fourierToDerivative(SimpleMatrix fCoefs){
+        
+        
+        return(fCoefs);
+    }
     
 }
