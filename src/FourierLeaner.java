@@ -15,7 +15,6 @@ import org.ejml.simple.SimpleMatrix;
 public class FourierLeaner {
     
     // Useful parameters
-    private int count = 0;
     private final int numObs;
     private final int numFeatures;
     private final String sysName;
@@ -115,7 +114,7 @@ public class FourierLeaner {
      * @param alpha
      * @return char(z, alpha)
      */
-    private int character(double[] z, double[] alpha){
+    public static int character(double[] z, double[] alpha){
         
         if(z.length != alpha.length){
             throw new RuntimeException("Character: length of vectors differ");
@@ -231,7 +230,7 @@ public class FourierLeaner {
             int [] charYs = new int[m2];
             
             for(int i = 0; i < m2; ++i){
-                charYs[i] = this.character(alpha, sampleY[i]);
+                charYs[i] = FourierLeaner.character(alpha, sampleY[i]);
             }
             
             double A = 0;
@@ -259,7 +258,7 @@ public class FourierLeaner {
             int [] charYs = new int[m2];
             
             for(int i = 0; i < m2; ++i){
-                charYs[i] = this.character(alpha, sampleY[i]);
+                charYs[i] = FourierLeaner.character(alpha, sampleY[i]);
             }
             
             double A = 0;

@@ -38,6 +38,15 @@ public class RunKMAlg {
         SimpleMatrix fCoefs = K.learnByKM(1, 0.1);
         
         fCoefs.print();
+        
+        FourierResult R = new FourierResult(fCoefs);
+        
+        double [] x = {0,1,0,1,0,0,0,0};
+        
+        double xzero = R.h(x);
+        
+        System.out.println(xzero);
+        
         /*
         try{
             fCoefs.saveToFileCSV("fCoefs.csv");
