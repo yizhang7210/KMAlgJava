@@ -179,11 +179,11 @@ public class FourierLeaner {
         // k index the length of alpha, n rounds
         for(int k = 1; k <= this.numFeatures;++k){
             
-            int mm1 = (int) Math.min(m1, 50*Math.pow(2, this.numFeatures - k));
-            int mm2 = (int) Math.min(m2, 50*Math.pow(2, k));
+            int mm1 = (int) Math.min(m1, 10*Math.pow(2, this.numFeatures - k));
+            int mm2 = (int) Math.min(m2, 10*Math.pow(2, k));
             
-            double [][] thisX = new double[mm1][this.numFeatures - k];
-            double [][] thisY = new double[mm2][k];
+            double [][] thisX = new double[m1][this.numFeatures - k];
+            double [][] thisY = new double[m2][k];
             
             // initialize thisX
             for(int i = 0; i < thisX.length; ++i){
@@ -250,7 +250,7 @@ public class FourierLeaner {
                     
                     A += this.lookup(this.concat(thisY, thisX))*charYs[j];
                 }
-            
+                
                 B += (A/m2)*(A/m2);
             }
             

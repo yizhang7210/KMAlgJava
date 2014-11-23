@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.util.HashMap;
 import org.ejml.simple.SimpleMatrix;
 
 
@@ -23,19 +24,23 @@ public class RunKMAlg {
         // Start timer:
         long startTime = System.currentTimeMillis();
         
+        
         String [] sampleLocs = {
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/ApacheProcessed.csv",
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/X264Processed.csv",
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/LLVMProcessed.csv"};
         
         
-        FourierLeaner K = new FourierLeaner("Apache", sampleLocs[0]);
+        FourierLeaner K = new FourierLeaner("Apache", sampleLocs[2]);
 
         SimpleMatrix fCoefs = K.learnByKM(1, 0.1);
           
         FourierResult R = new FourierResult(fCoefs);
         
-        R.estimateAllSample("Apache", sampleLocs[0]);
+        R.estimateAllSample("LLVM", sampleLocs[2]);
+        
+        fCoefs.print();
+        
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;

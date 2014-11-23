@@ -1,5 +1,5 @@
-origPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/ApacheProcessed.csv';
-estiPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/ApacheEstimated.csv';
+origPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/LLVMProcessed.csv';
+estiPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/LLVMEstimated.csv';
 
 origTable <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
 estiTable <- as.matrix(read.csv(estiPath, sep = "", header = F, skip = 1));
@@ -16,5 +16,4 @@ lines(origTable[,n+1], col = 2);
 # Titles and legends and others:
 legend('bottomright', legend = c("Estimated h(x)", "Real f(x)"), 
        lwd = c(2.5, 2.5), col = c(4,2));
-
 error <- mean(abs((origTable[, n+1] - estiTable[, n+1])/origTable[ ,n+1]));
