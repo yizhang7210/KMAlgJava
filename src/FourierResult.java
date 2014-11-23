@@ -67,8 +67,7 @@ public class FourierResult {
             throw new RuntimeException(e);
         }
 
-        
-        
+
     }
     
     
