@@ -51,6 +51,31 @@ public class FourierLeaner {
                 "\n Total number of Observations: " + this.numObs);
     }
     
+    public double[] getRandomVec(int len){
+        
+        if(len == 0){
+            return(new double[0]);
+        }
+        
+        double [] vec = new double[len];
+        
+        Random gen = new Random();
+        int val = gen.nextInt((int) Math.pow(2, len));
+        
+        String s = Integer.toBinaryString(val);
+        char [] chars = s.toCharArray();
+        
+        int charlen = chars.length;
+        
+        for(int i = 0; i< charlen; ++i){
+            vec[i + len - charlen] = Character.getNumericValue(chars[i]);
+        }
+        
+        return(vec);
+    }
+    
+    
+    
     /**
      * Get the dimension of the collected sample, namely, number of features
      * and number of observations.
@@ -178,25 +203,20 @@ public class FourierLeaner {
         
         // k index the length of alpha, n rounds
         for(int k = 1; k <= this.numFeatures;++k){
+            int mm1 = (int) Math.min(m1, 20*Math.pow(2, this.numFeatures - k));
+            int mm2 = (int) Math.min(m2, 20*Math.pow(2, k));
             
-            int mm1 = (int) Math.min(m1, 10*Math.pow(2, this.numFeatures - k));
-            int mm2 = (int) Math.min(m2, 10*Math.pow(2, k));
-            
-            double [][] thisX = new double[m1][this.numFeatures - k];
-            double [][] thisY = new double[m2][k];
+            double [][] thisX = new double[mm1][this.numFeatures - k];
+            double [][] thisY = new double[mm2][k];
             
             // initialize thisX
             for(int i = 0; i < thisX.length; ++i){
-                for(int j = 0; j < thisX[0].length; ++j){
-                    thisX[i][j] = gen.nextInt(2);
-                }
+                thisX[i] = this.getRandomVec(this.numFeatures - k);
             }
             
             // initialize thisY
             for(int i = 0; i < thisY.length; ++i){
-                for(int j = 0; j < thisY[0].length; ++j){
-                    thisY[i][j] = gen.nextInt(2);
-                }
+                thisY[i] = this.getRandomVec(k);
             }
             
             theSample[k-1][0] = thisX;
