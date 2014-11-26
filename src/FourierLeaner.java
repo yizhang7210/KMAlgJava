@@ -51,7 +51,7 @@ public class FourierLeaner {
                 "\n Total number of Observations: " + this.numObs);
     }
     
-    public double[] intToVec(int val, int len){
+    public static double[] intToVec(int val, int len){
         
         if(len == 0){
             return(new double[0]);
@@ -202,20 +202,20 @@ public class FourierLeaner {
         
         // k index the length of alpha, n rounds
         for(int k = 1; k <= n; ++k){
-            int mm1 = (int) Math.min(m1, 20*Math.pow(2, n - k));
-            int mm2 = (int) Math.min(m2, 20*Math.pow(2, k));
+            int mm1 = (int) Math.min(m1, 1*Math.pow(2, n - k));
+            int mm2 = (int) Math.min(m2, 1*Math.pow(2, k));
             
-            double [][] thisX = new double[m1][n - k];
-            double [][] thisY = new double[m2][k];
+            double [][] thisX = new double[mm1][n - k];
+            double [][] thisY = new double[mm2][k];
             
             // initialize thisX
             for(int i = 0; i < thisX.length; ++i){
-                thisX[i] = this.intToVec(gen.nextInt((int) Math.pow(2, n-k)), n - k);
+                thisX[i] = FourierLeaner.intToVec(gen.nextInt((int) Math.pow(2, n-k)), n - k);
             }
             
             // initialize thisY
             for(int i = 0; i < thisY.length; ++i){
-                thisY[i] = this.intToVec(gen.nextInt((int) Math.pow(2, k)), k);
+                thisY[i] = FourierLeaner.intToVec(gen.nextInt((int) Math.pow(2, k)), k);
             }
             
             theSample[k-1][0] = thisX;
