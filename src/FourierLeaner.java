@@ -51,16 +51,13 @@ public class FourierLeaner {
                 "\n Total number of Observations: " + this.numObs);
     }
     
-    public double[] getRandomVec(int len){
+    public double[] intToVec(int val, int len){
         
         if(len == 0){
             return(new double[0]);
         }
         
         double [] vec = new double[len];
-        
-        Random gen = new Random();
-        int val = gen.nextInt((int) Math.pow(2, len));
         
         String s = Integer.toBinaryString(val);
         char [] chars = s.toCharArray();
@@ -211,12 +208,12 @@ public class FourierLeaner {
             
             // initialize thisX
             for(int i = 0; i < thisX.length; ++i){
-                thisX[i] = this.getRandomVec(this.numFeatures - k);
+                thisX[i] = this.intToVec(gen.nextInt(this.numFeatures - k), this.numFeatures - k);
             }
             
             // initialize thisY
             for(int i = 0; i < thisY.length; ++i){
-                thisY[i] = this.getRandomVec(k);
+                thisY[i] = this.intToVec(gen.nextInt(k), k);
             }
             
             theSample[k-1][0] = thisX;
