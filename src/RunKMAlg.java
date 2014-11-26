@@ -32,14 +32,14 @@ public class RunKMAlg {
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/LLVMProcessed.csv"};
         
         
-        FourierLeaner K = new FourierLeaner("Apache", sampleLocs[2]);
+        FourierLeaner K = new FourierLeaner("Apache", sampleLocs[0]);
         
  
-        SimpleMatrix fCoefs = K.learnByKM(1.2, 0.1);
+        SimpleMatrix fCoefs = K.learnByKM(1, 0.1);
           
         FourierResult R = new FourierResult(fCoefs);
         
-        R.estimateAllSample("LLVM", sampleLocs[2]);
+        R.estimateAllSample("Apache", sampleLocs[0]);
         
         fCoefs.print();
 

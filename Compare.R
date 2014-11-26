@@ -1,5 +1,5 @@
-origPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/LLVMProcessed.csv';
-estiPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/LLVMEstimated.csv';
+origPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/ApacheProcessed.csv';
+estiPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/ApacheEstimated.csv';
 
 origTable <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
 estiTable <- as.matrix(read.csv(estiPath, sep = "", header = F, skip = 1));

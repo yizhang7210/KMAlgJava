@@ -147,12 +147,12 @@ public class FourierLeaner {
         for(int i = 0; i < z.length; ++i){
             sum = sum + z[i]*alpha[i];
         }
-        return(int) (Math.pow(-1, (int) sum%2));
+        return((int) (Math.pow(-1, (int) sum%2)));
     }
     
     public static int character(SimpleMatrix z, SimpleMatrix alpha){
         
-        return( (int) (Math.pow(-1, z.dot(alpha))));
+        return((int) (Math.pow(-1, z.dot(alpha))));
     }
     
     
@@ -193,27 +193,29 @@ public class FourierLeaner {
      * prefixes and the second column is the sample of the suffixes.
      */
     private double[][][][] generateSample(int m1, int m2){
+        
+        int n = this.numFeatures;
     
-        double [][][][] theSample = new double [this.numFeatures][2][][];
+        double [][][][] theSample = new double [n][2][][];
         
         Random gen = new Random();
         
         // k index the length of alpha, n rounds
-        for(int k = 1; k <= this.numFeatures;++k){
-            int mm1 = (int) Math.min(m1, 20*Math.pow(2, this.numFeatures - k));
+        for(int k = 1; k <= n; ++k){
+            int mm1 = (int) Math.min(m1, 20*Math.pow(2, n - k));
             int mm2 = (int) Math.min(m2, 20*Math.pow(2, k));
             
-            double [][] thisX = new double[mm1][this.numFeatures - k];
-            double [][] thisY = new double[mm2][k];
+            double [][] thisX = new double[m1][n - k];
+            double [][] thisY = new double[m2][k];
             
             // initialize thisX
             for(int i = 0; i < thisX.length; ++i){
-                thisX[i] = this.intToVec(gen.nextInt(this.numFeatures - k), this.numFeatures - k);
+                thisX[i] = this.intToVec(gen.nextInt((int) Math.pow(2, n-k)), n - k);
             }
             
             // initialize thisY
             for(int i = 0; i < thisY.length; ++i){
-                thisY[i] = this.intToVec(gen.nextInt(k), k);
+                thisY[i] = this.intToVec(gen.nextInt((int) Math.pow(2, k)), k);
             }
             
             theSample[k-1][0] = thisX;
