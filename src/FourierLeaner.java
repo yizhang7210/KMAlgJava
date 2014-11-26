@@ -202,11 +202,11 @@ public class FourierLeaner {
         
         // k index the length of alpha, n rounds
         for(int k = 1; k <= n; ++k){
-            int mm1 = (int) Math.min(m1, 1*Math.pow(2, n - k));
-            int mm2 = (int) Math.min(m2, 1*Math.pow(2, k));
+            int mm1 = (int) Math.min(m1, 20*Math.pow(2, n - k));
+            int mm2 = (int) Math.min(m2, 20*Math.pow(2, k));
             
-            double [][] thisX = new double[mm1][n - k];
-            double [][] thisY = new double[mm2][k];
+            double [][] thisX = new double[m1][n - k];
+            double [][] thisY = new double[m2][k];
             
             // initialize thisX
             for(int i = 0; i < thisX.length; ++i){

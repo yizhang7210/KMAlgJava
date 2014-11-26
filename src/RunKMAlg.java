@@ -31,15 +31,17 @@ public class RunKMAlg {
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/X264Processed.csv",
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/LLVMProcessed.csv"};
         
+        String tmp = "/home/y825zhan/00ME/CS860/JavaImp/ApacheProcessed.csv";
         
-        FourierLeaner K = new FourierLeaner("X264", sampleLocs[1]);
+        //FourierLeaner K = new FourierLeaner("Apache", sampleLocs[0]);
+        FourierLeaner K = new FourierLeaner("Apache", tmp);
         
  
-        SimpleMatrix fCoefs = K.learnByKM(1.2, 0.1);
+        SimpleMatrix fCoefs = K.learnByKM(1, 0.1);
           
         FourierResult R = new FourierResult(fCoefs);
         
-        R.estimateAllSample("X264", sampleLocs[1]);
+        R.estimateAllSample("Apache", tmp);
         
         fCoefs.print();
 
