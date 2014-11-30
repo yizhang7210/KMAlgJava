@@ -33,15 +33,15 @@ public class RunKMAlg {
         
         String tmp = "/home/y825zhan/00ME/CS860/JavaImp/ApacheProcessed.csv";
         
-        //FourierLeaner K = new FourierLeaner("Apache", sampleLocs[0]);
-        FourierLeaner K = new FourierLeaner("Apache", tmp);
+        FourierLeaner K = new FourierLeaner("Apache", sampleLocs[0]);
+        //FourierLeaner K = new FourierLeaner("Apache", tmp);
         
  
-        SimpleMatrix fCoefs = K.learnByKM(1, 0.1);
+        SimpleMatrix fCoefs = K.learnByKM(2, 0.1);
           
         FourierResult R = new FourierResult(fCoefs);
         
-        R.estimateAllSample("Apache", tmp);
+        R.estimateAllSample("Apache", sampleLocs[0]);
         
         fCoefs.print();
 
