@@ -40,8 +40,12 @@ public class RunKMAlg {
         //FourierLeaner K = new FourierLeaner("Apache", tmp);
         
  
-        SimpleMatrix fCoefs = K.learnByKM(1.2, 0.1);
-          
+        SimpleMatrix fCoefs = K.learnByKM(1, 0.1);
+        
+        try{
+            fCoefs.saveToFileCSV("TestFourierEstimated.csv");
+        }catch(IOException e){};
+
         FourierResult R = new FourierResult(fCoefs);
         
         R.estimateAllSample("TestEstimated.csv", tmp);
