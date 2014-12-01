@@ -40,13 +40,13 @@ public class FourierResult {
         for(int i = 0; i < m;++i){
             
             SimpleMatrix input = this.fCoefs.extractMatrix(i, i+1, 0, n);
-            val = val + FourierLeaner.character(input, x)*this.fCoefs.get(i, n);
+            val = val + FourierLearner.character(input, x)*this.fCoefs.get(i, n);
         }
 
         return(val);
     }
     
-    public void estimateAllSample(String sysName, String sampleLoc){
+    public void estimateAllSample(String newName, String sampleLoc){
         
         try{
             SimpleMatrix allSample = SimpleMatrix.loadCSV(sampleLoc);
@@ -59,8 +59,7 @@ public class FourierResult {
                 
                 allSample.set(i, n , this.h(input));
             }
-            
-            String newName = sysName + "Estimated.csv";
+
             allSample.saveToFileCSV(newName);
             
         }catch(IOException e){

@@ -31,21 +31,24 @@ public class RunKMAlg {
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/X264Processed.csv",
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/LLVMProcessed.csv"};
         
-        String tmp = "Test.csv";
+        String tmp = "TestFromFourier.csv";
         
-        FourierTester.GenerateTestToFile(tmp, 8, 200);
+        //FourierTester.GenerateTestToFile(tmp, 8, 200);
+        FourierTester.GenerateTestFromFourierToFile(tmp, 8, 200, 30);
         
-        FourierLeaner K = new FourierLeaner("Test", sampleLocs[0]);
+        FourierLearner K = new FourierLearner("TestSys", tmp);
         //FourierLeaner K = new FourierLeaner("Apache", tmp);
         
  
-        SimpleMatrix fCoefs = K.learnByKM(1, 0.1);
+        SimpleMatrix fCoefs = K.learnByKM(1.2, 0.1);
           
         FourierResult R = new FourierResult(fCoefs);
         
-        R.estimateAllSample("Test", tmp);
+        R.estimateAllSample("TestEstimated.csv", tmp);
         
         fCoefs.print();
+
+        
 
         
         // End timer:

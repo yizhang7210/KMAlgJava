@@ -30,7 +30,6 @@ public class FourierTester {
             numList.add(i, i);
         }
         
-        
         Collections.shuffle(numList);
         
         try{
@@ -38,7 +37,7 @@ public class FourierTester {
             writer.print(noObs + " ");
             writer.println(dim + 1);
             for(int i = 0; i < noObs; ++i){
-                double [] thisVec = FourierLeaner.intToVec(numList.get(i), dim);
+                double [] thisVec = FourierLearner.intToVec(numList.get(i), dim);
                 for(int j = 0; j < dim; ++j){
                     writer.print((int) thisVec[j] + " ");
                 }
@@ -53,7 +52,23 @@ public class FourierTester {
         
     }
     
-    public static void GenerateTestFromFourierToFile(String fileName, int dim, int spar){
+    public static void GenerateTestFromFourierToFile(String fileName,
+            int dim, int noObs, int sparcity){
+        
+        FourierTester.GenerateTestToFile("tempFouriers.csv", dim, sparcity);
+        FourierTester.GenerateTestToFile(fileName, dim, noObs);
+        
+        try{
+            SimpleMatrix fCoefs = SimpleMatrix.loadCSV("tempFouriers.csv");
+            FourierResult R = new FourierResult(fCoefs);
+            
+            R.estimateAllSample(fileName, fileName);
+            
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        }
+        
+
         
     }
     
