@@ -175,7 +175,7 @@ public class FourierLeaner {
     }
     
     
-    public double[] concat(double[] a, double[] b){
+    public static double[] concat(double[] a, double[] b){
         int length = a.length + b.length;
         double[] result = new double[length];
         System.arraycopy(a, 0, result, 0, a.length);
@@ -267,7 +267,7 @@ public class FourierLeaner {
                 for(int j = 0; j < m2; ++j){
                     double[] thisY = sampleY[j];
                     
-                    A += this.lookup(this.concat(thisY, thisX))*charYs[j];
+                    A += this.lookup(FourierLeaner.concat(thisY, thisX))*charYs[j];
                 }
                 
                 B += (A/m2)*(A/m2);
@@ -345,7 +345,7 @@ public class FourierLeaner {
         if(Math.abs(bucketWeight) >= theta*theta/2){
             if(alpha.length == this.numFeatures){
                 
-                double[][] newRow = {this.concat(alpha, bucketWeightMat)};
+                double[][] newRow = {FourierLeaner.concat(alpha, bucketWeightMat)};
                 
                 SimpleMatrix newRowMat = new SimpleMatrix(newRow);
                 
@@ -354,8 +354,8 @@ public class FourierLeaner {
                 
                 double [] zero = {0};
                 double [] one = {1};
-                double[] newAlpha1 = this.concat(alpha, zero);
-                double[] newAlpha2 = this.concat(alpha, one);
+                double[] newAlpha1 = FourierLeaner.concat(alpha, zero);
+                double[] newAlpha2 = FourierLeaner.concat(alpha, one);
                 
                 SimpleMatrix table1 = this.learnByKMImp(theta, delta, newAlpha1, fCoefs);
                 SimpleMatrix table2 = this.learnByKMImp(theta, delta, newAlpha2, fCoefs);

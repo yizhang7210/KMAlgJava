@@ -1,8 +1,8 @@
-origPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/X264Processed.csv';
-estiPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/X264Estimated.csv';
+origPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/Test.csv';
+estiPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/TestEstimated.csv';
 
-origPath <- '/home/y825zhan/00ME/CS860/JavaImp/ApacheProcessed.csv';
-estiPath <- '/home/y825zhan/00ME/CS860/JavaImp/ApacheEstimated.csv';
+#origPath <- '/home/y825zhan/00ME/CS860/JavaImp/Test.csv';
+#estiPath <- '/home/y825zhan/00ME/CS860/JavaImp/TestEstimated.csv';
 
 origTable <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
 estiTable <- as.matrix(read.csv(estiPath, sep = "", header = F, skip = 1));
