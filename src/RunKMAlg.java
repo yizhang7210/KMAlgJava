@@ -31,7 +31,7 @@ public class RunKMAlg {
         String tmp = "TestFromFourier.csv";
         
         //FourierTester.GenerateTestToFile(tmp, 8, 200);
-        FourierTester.GenerateTestFromFourierToFile(tmp, 12, 1000, 300);
+        FourierTester.GenerateTestFromFourierToFile(tmp, 12, 1500, 100);
         
         FourierLearner K = new FourierLearner("TestSys", tmp);
         //FourierLeaner K = new FourierLeaner("Apache", tmp);
@@ -43,7 +43,7 @@ public class RunKMAlg {
             fCoefs.saveToFileCSV("TestFourierEstimated.csv");
         }catch(IOException e){
             throw new RuntimeException(e);
-        };
+        }
 
         FourierResult R = new FourierResult(fCoefs);
         
