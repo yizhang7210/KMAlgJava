@@ -2,7 +2,9 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random;
 import org.ejml.simple.SimpleMatrix;
 
@@ -21,6 +23,8 @@ public class FourierLearner {
     private final String sampleLoc;
     private final HashMap<String, Double> allSampleMap;
     private double[][][][] currentSample;
+    public HashSet<String> uniqueSample;
+    private int firstTime;
     
     /**
      * Constructor: provide the name of the system and the location of samples
@@ -34,6 +38,8 @@ public class FourierLearner {
         this.numFeatures = FourierLearner.getSampleDim(sampleLoc)[1] - 1;
         this.allSampleMap = this.readSampleToMap(sampleLoc);
         this.currentSample = null;
+        this.uniqueSample = new HashSet<>();
+        this.firstTime = 0;
     }
     
     
@@ -176,7 +182,7 @@ public class FourierLearner {
         return val;
     }
     
-    
+        
     public static double[] concat(double[] a, double[] b){
         int length = a.length + b.length;
         double[] result = new double[length];
@@ -228,7 +234,7 @@ public class FourierLearner {
         System.out.println("Done generating Samples");
         return(theSample);
     }
-    
+        
     /**
      * Approximate the sum of the squares of the Fourier coefficients starting
      * with the prefix alpha.
@@ -269,7 +275,11 @@ public class FourierLearner {
                 for(int j = 0; j < m2; ++j){
                     double[] thisY = sampleY[j];
                     
-                    A += this.lookup(FourierLearner.concat(thisY, thisX))*charYs[j];
+                    double[] thisSample = FourierLearner.concat(thisY, thisX);
+                    
+                    A += this.lookup(thisSample)*charYs[j];
+                    
+                    this.uniqueSample.add(Arrays.toString(thisSample));
                 }
                 
                 B += (A/m2)*(A/m2);
@@ -291,6 +301,9 @@ public class FourierLearner {
             for(int j = 0; j < m2; ++j){
                 double[] thisY = sampleY[j];
                 A += this.lookup(thisY)*charYs[j];
+                
+                this.uniqueSample.add(Arrays.toString(thisY));
+                
             }
                 double B = A/m2;
                 return(Math.signum(B)*B*B);
@@ -321,11 +334,11 @@ public class FourierLearner {
         System.out.println("m1 is: "+ m1 + " and m2 is: " + m2);
         
         this.currentSample = this.generateSample(m1, m2);
-        
+               
         double[] emptyAlpha = new double [0];
         
         fCoefs = this.learnByKMImp(theta, delta, emptyAlpha, fCoefs);
-        
+               
         return(fCoefs);
     }
     
@@ -346,6 +359,12 @@ public class FourierLearner {
         
         if(Math.abs(bucketWeight) >= theta*theta/2){
             if(alpha.length == this.numFeatures){
+                
+                if(this.firstTime == 0){
+                    System.out.println("The sample size is: " + this.uniqueSample.size());
+                    this.firstTime = 1;
+                }
+                
                 
                 double[][] newRow = {FourierLearner.concat(alpha, bucketWeightMat)};
                 

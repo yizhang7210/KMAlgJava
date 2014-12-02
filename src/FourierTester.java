@@ -2,10 +2,8 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import org.ejml.simple.SimpleMatrix;
 
 /*
@@ -55,11 +53,11 @@ public class FourierTester {
     public static void GenerateTestFromFourierToFile(String fileName,
             int dim, int noObs, int sparcity){
         
-        FourierTester.GenerateTestToFile("tempFouriers.csv", dim, sparcity);
+        FourierTester.GenerateTestToFile("origFouriers.csv", dim, sparcity);
         FourierTester.GenerateTestToFile(fileName, dim, noObs);
         
         try{
-            SimpleMatrix fCoefs = SimpleMatrix.loadCSV("tempFouriers.csv");
+            SimpleMatrix fCoefs = SimpleMatrix.loadCSV("origFouriers.csv");
             FourierResult R = new FourierResult(fCoefs);
             
             R.estimateAllSample(fileName, fileName);

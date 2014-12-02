@@ -1,8 +1,5 @@
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.stream.IntStream;
 import org.ejml.simple.SimpleMatrix;
 
 
@@ -25,7 +22,7 @@ public class RunKMAlg {
         // TODO code application logic here
         // Start timer:
         long startTime = System.currentTimeMillis();
-        
+
         String [] sampleLocs = {
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/ApacheProcessed.csv",
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/X264Processed.csv",
@@ -34,17 +31,19 @@ public class RunKMAlg {
         String tmp = "TestFromFourier.csv";
         
         //FourierTester.GenerateTestToFile(tmp, 8, 200);
-        FourierTester.GenerateTestFromFourierToFile(tmp, 8, 200, 30);
+        FourierTester.GenerateTestFromFourierToFile(tmp, 12, 1000, 300);
         
         FourierLearner K = new FourierLearner("TestSys", tmp);
         //FourierLeaner K = new FourierLeaner("Apache", tmp);
         
  
-        SimpleMatrix fCoefs = K.learnByKM(1, 0.1);
+        SimpleMatrix fCoefs = K.learnByKM(1.5, 0.1);
         
         try{
             fCoefs.saveToFileCSV("TestFourierEstimated.csv");
-        }catch(IOException e){};
+        }catch(IOException e){
+            throw new RuntimeException(e);
+        };
 
         FourierResult R = new FourierResult(fCoefs);
         

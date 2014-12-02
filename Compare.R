@@ -25,7 +25,7 @@ error <- mean(abs((origTable[, n+1] - estiTable[, n+1])/origTable[ ,n+1]));
 #=====================================================================
 # Comparing Fourier coefficients
 
-origCoefPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/tempFouriers.csv';
+origCoefPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/origFouriers.csv';
 estiCoefPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/TestFourierEstimated.csv';
 
 origCoefs<- as.matrix(read.csv(origCoefPath, sep = "", header = F, skip = 1));
