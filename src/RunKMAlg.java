@@ -50,9 +50,9 @@ public class RunKMAlg {
         R.estimateAllSample("TestEstimated.csv", tmp);
         
         fCoefs.print();
-
         
-
+      
+        
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
