@@ -36,7 +36,7 @@ public class RunKMAlg {
         //FourierLearner K = new FourierLearner("TestSys", tmp);
         //FourierLearner K = new FourierLearner("Apache", tmp);
         
-        TrivialLearner L = new TrivialLearner("Apache", sampleLocs[1]);
+        TrivialLearner L = new TrivialLearner("Apache", sampleLocs[2]);
         
         SimpleMatrix fCoefs = L.learn(L.numObs, (int) Math.pow(2, L.numFeatures));
         
@@ -50,7 +50,7 @@ public class RunKMAlg {
 
         FourierResult R = new FourierResult(fCoefs);
         
-        R.estimateAllSample("X264Estimated.csv", sampleLocs[1]);
+        R.estimateAllSample("LLVMEstimated.csv", sampleLocs[2]);
         
         fCoefs.print();
         

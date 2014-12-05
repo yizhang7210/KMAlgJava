@@ -144,9 +144,9 @@ public class TrivialLearner {
             numSamples = this.numObs;
         }
         
-        double[][] sampleToUse = Arrays.copyOfRange(allSamples, 0, numSamples);
+        double[][] sampleToUse = Arrays.copyOfRange(this.allSamples, 0, numSamples);
         
-        double [][] allCoefs = new double [(int) Math.pow(2, n)][n + 1];
+        double[][] allCoefs = new double [(int) Math.pow(2, n)][n + 1];
         
         for(int i = 0; i < allCoefs.length; ++i){
             
@@ -156,9 +156,9 @@ public class TrivialLearner {
             
             if(i < numCoefs){
                 allCoefs[i][n] = this.approx(vec, sampleToUse);
+                }
+
             }
-            
-        }
                
         return(new SimpleMatrix(allCoefs));
     }
