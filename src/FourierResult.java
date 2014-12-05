@@ -37,8 +37,8 @@ public class FourierResult {
         
         for(int i = 0; i < m;++i){
             
-            SimpleMatrix input = this.fCoefs.extractMatrix(i, i+1, 0, n);
-            val = val + FourierLearner.character(input, x)*this.fCoefs.get(i, n);
+            SimpleMatrix z = this.fCoefs.extractMatrix(i, i+1, 0, n);
+            val = val + FourierLearner.character(z, x)*this.fCoefs.get(i, n);
         }
 
         return(val);

@@ -31,23 +31,26 @@ public class RunKMAlg {
         String tmp = "TestFromFourier.csv";
         
         //FourierTester.GenerateTestToFile(tmp, 8, 200);
-        FourierTester.GenerateTestFromFourierToFile(tmp, 12, 1500, 100);
+        //FourierTester.GenerateTestFromFourierToFile(tmp, 12, 1500, 100);
         
-        FourierLearner K = new FourierLearner("TestSys", tmp);
-        //FourierLeaner K = new FourierLeaner("Apache", tmp);
+        //FourierLearner K = new FourierLearner("TestSys", tmp);
+        //FourierLearner K = new FourierLearner("Apache", tmp);
         
- 
-        SimpleMatrix fCoefs = K.learnByKM(1.5, 0.1);
+        TrivialLearner L = new TrivialLearner("Apache", sampleLocs[1]);
         
+        SimpleMatrix fCoefs = L.learn(L.numObs, (int) Math.pow(2, L.numFeatures));
+        
+        /*
         try{
             fCoefs.saveToFileCSV("TestFourierEstimated.csv");
         }catch(IOException e){
             throw new RuntimeException(e);
         }
+        */
 
         FourierResult R = new FourierResult(fCoefs);
         
-        R.estimateAllSample("TestEstimated.csv", tmp);
+        R.estimateAllSample("X264Estimated.csv", sampleLocs[1]);
         
         fCoefs.print();
         
