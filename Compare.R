@@ -21,8 +21,8 @@ lines(origTable[range,n+1], col = 2);
 # Titles and legends and others:
 legend('bottomright', legend = c("Estimated h(x)", "Real f(x)"), 
        lwd = c(2.5, 2.5), col = c(4,2));
-error <- mean(abs((origTable[, n+1] - estiTable[, n+1])/origTable[ ,n+1]));
-
+error <- mean(abs((origTable[, n+1] - estiTable[, n+1])/origTable[,n+1]));
+error2 <- sum(((origTable[, n+1] - estiTable[, n+1])/origTable[,n+1])^2)
 
 #=====================================================================
 # Comparing Fourier coefficients
@@ -45,7 +45,7 @@ plot(estiCoefs[,n+1], type = 'l', xlab = 'x', ylab = 'h(x)', col = 4, );
 lines(origCoefs[,n+1], col = 2);
 
 # Titles and legends and others:
-legend('bottomright', legend = c("Estimated h(x)", "Real f(x)"), 
+legend('bottomleft', legend = c("Estimated h(x)", "Real f(x)"), 
        lwd = c(2.5, 2.5), col = c(4,2));
 
 

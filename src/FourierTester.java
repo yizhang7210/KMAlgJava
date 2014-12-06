@@ -23,6 +23,10 @@ public class FourierTester {
     
     public static void GenerateTestToFile(String fileName, int dim, int noObs){
         
+        if(noObs > Math.pow(2,dim)){
+            noObs = (int) Math.pow(2,dim);
+        }
+        
         List<Integer> numList = new ArrayList<>((int) Math.pow(2, dim));
         for(int i = 0; i < (int) Math.pow(2, dim);++i){
             numList.add(i, i);
@@ -39,7 +43,7 @@ public class FourierTester {
                 for(int j = 0; j < dim; ++j){
                     writer.print((int) thisVec[j] + " ");
                 }
-                writer.println(200*Math.random());
+                writer.println(50*(2*Math.random()-1));
             }
             
             writer.close();
