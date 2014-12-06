@@ -33,10 +33,10 @@ public class RunKMAlg {
         
         //FourierTester.GenerateTestToFile(tmp, 8, 200);
         
-        int n = 15;
+        int n = 11;
         double ep = 0.12, del = 0.1;
         
-        int numSample = (int) Math.ceil(2/(ep*ep)*((n+1)*Math.log(2.0) + Math.log(1/del)));
+        int numSample = (int) Math.ceil(2/(ep*ep)*((n+1)*Math.log(2) + Math.log(1/del)));
         
         double err = Math.pow(2, n)*ep*ep;
         

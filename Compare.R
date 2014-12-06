@@ -12,11 +12,15 @@ noObs <- nrow(origTable);
 
 range = 1:300;
 
+ord = order(origTable[,n+1], decreasing=T);
+origVals = origTable[,n+1][ord];
+estiVals = estiTable[,n+1][ord];
+
 # The estimation, h(x):
-plot(estiTable[range,n+1], type = 'l', xlab = 'x', ylab = 'h(x)', col = 4);
+plot(estiVals[range], type = 'l', xlab = 'x', ylab = 'h(x)', col = 4);
 
 # The real, f(x):
-lines(origTable[range,n+1], col = 2);
+lines(origVals[range], col = 2);
 
 # Titles and legends and others:
 legend('bottomright', legend = c("Estimated h(x)", "Real f(x)"), 
