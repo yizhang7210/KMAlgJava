@@ -23,6 +23,7 @@ public class RunKMAlg {
         // Start timer:
         long startTime = System.currentTimeMillis();
 
+
         String [] sampleLocs = {
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/ApacheProcessed.csv",
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/X264Processed.csv",
@@ -31,30 +32,27 @@ public class RunKMAlg {
         String tmp = "TestFromFourier.csv";
         
         //FourierTester.GenerateTestToFile(tmp, 8, 200);
-        //FourierTester.GenerateTestFromFourierToFile(tmp, 12, 1500, 100);
+        FourierTester.GenerateTestFromFourierToFile(tmp, 17, (int)Math.pow(2,17)/3, 100);
         
         //FourierLearner K = new FourierLearner("TestSys", tmp);
         //FourierLearner K = new FourierLearner("Apache", tmp);
         
-        TrivialLearner L = new TrivialLearner("Apache", sampleLocs[2]);
+        TrivialLearner L = new TrivialLearner("TestSys", tmp);
         
-        SimpleMatrix fCoefs = L.learn(L.numObs, (int) Math.pow(2, L.numFeatures));
+        SimpleMatrix fCoefs = L.learn(L.numObs, 100, true);
         
-        /*
+        String tmp2 = "TestFourierEstimated.csv";
         try{
-            fCoefs.saveToFileCSV("TestFourierEstimated.csv");
+            fCoefs.saveToFileCSV(tmp2);
         }catch(IOException e){
             throw new RuntimeException(e);
         }
-        */
-
+        
         FourierResult R = new FourierResult(fCoefs);
         
-        R.estimateAllSample("LLVMEstimated.csv", sampleLocs[2]);
+        R.estimateAllSample("TestEstimated.csv", tmp);
         
         fCoefs.print();
-        
-      
         
         
         // End timer:

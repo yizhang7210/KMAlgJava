@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Comparator;
 import org.ejml.simple.SimpleMatrix;
 
 /**
@@ -135,7 +136,7 @@ public class TrivialLearner {
     }  
     
 
-    public SimpleMatrix learn(int numSamples, int numCoefs){
+    public SimpleMatrix learn(int numSamples, int numCoefs, Boolean sorted){
         
         int n = this.numFeatures;
         
@@ -148,17 +149,39 @@ public class TrivialLearner {
         
         double[][] allCoefs = new double [(int) Math.pow(2, n)][n + 1];
         
-        for(int i = 0; i < allCoefs.length; ++i){
+        if(sorted){
             
-            double[] vec = FourierLearner.intToVec(i, n);
-            
-            allCoefs[i] = Arrays.copyOf(vec, n+1);
-            
-            if(i < numCoefs){
-                allCoefs[i][n] = this.approx(vec, sampleToUse);
+            Comparator<double[]> comp = new Comparator<double[]>(){
+                @Override
+                public int compare(double[] a, double [] b){
+                    return Double.compare(Math.abs(b[b.length-1]), Math.abs(a[a.length-1]));
                 }
-
+            };
+            
+            for(int i = 0; i < allCoefs.length; ++i){
+                double [] vec = FourierLearner.intToVec(i, n);
+                allCoefs[i] = Arrays.copyOf(vec, n+1);
+                allCoefs[i][n] = this.approx(vec, sampleToUse);
             }
+            
+            Arrays.sort(allCoefs, comp);
+            
+            allCoefs = Arrays.copyOfRange(allCoefs, 0, numCoefs);
+            
+            
+        }else{
+            for(int i = 0; i < allCoefs.length; ++i){
+
+                double[] vec = FourierLearner.intToVec(i, n);
+
+                allCoefs[i] = Arrays.copyOf(vec, n+1);
+
+                if(i < numCoefs){
+                    allCoefs[i][n] = this.approx(vec, sampleToUse);
+                    }
+
+                }
+        }
                
         return(new SimpleMatrix(allCoefs));
     }
