@@ -2,8 +2,11 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import org.ejml.simple.SimpleMatrix;
 
 /**
@@ -145,7 +148,18 @@ public class TrivialLearner {
             numSamples = this.numObs;
         }
         
-        double[][] sampleToUse = Arrays.copyOfRange(this.allSamples, 0, numSamples);
+        List<Integer> numList = new ArrayList<>(this.numObs);
+        for(int i = 0; i < this.numObs;++i){
+            numList.add(i, i);
+        }
+        
+        Collections.shuffle(numList);
+        
+        double[][] sampleToUse = new double [numSamples][n +1];
+        
+        for(int i = 0; i < numSamples; ++i){
+            sampleToUse[i] = this.allSamples[numList.get(i)];
+        }
         
         double[][] allCoefs = new double [(int) Math.pow(2, n)][n + 1];
         

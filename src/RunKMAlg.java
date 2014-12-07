@@ -34,7 +34,7 @@ public class RunKMAlg {
         //FourierTester.GenerateTestToFile(tmp, 8, 200);
         
         int n = 11;
-        double ep = 0.12, del = 0.1;
+        double ep = 0.15, del = 0.1;
         
         int numSample = (int) Math.ceil(2/(ep*ep)*((n+1)*Math.log(2) + Math.log(1/del)));
         
@@ -44,14 +44,14 @@ public class RunKMAlg {
         System.out.println("Total number of combinations is: " + Math.pow(2, n));
         System.out.println("Number of samples is: " + numSample);
         
-        FourierTester.GenerateTestFromFourierToFile(tmp, n, numSample, 100);
+        FourierTester.GenerateTestFromFourierToFile(tmp, n, (int) Math.ceil(1.5*numSample), 100);
         
         //FourierLearner K = new FourierLearner("TestSys", tmp);
         //FourierLearner K = new FourierLearner("Apache", tmp);
         
         TrivialLearner L = new TrivialLearner("TestSys", tmp);
         
-        SimpleMatrix fCoefs = L.learn(L.numObs, 100, true);
+        SimpleMatrix fCoefs = L.learn(numSample, 100, true);
         
         String tmp2 = "TestFourierEstimated.csv";
         try{
