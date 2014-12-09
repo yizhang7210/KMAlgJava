@@ -33,7 +33,7 @@ public class RunKMAlg {
         
         //FourierTester.GenerateTestToFile(tmp, 8, 200);
         
-        int n = 11;
+        int n = 14;
         double ep = 0.12, del = 0.1;
       
         int numSample = (int) Math.ceil(2/(ep*ep)*((n+1)*Math.log(2) + Math.log(1/del)));
@@ -52,7 +52,7 @@ public class RunKMAlg {
         
         TrivialLearner L = new TrivialLearner("TestSys", tmp);
         
-        SimpleMatrix fCoefs = L.learn(numSample, 30, true);
+        SimpleMatrix fCoefs = L.learn(numSample, 50, true);
         
         String tmp2 = "TestFourierEstimated.csv";
         try{
