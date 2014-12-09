@@ -23,12 +23,14 @@ public class FourierTester {
     
     public static void GenerateTestToFile(String fileName, int dim, int noObs){
         
-        if(noObs > Math.pow(2,dim)){
-            noObs = (int) Math.pow(2,dim);
+        int total = (int) Math.pow(2, dim);
+        
+        if(noObs > total){
+            noObs = total;
         }
         
-        List<Integer> numList = new ArrayList<>((int) Math.pow(2, dim));
-        for(int i = 0; i < (int) Math.pow(2, dim);++i){
+        List<Integer> numList = new ArrayList<>(total);
+        for(int i = 0; i < total;++i){
             numList.add(i, i);
         }
         
@@ -43,7 +45,7 @@ public class FourierTester {
                 for(int j = 0; j < dim; ++j){
                     writer.print((int) thisVec[j] + " ");
                 }
-                writer.println(50*(2*Math.random()-1));
+                writer.println(2*Math.random()-1);
             }
             
             writer.close();
@@ -57,14 +59,36 @@ public class FourierTester {
     public static void GenerateTestFromFourierToFile(String fileName,
             int dim, int noObs, int sparcity){
         
-        FourierTester.GenerateTestToFile("origFouriers.csv", dim, sparcity);
+        String origCoefs = "origFouriers.csv";
+        
+        FourierTester.GenerateTestToFile(origCoefs, dim, sparcity);
         FourierTester.GenerateTestToFile(fileName, dim, noObs);
         
         try{
-            SimpleMatrix fCoefs = SimpleMatrix.loadCSV("origFouriers.csv");
+            SimpleMatrix fCoefs = SimpleMatrix.loadCSV(origCoefs);
             FourierResult R = new FourierResult(fCoefs);
             
             R.estimateAllSample(fileName, fileName);
+            
+            SimpleMatrix fun = SimpleMatrix.loadCSV(fileName);
+            
+            double max = fun.extractVector(false, dim).elementMaxAbs();
+            
+            for(int i = 0; i < fun.numRows(); ++i){
+                fun.set(i, dim, fun.get(i, dim)/max);
+            }
+            
+            fun.saveToFileCSV(fileName);
+            
+            
+            SimpleMatrix coefs = SimpleMatrix.loadCSV(origCoefs);
+            
+            for(int i = 0; i < coefs.numRows(); ++i){
+                coefs.set(i, dim, coefs.get(i, dim)/max);
+            }
+            
+            coefs.saveToFileCSV(origCoefs);
+
             
         }catch(IOException e){
             throw new RuntimeException(e);

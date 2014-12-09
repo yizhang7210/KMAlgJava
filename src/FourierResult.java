@@ -57,7 +57,7 @@ public class FourierResult {
                 
                 allSample.set(i, n , this.h(input));
             }
-
+            
             allSample.saveToFileCSV(newName);
             
         }catch(IOException e){

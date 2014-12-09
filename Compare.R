@@ -10,7 +10,7 @@ estiTable <- as.matrix(read.csv(estiPath, sep = "", header = F, skip = 1));
 n <- ncol(origTable) - 1;
 noObs <- nrow(origTable);
 
-range = 1:300;
+range = 1:noObs;
 
 ord = order(origTable[,n+1], decreasing=T);
 origVals = origTable[,n+1][ord];
@@ -26,7 +26,7 @@ lines(origVals[range], col = 2);
 legend('bottomright', legend = c("Estimated h(x)", "Real f(x)"), 
        lwd = c(2.5, 2.5), col = c(4,2));
 error <- mean(abs((origTable[, n+1] - estiTable[, n+1])/origTable[,n+1]));
-error2 <- sum(((origTable[, n+1] - estiTable[, n+1])/origTable[,n+1])^2)
+error2 <- sum((origTable[, n+1] - estiTable[, n+1])^2)
 
 #=====================================================================
 # Comparing Fourier coefficients
