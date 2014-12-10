@@ -102,7 +102,9 @@ public class TrivialLearner {
         for(int i = 0; i < z.length; ++i){
             sum = sum + z[i]*alpha[i];
         }
-        return((int) (Math.pow(-1, (int) sum%2)));
+        
+        
+        return(-2*((int)sum%2)+1);
     }
      
     public static double[] concat(double[] a, double[] b){
@@ -126,12 +128,10 @@ public class TrivialLearner {
         
         double A = 0;
         for(int i = 0; i < m; ++i){
-            double[] vec = Arrays.copyOfRange(sample[i], 0, n);
-            A += sample[i][n]*this.character(alpha, vec);
+            A += sample[i][n]*this.character(alpha, sample[i]);
         }
-
-            double B = A/m;
-            return(B);
+        
+            return(A/m);
     }  
     
 
