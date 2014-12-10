@@ -97,10 +97,6 @@ public class TrivialLearner {
      */
     private int character(double[] z, double[] alpha){
         
-        if(z.length != alpha.length){
-            throw new RuntimeException("Character: length of vectors differ");
-        }
-        
         double sum = 0;
         
         for(int i = 0; i < z.length; ++i){
