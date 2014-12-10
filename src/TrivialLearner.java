@@ -135,7 +135,68 @@ public class TrivialLearner {
     }  
     
 
-    public SimpleMatrix learn(int numSamples, int numCoefs, Boolean sorted){
+    public SimpleMatrix learn(int numSamples, double theta, Boolean sorted){
+        
+        int n = this.numFeatures;
+        
+        // Warn is there aren't enough samples
+        if(numSamples > this.numObs){
+            System.out.println("Warning: Don't have that many samples.");
+            numSamples = this.numObs;
+        }
+        
+        // Shuffle the samples
+        List<Integer> numList = new ArrayList<>(this.numObs);
+        for(int i = 0; i < this.numObs;++i){
+            numList.add(i, i);
+        }
+        
+        Collections.shuffle(numList);
+        
+        double[][] sampleToUse = new double [numSamples][n +1];
+        
+        for(int i = 0; i < numSamples; ++i){
+            sampleToUse[i] = this.allSamples[numList.get(i)];
+        }
+        
+        // Initialize the Fourier coefficients.
+        double[][] allCoefs = new double [(int) Math.pow(2, n)][n + 1];
+            
+        Comparator<double[]> comp = new Comparator<double[]>(){
+            @Override
+            public int compare(double[] a, double [] b){
+                return Double.compare(Math.abs(b[b.length-1]), Math.abs(a[a.length-1]));
+            }
+        };
+
+        int i = 0;
+        int nonZeroCount = 0;
+        while(i < allCoefs.length){
+            double [] vec = FourierLearner.intToVec(i, n);
+
+            double val = this.approx(vec, sampleToUse);
+
+            if(Math.abs(val) > theta){
+                allCoefs[i] = Arrays.copyOf(vec, n+1);
+                allCoefs[i][n] = val;
+                ++nonZeroCount;
+            }
+
+            ++i;
+        }
+        
+        if(sorted){
+            Arrays.sort(allCoefs, comp);
+        }
+        
+        SimpleMatrix resultCoefs = new SimpleMatrix(allCoefs);
+        
+        resultCoefs = resultCoefs.extractMatrix(0, nonZeroCount, 0, n+1);
+
+        return(resultCoefs);
+    }
+    
+    public SimpleMatrix oldLearn(int numSamples, int numCoefs, Boolean sorted){
         
         int n = this.numFeatures;
         

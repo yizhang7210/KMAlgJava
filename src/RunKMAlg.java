@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.util.Arrays;
 import org.ejml.simple.SimpleMatrix;
 
 
@@ -23,7 +24,7 @@ public class RunKMAlg {
         // Start timer:
         long startTime = System.currentTimeMillis();
 
-
+        
         String [] sampleLocs = {
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/ApacheProcessed.csv",
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/X264Processed.csv",
@@ -46,14 +47,15 @@ public class RunKMAlg {
         System.out.println("Total number of combinations is: " + Math.pow(2, n));
         System.out.println("Number of samples is: " + numSample);
 
-        FourierTester.GenerateTestFromFourierToFile(tmp, n, numSample, t);
+        FourierTester.GenerateTestFromFourierToFile(tmp, n, (int) Math.pow(2, n), t);
         
         //FourierLearner K = new FourierLearner("TestSys", tmp);
         //FourierLearner K = new FourierLearner("Apache", tmp);
         
         TrivialLearner L = new TrivialLearner("TestSys", tmp);
         
-        SimpleMatrix fCoefs = L.learn(numSample, t, true);
+        SimpleMatrix fCoefs = L.learn(numSample, 0.025, true);
+        //SimpleMatrix fCoefs = L.oldLearn(numSample, t, true);
         
         String tmp2 = "TestFourierEstimated.csv";
         try{

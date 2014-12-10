@@ -45,7 +45,10 @@ public class FourierTester {
                 for(int j = 0; j < dim; ++j){
                     writer.print((int) thisVec[j] + " ");
                 }
-                writer.println(2*Math.random()-1);
+                
+                double coef = 2*Math.random() - 1;
+                
+                writer.println(coef);
             }
             
             writer.close();
@@ -70,6 +73,7 @@ public class FourierTester {
             
             R.estimateAllSample(fileName, fileName);
             
+
             SimpleMatrix fun = SimpleMatrix.loadCSV(fileName);
             
             double max = fun.extractVector(false, dim).elementMaxAbs();
@@ -88,7 +92,7 @@ public class FourierTester {
             }
             
             coefs.saveToFileCSV(origCoefs);
-
+            
             
         }catch(IOException e){
             throw new RuntimeException(e);
