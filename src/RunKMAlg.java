@@ -54,8 +54,8 @@ public class RunKMAlg {
         
         TrivialLearner L = new TrivialLearner("TestSys", tmp);
         
-        SimpleMatrix fCoefs = L.learn(numSample, 0.025, true);
-        //SimpleMatrix fCoefs = L.oldLearn(numSample, t, true);
+        //SimpleMatrix fCoefs = L.learn(numSample, 0.025, true);
+        SimpleMatrix fCoefs = L.oldLearn(numSample, t, true);
         
         String tmp2 = "TestFourierEstimated.csv";
         try{
