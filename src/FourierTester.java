@@ -4,7 +4,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.ejml.simple.SimpleMatrix;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -41,7 +40,7 @@ public class FourierTester {
             writer.print(noObs + " ");
             writer.println(dim + 1);
             for(int i = 0; i < noObs; ++i){
-                double [] thisVec = FourierLearner.intToVec(numList.get(i), dim);
+                double [] thisVec = Matrix.intToVec(numList.get(i), dim);
                 for(int j = 0; j < dim; ++j){
                     writer.print((int) thisVec[j] + " ");
                 }
@@ -66,39 +65,29 @@ public class FourierTester {
         
         FourierTester.GenerateTestToFile(origCoefs, dim, sparcity);
         FourierTester.GenerateTestToFile(fileName, dim, noObs);
-        
-        try{
-            SimpleMatrix fCoefs = SimpleMatrix.loadCSV(origCoefs);
-            FourierResult R = new FourierResult(fCoefs);
-            
-            R.estimateAllSample(fileName, fileName);
-            
 
-            SimpleMatrix fun = SimpleMatrix.loadCSV(fileName);
-            
-            double max = fun.extractVector(false, dim).elementMaxAbs();
-            
-            for(int i = 0; i < fun.numRows(); ++i){
-                fun.set(i, dim, fun.get(i, dim)/max);
-            }
-            
-            fun.saveToFileCSV(fileName);
-            
-            
-            SimpleMatrix coefs = SimpleMatrix.loadCSV(origCoefs);
-            
-            for(int i = 0; i < coefs.numRows(); ++i){
-                coefs.set(i, dim, coefs.get(i, dim)/max);
-            }
-            
-            coefs.saveToFileCSV(origCoefs);
-            
-            
-        }catch(IOException e){
-            throw new RuntimeException(e);
+        double[][] fCoefs = Matrix.read(origCoefs);
+        FourierResult R = new FourierResult(fCoefs);
+
+        R.estimateAllSample(fileName, fileName);
+
+        double[][] fun = Matrix.read(fileName);
+
+        double max = Matrix.maxAbsCol(fun, dim);
+
+        for(int i = 0; i < fun.length; ++i){
+            fun[i][dim] = fun[i][dim]/max;
         }
-        
 
+        Matrix.write(fun, fileName);            
+
+        double[][] coefs = Matrix.read(origCoefs);
+
+        for(int i = 0; i < coefs.length; ++i){
+            coefs[i][dim] = coefs[i][dim]/max;
+        }
+
+        Matrix.write(coefs, origCoefs);            
         
     }
     

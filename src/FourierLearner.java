@@ -57,28 +57,6 @@ public class FourierLearner {
                 "\n Total number of Observations: " + this.numObs);
     }
     
-    public static double[] intToVec(int val, int len){
-        
-        if(len == 0){
-            return(new double[0]);
-        }
-        
-        double [] vec = new double[len];
-        
-        String s = Integer.toBinaryString(val);
-        char [] chars = s.toCharArray();
-        
-        int charlen = chars.length;
-        
-        for(int i = 0; i< charlen; ++i){
-            vec[i + len - charlen] = Character.getNumericValue(chars[i]);
-        }
-        
-        return(vec);
-    }
-    
-    
-    
     /**
      * Get the dimension of the collected sample, namely, number of features
      * and number of observations.
@@ -137,33 +115,7 @@ public class FourierLearner {
         
         return(f);
     }
-    
-    /**
-     * Calculate the character of z and alpha.
-     * @param z
-     * @param alpha
-     * @return char(z, alpha)
-     */
-    public static int character(double[] z, double[] alpha){
         
-        if(z.length != alpha.length){
-            throw new RuntimeException("Character: length of vectors differ");
-        }
-        
-        double sum = 0;
-        
-        for(int i = 0; i < z.length; ++i){
-            sum = sum + z[i]*alpha[i];
-        }
-        return((int) (Math.pow(-1, (int) sum%2)));
-    }
-    
-    public static int character(SimpleMatrix z, SimpleMatrix alpha){
-        
-        return((int) (Math.pow(-1, z.dot(alpha))));
-    }
-    
-    
     /**
      * Lookup the value of the input vec in the HashMap, return 0 if not found.
      * @param vec
@@ -182,16 +134,7 @@ public class FourierLearner {
         return val;
     }
     
-        
-    public static double[] concat(double[] a, double[] b){
-        int length = a.length + b.length;
-        double[] result = new double[length];
-        System.arraycopy(a, 0, result, 0, a.length);
-        System.arraycopy(b, 0, result, a.length, b.length);
-        return result;
-    }
-
-    
+            
     /**
      * Generate the n pairs of samples for both the prefix and suffix.
      * @param m1
@@ -218,12 +161,12 @@ public class FourierLearner {
             
             // initialize thisX
             for(int i = 0; i < thisX.length; ++i){
-                thisX[i] = FourierLearner.intToVec(gen.nextInt((int) Math.pow(2, n-k)), n - k);
+                thisX[i] = Matrix.intToVec(gen.nextInt((int) Math.pow(2, n-k)), n - k);
             }
             
             // initialize thisY
             for(int i = 0; i < thisY.length; ++i){
-                thisY[i] = FourierLearner.intToVec(gen.nextInt((int) Math.pow(2, k)), k);
+                thisY[i] = Matrix.intToVec(gen.nextInt((int) Math.pow(2, k)), k);
             }
             
             theSample[k-1][0] = thisX;
@@ -262,7 +205,7 @@ public class FourierLearner {
             int [] charYs = new int[m2];
             
             for(int i = 0; i < m2; ++i){
-                charYs[i] = FourierLearner.character(alpha, sampleY[i]);
+                charYs[i] = Matrix.character(alpha, sampleY[i]);
             }
             
             double A = 0;
@@ -275,7 +218,7 @@ public class FourierLearner {
                 for(int j = 0; j < m2; ++j){
                     double[] thisY = sampleY[j];
                     
-                    double[] thisSample = FourierLearner.concat(thisY, thisX);
+                    double[] thisSample = Matrix.concat(thisY, thisX);
                     
                     A += this.lookup(thisSample)*charYs[j];
                     
@@ -294,7 +237,7 @@ public class FourierLearner {
             int [] charYs = new int[m2];
             
             for(int i = 0; i < m2; ++i){
-                charYs[i] = FourierLearner.character(alpha, sampleY[i]);
+                charYs[i] = Matrix.character(alpha, sampleY[i]);
             }
             
             double A = 0;
@@ -366,7 +309,7 @@ public class FourierLearner {
                 }
                 
                 
-                double[][] newRow = {FourierLearner.concat(alpha, bucketWeightMat)};
+                double[][] newRow = {Matrix.concat(alpha, bucketWeightMat)};
                 
                 SimpleMatrix newRowMat = new SimpleMatrix(newRow);
                 
@@ -375,8 +318,8 @@ public class FourierLearner {
                 
                 double [] zero = {0};
                 double [] one = {1};
-                double[] newAlpha1 = FourierLearner.concat(alpha, zero);
-                double[] newAlpha2 = FourierLearner.concat(alpha, one);
+                double[] newAlpha1 = Matrix.concat(alpha, zero);
+                double[] newAlpha2 = Matrix.concat(alpha, one);
                 
                 SimpleMatrix table1 = this.learnByKMImp(theta, delta, newAlpha1, fCoefs);
                 SimpleMatrix table2 = this.learnByKMImp(theta, delta, newAlpha2, fCoefs);

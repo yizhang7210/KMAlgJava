@@ -1,10 +1,4 @@
 
-import java.io.IOException;
-import java.util.Arrays;
-import org.ejml.simple.SimpleMatrix;
-
-
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -24,7 +18,6 @@ public class RunKMAlg {
         // Start timer:
         long startTime = System.currentTimeMillis();
 
-        
         String [] sampleLocs = {
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/ApacheProcessed.csv",
             "/home/yzhang/00ME/Education/UW/CS860/JavaImp/X264Processed.csv",
@@ -40,7 +33,7 @@ public class RunKMAlg {
         double ep = 0.05, del = 0.25;
       
         int numSample = (int) Math.ceil(2/(ep*ep)*((n+1)*Math.log(2) + Math.log(1/del)));
-        System.out.println("Number of samples is: " + numSample);
+        //System.out.println("Number of samples is: " + numSample);
         //int numSample = (int) Math.ceil(Math.pow(2, n));
         //numSample = Math.min(5000, numSample);
         
@@ -58,23 +51,19 @@ public class RunKMAlg {
         TrivialLearner L = new TrivialLearner("TestSys", tmp);
         
         //SimpleMatrix fCoefs = L.learn(numSample, theta, true);
-        SimpleMatrix fCoefs = L.oldLearn(numSample, t, true);
+        double[][] fCoefs = L.oldLearn(numSample, t, true);
         
-        /*
+        
         String tmp2 = "TestFourierEstimated.csv";
-        try{
-            fCoefs.saveToFileCSV(tmp2);
-        }catch(IOException e){
-            throw new RuntimeException(e);
-        }
-        */
+        
+        Matrix.write(fCoefs, tmp2);
         
         FourierResult R = new FourierResult(fCoefs);
         
         R.estimateAllSample("TestEstimated.csv", tmp);
         
-        fCoefs.print();
-
+        Matrix.print(fCoefs);        
+        
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;

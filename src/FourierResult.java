@@ -1,6 +1,5 @@
 
-import java.io.IOException;
-import org.ejml.simple.SimpleMatrix;
+import java.util.Arrays;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,57 +12,52 @@ import org.ejml.simple.SimpleMatrix;
  */
 public class FourierResult {
     
-    public SimpleMatrix fCoefs;
-    public SimpleMatrix derivatives;
+    public double[][] fCoefs;
+    public double[][] derivatives;
     
     
-    public FourierResult(SimpleMatrix coefs){
+    public FourierResult(double[][] coefs){
         this.fCoefs = coefs;
         this.derivatives = this.getDerivatives(coefs);
     }
     
-    private SimpleMatrix getDerivatives(SimpleMatrix fCoefs){
+    private double[][] getDerivatives(double[][] fCoefs){
         
         return(fCoefs);
     }
     
-    public double h(SimpleMatrix x){
+    public double h(double[] x){
         
         double val = 0;
         
-        int m = this.fCoefs.numRows();
-        int n = this.fCoefs.numCols() - 1;
+        int m = this.fCoefs.length;
+        int n = this.fCoefs[0].length- 1;
         
         
         for(int i = 0; i < m;++i){
             
-            SimpleMatrix z = this.fCoefs.extractMatrix(i, i+1, 0, n);
-            val = val + FourierLearner.character(z, x)*this.fCoefs.get(i, n);
+            double[] z = Arrays.copyOfRange(this.fCoefs[i], 0, n);
+            
+            val = val + Matrix.character(z, x)*this.fCoefs[i][n];
         }
 
         return(val);
     }
     
     public void estimateAllSample(String newName, String sampleLoc){
-        
-        try{
-            SimpleMatrix allSample = SimpleMatrix.loadCSV(sampleLoc);
-            
-            int m = allSample.numRows();
-            int n = allSample.numCols() - 1;
-            
-            for(int i = 0; i < m;++i){
-                SimpleMatrix input = allSample.extractMatrix(i, i+1, 0, n);
-                
-                allSample.set(i, n , this.h(input));
-            }
-            
-            allSample.saveToFileCSV(newName);
-            
-        }catch(IOException e){
-            throw new RuntimeException(e);
+
+        double[][] allSample = Matrix.read(sampleLoc);
+
+        int m = allSample.length;
+        int n = allSample[0].length - 1;
+
+        for(int i = 0; i < m;++i){
+            double [] input = Arrays.copyOfRange(allSample[i], 0, n);
+
+            allSample[i][n] = this.h(input);
         }
 
+        Matrix.write(allSample, newName);
 
     }
     

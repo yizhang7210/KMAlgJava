@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import org.ejml.simple.SimpleMatrix;
 
 /**
  * Trivial Learner: implemented the low-level algorithm for learning Boolean
@@ -88,33 +87,7 @@ public class TrivialLearner {
             throw new RuntimeException(e);
         }
     }
-    
-    /**
-     * Calculate the character of z and alpha.
-     * @param z
-     * @param alpha
-     * @return char(z, alpha)
-     */
-    private int character(double[] z, double[] alpha){
-        
-        double sum = 0;
-        
-        for(int i = 0; i < z.length; ++i){
-            sum = sum + z[i]*alpha[i];
-        }
-        
-        
-        return(-2*((int)sum%2)+1);
-    }
-     
-    public static double[] concat(double[] a, double[] b){
-        int length = a.length + b.length;
-        double[] result = new double[length];
-        System.arraycopy(a, 0, result, 0, a.length);
-        System.arraycopy(b, 0, result, a.length, b.length);
-        return result;
-    }
-        
+                    
     /**
      * Approximate the sum of the squares of the Fourier coefficients starting
      * with the prefix alpha.
@@ -128,14 +101,14 @@ public class TrivialLearner {
         
         double A = 0;
         for(int i = 0; i < m; ++i){
-            A += sample[i][n]*this.character(alpha, sample[i]);
+            A += sample[i][n]*Matrix.character(alpha, sample[i]);
         }
         
             return(A/m);
     }  
     
 
-    public SimpleMatrix learn(int numSamples, double theta, Boolean sorted){
+    public double[][] learn(int numSamples, double theta, Boolean sorted){
         
         int n = this.numFeatures;
         
@@ -172,7 +145,7 @@ public class TrivialLearner {
         int i = 0;
         int nonZeroCount = 0;
         while(i < allCoefs.length){
-            double [] vec = FourierLearner.intToVec(i, n);
+            double [] vec = Matrix.intToVec(i, n);
 
             double val = this.approx(vec, sampleToUse);
 
@@ -189,14 +162,12 @@ public class TrivialLearner {
             Arrays.sort(allCoefs, comp);
         }
         
-        SimpleMatrix resultCoefs = new SimpleMatrix(allCoefs);
-        
-        resultCoefs = resultCoefs.extractMatrix(0, nonZeroCount, 0, n+1);
+        allCoefs = Arrays.copyOfRange(allCoefs, 0, nonZeroCount);
 
-        return(resultCoefs);
+        return(allCoefs);
     }
     
-    public SimpleMatrix oldLearn(int numSamples, int numCoefs, Boolean sorted){
+    public double[][] oldLearn(int numSamples, int numCoefs, Boolean sorted){
         
         int n = this.numFeatures;
         
@@ -230,7 +201,7 @@ public class TrivialLearner {
             };
             
             for(int i = 0; i < allCoefs.length; ++i){
-                double [] vec = FourierLearner.intToVec(i, n);
+                double [] vec = Matrix.intToVec(i, n);
                 allCoefs[i] = Arrays.copyOf(vec, n+1);
                 allCoefs[i][n] = this.approx(vec, sampleToUse);
             }
@@ -243,7 +214,7 @@ public class TrivialLearner {
         }else{
             for(int i = 0; i < allCoefs.length; ++i){
 
-                double[] vec = FourierLearner.intToVec(i, n);
+                double[] vec = Matrix.intToVec(i, n);
 
                 allCoefs[i] = Arrays.copyOf(vec, n+1);
 
@@ -254,7 +225,7 @@ public class TrivialLearner {
                 }
         }
                
-        return(new SimpleMatrix(allCoefs));
+        return(allCoefs);
     }
     
     
