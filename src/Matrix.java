@@ -1,10 +1,8 @@
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -46,7 +44,7 @@ public class Matrix {
             sum = sum + z[i]*alpha[i];
         }
         
-        return(-2*((int)sum%2)+1);
+        return(-2*(((int)sum)%2)+1);
     }
     
     public static double[] concat(double[] a, double[] b){

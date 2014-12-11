@@ -58,20 +58,18 @@ public class FourierTester {
         
     }
     
-    public static void GenerateTestFromFourierToFile(String fileName,
-            int dim, int noObs, int sparcity){
-        
-        String origCoefs = "origFouriers.csv";
+    public static void GenerateTestFromFourierToFile(String origCoefs, 
+            String origFun, int dim, int noObs, int sparcity){
         
         FourierTester.GenerateTestToFile(origCoefs, dim, sparcity);
-        FourierTester.GenerateTestToFile(fileName, dim, noObs);
+        FourierTester.GenerateTestToFile(origFun, dim, noObs);
 
         double[][] fCoefs = Matrix.read(origCoefs);
         FourierResult R = new FourierResult(fCoefs);
 
-        R.estimateAllSample(fileName, fileName);
+        R.estimateAllSample(origFun, origFun);
 
-        double[][] fun = Matrix.read(fileName);
+        double[][] fun = Matrix.read(origFun);
 
         double max = Matrix.maxAbsCol(fun, dim);
 
@@ -79,7 +77,7 @@ public class FourierTester {
             fun[i][dim] = fun[i][dim]/max;
         }
 
-        Matrix.write(fun, fileName);            
+        Matrix.write(fun, origFun);            
 
         double[][] coefs = Matrix.read(origCoefs);
 
