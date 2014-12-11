@@ -35,11 +35,14 @@ public class RunKMAlg {
         //FourierTester.GenerateTestToFile(tmp, 8, 200);
         
         int n = 16;
-        int t = 20;
+        int t = 200;
+        double theta = 200;
         double ep = 0.05, del = 0.25;
       
         int numSample = (int) Math.ceil(2/(ep*ep)*((n+1)*Math.log(2) + Math.log(1/del)));
+        System.out.println("Number of samples is: " + numSample);
         //int numSample = (int) Math.ceil(Math.pow(2, n));
+        //numSample = Math.min(5000, numSample);
         
         double err = t*ep*ep;
         
@@ -54,15 +57,17 @@ public class RunKMAlg {
         
         TrivialLearner L = new TrivialLearner("TestSys", tmp);
         
-        //SimpleMatrix fCoefs = L.learn(numSample, 0.025, true);
+        //SimpleMatrix fCoefs = L.learn(numSample, theta, true);
         SimpleMatrix fCoefs = L.oldLearn(numSample, t, true);
         
+        /*
         String tmp2 = "TestFourierEstimated.csv";
         try{
             fCoefs.saveToFileCSV(tmp2);
         }catch(IOException e){
             throw new RuntimeException(e);
         }
+        */
         
         FourierResult R = new FourierResult(fCoefs);
         
