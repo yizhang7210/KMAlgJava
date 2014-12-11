@@ -27,7 +27,7 @@ public class RunKMAlg {
         
         RunKMAlg.runOnTest(16, 0.05, 0.1, 40);
         
-        
+        //RunKMAlg.runOnData(systems[0], sampleLocs[0], 50, 5);
         
         
         // End timer:
@@ -58,7 +58,7 @@ public class RunKMAlg {
         TrivialLearner L = new TrivialLearner("TestSys", origFun);
         
         //double[][] fCoefs = L.learn(numSample, theta, true);
-        double[][] fCoefs = L.oldLearn(numSample, t, true);
+        double[][] fCoefs = L.oldLearn(numSample, t+3, true);
         
         Matrix.write(fCoefs, estiCoef);
         

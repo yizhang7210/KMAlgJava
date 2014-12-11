@@ -1,4 +1,4 @@
-origPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/TestFromFourier.csv';
+origPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/OrigTestFun.csv';
 estiPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/TestEstimated.csv';
 
 #origPath <- '/home/y825zhan/00ME/CS860/JavaImp/TestFromFourier.csv';
@@ -14,7 +14,6 @@ range = 1:300;
 
 ord = order(origTable[,n+1], decreasing=T);
 origVals = origTable[,n+1][ord];
-#estiVals = estiTable[,n+1][order(estiTable[,n+1], decreasing=T)];
 estiVals = estiTable[,n+1][ord];
 
 
@@ -44,8 +43,8 @@ plot(errors[range], type='l', xlab = 'x', ylab = 'error at x', col = 4);
 #=====================================================================
 # Comparing Fourier coefficients
 
-origCoefPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/origFouriers.csv';
-estiCoefPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/TestFourierEstimated.csv';
+origCoefPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/OrigCoefs.csv';
+estiCoefPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/TestCoefsEstimated.csv';
 
 #origCoefPath <- '/home/y825zhan/00ME/CS860/JavaImp/origFouriers.csv';
 #estiCoefPath <- '/home/y825zhan/00ME/CS860/JavaImp/TestFourierEstimated.csv';
@@ -57,10 +56,10 @@ estiCoefs <- as.matrix(read.csv(estiCoefPath, sep = "", header = F, skip = 1));
 origCoefs <- origCoefs[do.call(order, as.data.frame(origCoefs)),]
 estiCoefs <- estiCoefs[do.call(order, as.data.frame(estiCoefs)),]
 
-#coefOrd <- order(origCoefs[,n+1],decreasing = T);
-
-#origCoefs <- origCoefs[coefOrd,]
-#estiCoefs <- estiCoefs[coefOrd,]
+# # Order coefs may not make sense
+# coefOrd <- order(origCoefs[,n+1],decreasing = T);
+# origCoefs <- origCoefs[coefOrd,]
+# estiCoefs <- estiCoefs[coefOrd,]
 
 
 #================================================
