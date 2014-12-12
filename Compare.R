@@ -1,39 +1,47 @@
 isTest = F;
+isHome = T;
 
-if(isTest){
-  #origPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/OrigTestFun.csv';
-  #estiPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/TestEstimated.csv';
-  
-  origPath <- '/home/y825zhan/00ME/CS860/JavaImp/OrigTestFun.csv';
-  estiPath <- '/home/y825zhan/00ME/CS860/JavaImp/TestEstimated.csv';
-  
-  #origCoefPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/OrigCoefs.csv';
-  #estiCoefPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/TestCoefsEstimated.csv';
-  
-  origCoefPath <- '/home/y825zhan/00ME/CS860/JavaImp/OrigCoefs.csv';
-  estiCoefPath <- '/home/y825zhan/00ME/CS860/JavaImp/TestCoefsEstimated.csv';
-  
+if(isHome){
+  setwd('/home/yzhang/00ME/Education/UW/CS860/JavaImp/');
 }else{
-  #origPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/OrigTestFun.csv';
-  #estiPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/TestEstimated.csv';
-  
-  origPath <- '/home/y825zhan/00ME/CS860/JavaImp/X264Processed.csv';
-  estiPath <- '/home/y825zhan/00ME/CS860/JavaImp/X264Estimated.csv';
-  
-  #origCoefPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/OrigCoefs.csv';
-  #estiCoefPath <- '/home/yzhang/00ME/Education/UW/CS860/JavaImp/TestCoefsEstimated.csv';
-  
-  origCoefPath <- '/home/y825zhan/00ME/CS860/JavaImp/OrigCoefs.csv';
-  estiCoefPath <- '/home/y825zhan/00ME/CS860/JavaImp/TestCoefsEstimated.csv';
-  
-  origPath <- '/home/y825zhan/00ME/CS860/JavaImp/X264Complete.csv';
-  estiPath <- '/home/y825zhan/00ME/CS860/JavaImp/X264CompleteEstimated.csv';
+  setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
+
+
+if(isTest){
+  origPath <- 'OrigTestFun.csv';
+  estiPath <- 'TestEstimated.csv';
+  
+}else{
+  
+  origPath <- 'X264Processed.csv';
+  estiPath <- 'X264Estimated.csv';
+  
+  origAllPath <- 'X264Complete.csv';
+  estiAllPath <- 'X264CompleteEstimated.csv';
+}
+
+origCoefPath <- 'OrigCoefs.csv';
+estiCoefPath <- 'TestCoefsEstimated.csv';
 
 #==============================================================================
 origTable <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
 estiTable <- as.matrix(read.csv(estiPath, sep = "", header = F, skip = 1));
+origAll <- as.matrix(read.csv(origAllPath, sep = "", header = F, skip = 1));
+estiAll <- as.matrix(read.csv(estiAllPath, sep = "", header = F, skip = 1));
+
+
+origNon <- rbind(origTable[,1:n], origAll[,1:n]);
+estiNon <- rbind(estiTable[,1:n], estiAll[,1:n]);
+nonOrd <- !(duplicated(origNon,fromLast = T) | duplicated(origNon));
+
+origNon <- rbind(origTable, origAll)[nonOrd,];
+estiNon <- rbind(estiTable, estiAll)[nonOrd,];
+
+plot(estiNon[,n+1], type='l');
+
+
 
 n <- ncol(origTable) - 1;
 noObs <- nrow(origTable);

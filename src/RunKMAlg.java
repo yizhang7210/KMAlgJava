@@ -26,7 +26,7 @@ public class RunKMAlg {
         
         //RunKMAlg.runOnTest(18, 0.05, 0.1, 50);
         
-        RunKMAlg.runOnData(systems[1], sampleLocs[1], 600, 0.05);
+        RunKMAlg.runOnData(systems[1], sampleLocs[1], 200, 0.2);
         
         
         // End timer:
