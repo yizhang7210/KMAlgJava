@@ -24,10 +24,9 @@ public class RunKMAlg {
             "X264Processed.csv", "LLVMProcessed.csv"};
         
         
-        //RunKMAlg.runOnTest(18, 0.05, 0.1, 50);
+        //RunKMAlg.runOnTest(12, 0.05, 0.1, 50);
         
-        RunKMAlg.runOnData(systems[1], sampleLocs[1], 200, 0.2);
-        
+        RunKMAlg.runOnData(systems[0], systems[0]+"/origFun.csv", 80, 0.165);
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
@@ -39,10 +38,10 @@ public class RunKMAlg {
     
     public static void runOnTest(int n, double ep, double del, int t){
         
-        String origFun = "OrigTestFun.csv";
-        String origCoef = "OrigCoefs.csv";
-        String estiFun = "TestEstimated.csv";
-        String estiCoef = "TestCoefsEstimated.csv";
+        String origFun = "Test/origFun.csv";
+        String origCoef = "Test/origCoef.csv";
+        String estiFun = "Test/estiFun.csv";
+        String estiCoef = "Test/estiCoef.csv";
       
         int numSample = (int) Math.ceil(2/(ep*ep)*((n+1)*Math.log(2) + Math.log(1/del)));
         
@@ -71,8 +70,8 @@ public class RunKMAlg {
     
     public static void runOnData(String sysName, String sampleLoc, int numSample, double theta){
         
-        String estiCoef = sysName + "CoefsEstimated.csv";
-        String estiFun = sysName + "Estimated.csv";
+        String estiCoef = sysName + "/estiCoef.csv";
+        String estiFun = sysName + "/estiFun.csv";
 
         TrivialLearner L = new TrivialLearner(sysName, sampleLoc);
         
@@ -84,7 +83,7 @@ public class RunKMAlg {
         FourierResult R = new FourierResult(fCoefs);
         
         R.estimateAllSample(estiFun, sampleLoc);
-        R.estimateAllSample(sysName+"CompleteEstimated.csv", sysName+"Complete.csv");
+        R.estimateAllSample(sysName+"/estiComplete.csv", sysName+"/completeFun.csv");
         
         Matrix.print(fCoefs);      
     }
