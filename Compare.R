@@ -7,7 +7,7 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-sys <- 'Apache';
+sys <- 'X264';
 
 if(isTest){
   origPath <- paste(sys, '/origFun.csv', sep='');
@@ -98,13 +98,6 @@ if(nrow(estiCoefs) > 1){
   estiCoefs <- estiCoefs[do.call(order, as.data.frame(estiCoefs)),]
 }
 
-
-# # Order coefs may not make sense
-# coefOrd <- order(origCoefs[,n+1],decreasing = T);
-# origCoefs <- origCoefs[coefOrd,]
-# estiCoefs <- estiCoefs[coefOrd,]
-
-
 #================================================
 # Plot
 plot(origCoefs[,n+1], type = 'l', xlab = 'x', ylab = 'h(x)', col = 2);
@@ -116,5 +109,39 @@ points(estiCoefs[,n+1], col = 4, cex=0.8);
 title('Original and Estimated Coefficients Comparison')
 legend('topright', legend = c("Estimated h(x)", "Real f(x)"), 
        lwd = c(2.5, 2.5), col = c(4,2));
+
+
+#=========================================================
+# Look at the original coefs ordered by weight
+coefOrd <- order(rowSums(origCoefs[,1:n]));
+orderedOrigCoefs <- origCoefs[coefOrd,];
+
+coefRange <- 1:30;
+plot(orderedOrigCoefs[coefRange,n+1], type='l',col=2,xlab='z',ylab='coef(z)');
+title('Distribution of Fourier Coefficients')
+
+#===============================================================
+# Coefficients grouped by weight
+
+sumCoef <- matrix(0,1,n+1);
+cut <- choose(n, 0:n);
+cuts <- cut;
+
+#orderedCoefVals <- orderedOrigCoefs[,n+1];
+orderedCoefVals <- orderedOrigCoefs[,n+1]^2;
+
+sumCoef[1] <- orderedCoefVals[1];
+
+for(i in 2:(n+1)){
+  cuts[i] <- sum(cut[1:i]);
+  sumCoef[i] <- sum(orderedCoefVals[1:cuts[i]]) - sum(sumCoef[1:(i-1)]);
+}
+
+plot(0:n, sumCoef, type='l', xlab='Coefficients at level', ylab='Sum of coefficients squared');
+title('Distribution of Fourier Coefficients by level');
+
+print(sprintf("error is: %f", error));
+
+
 
 

@@ -26,7 +26,7 @@ public class RunKMAlg {
         
         //RunKMAlg.runOnTest(12, 0.05, 0.1, 50);
         
-        RunKMAlg.runOnData(systems[0], systems[0]+"/origFun.csv", 80, 0.165);
+        RunKMAlg.runOnData(systems[1], systems[1]+"/origFun.csv", 500, 0.13);
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;

@@ -1,8 +1,8 @@
-origPath <- 'X264/rawFun.csv';
-newFile  <- 'X264/origFun.csv';
+origPath <- 'SQLite/rawFun.csv';
+newFile  <- 'SQLite/origFun.csv';
 
 normalize <- function(origPath, newFile){
-  origTable <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
+  origTable <- as.matrix(read.csv(origPath, sep = ",", header = F, skip = 0));
   
   n <- ncol(origTable) - 1;
   noObs <- nrow(origTable);
