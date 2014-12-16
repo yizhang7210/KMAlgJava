@@ -7,7 +7,7 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-sys <- 'X264';
+sys <- 'Apache';
 
 if(isTest){
   origPath <- paste(sys, '/origFun.csv', sep='');
@@ -58,17 +58,16 @@ range = 1:noObs;
 ord = order(origTable[,n+1], decreasing=T);
 origVals = origTable[,n+1][ord];
 estiVals = estiTable[,n+1][ord];
-newEstiVals = estiVals*noObs/2^n;
 
 
 # The estimation, h(x):
 
-minVal = min(newEstiVals[range], origVals[range]);
-maxVal = max(newEstiVals[range], origVals[range]);
+minVal = min(estiVals[range], origVals[range]);
+maxVal = max(estiVals[range], origVals[range]);
 
 
 
-plot(newEstiVals[range], type = 'l', xlab = 'x', ylab = 'h(x)', col = 4,
+plot(estiVals[range], type = 'l', xlab = 'x', ylab = 'h(x)', col = 4,
      ylim = c(minVal*0.95,maxVal*1.05));
 
 # The real, f(x):
@@ -78,7 +77,7 @@ lines(origVals[range], col = 2);
 title('Original and Estimated Function Comparison')
 legend('topright', legend = c("Estimated h(x)", "Real f(x)"), 
        lwd = c(2.5, 2.5), col = c(4,2));
-errors <- as.matrix(abs(origTable[, n+1] - estiTable[, n+1]*noObs/2^n)/abs(origTable[,n+1]));
+errors <- as.matrix(abs(origTable[, n+1] - estiTable[, n+1])/abs(origTable[,n+1]));
 maxerror <- max(errors);
 minerror <- min(errors);
 error <- mean(errors);

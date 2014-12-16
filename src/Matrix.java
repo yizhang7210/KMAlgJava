@@ -140,4 +140,37 @@ public class Matrix {
         return(max);
     }
     
+    public static double mean(double[] vec){
+        double sum = 0;
+        
+        for(int i = 0; i < vec.length; ++i){
+            sum += vec[i];
+        }
+        
+        return(sum/vec.length);
+    }
+    
+    public static double max(double[] vec){
+        double max = Double.NEGATIVE_INFINITY;
+        
+        for(int i = 0; i < vec.length; ++i){
+            if(vec[i] > max){
+                max = vec[i];
+            }
+        }
+        
+        return(max);
+    }
+
+    public static double min(double[] vec){
+        double min = Double.POSITIVE_INFINITY;
+        
+        for(int i = 0; i < vec.length; ++i){
+            if(vec[i] < min){
+                min = vec[i];
+            }
+        }
+        
+        return(min);
+    }
 }

@@ -44,21 +44,30 @@ public class FourierResult {
         return(val);
     }
     
-    public void estimateAllSample(String newName, String sampleLoc){
+    public double estimateAllSample(String newName, String origFun){
 
-        double[][] allSample = Matrix.read(sampleLoc);
+        double[][] allSample = Matrix.read(origFun);
 
         int m = allSample.length;
         int n = allSample[0].length - 1;
+        
+        double[] errors = new double [m];
 
         for(int i = 0; i < m;++i){
+            
             double [] input = Arrays.copyOfRange(allSample[i], 0, n);
-
-            allSample[i][n] = this.h(input);
+            
+            double oldVal = allSample[i][n];
+            double newVal = this.h(input)*m/Math.pow(2, n);
+            
+            errors[i] = Math.abs(newVal - oldVal)/Math.abs(oldVal);
+            
+            allSample[i][n] = newVal;
         }
 
         Matrix.write(allSample, newName);
 
+        return(Matrix.mean(errors));
     }
     
     

@@ -18,16 +18,13 @@ public class RunKMAlg {
         // Start timer:
         long startTime = System.currentTimeMillis();
 
-        String [] systems = {"Apache", "X264", "LLVM"};
-        
-        String [] sampleLocs = {"ApacheProcessed.csv", 
-            "X264Processed.csv", "LLVMProcessed.csv"};
-        
+        String [] systems = {"Apache", "X264", "LLVM", "BDBC"};
         
         //RunKMAlg.runOnTest(12, 0.05, 0.1, 50);
         
-        RunKMAlg.runOnData(systems[1], systems[1]+"/origFun.csv", 500, 0.13);
-        
+        double err = RunKMAlg.runOnData(systems[0], systems[0]+"/origFun.csv", 100, 0.15);
+
+        System.out.println("error is: " + err);
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
         System.out.println("\nTime taken: " + duration/1000 + " seconds");
@@ -68,12 +65,14 @@ public class RunKMAlg {
     }
     
     
-    public static void runOnData(String sysName, String sampleLoc, int numSample, double theta){
+    public static double runOnData(String sysName, String origFun, int numSample, double theta){
+        
+        double err;
         
         String estiCoef = sysName + "/estiCoef.csv";
         String estiFun = sysName + "/estiFun.csv";
-
-        TrivialLearner L = new TrivialLearner(sysName, sampleLoc);
+        
+        TrivialLearner L = new TrivialLearner(sysName, origFun);
         
         double[][] fCoefs = L.learn(numSample, theta, true);
         //double[][] fCoefs = L.oldLearn(numSample, (int) theta, true);
@@ -82,10 +81,12 @@ public class RunKMAlg {
         
         FourierResult R = new FourierResult(fCoefs);
         
-        R.estimateAllSample(estiFun, sampleLoc);
-        R.estimateAllSample(sysName+"/estiComplete.csv", sysName+"/completeFun.csv");
+        err = R.estimateAllSample(estiFun, origFun);
+        //R.estimateAllSample(sysName+"/estiComplete.csv", sysName+"/completeFun.csv");
         
-        Matrix.print(fCoefs);      
+        Matrix.print(fCoefs);
+        
+        return(err);
     }
     
 }
