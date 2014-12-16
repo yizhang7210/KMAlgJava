@@ -22,9 +22,18 @@ public class RunKMAlg {
         
         //RunKMAlg.runOnTest(12, 0.05, 0.1, 50);
         
-        double err = RunKMAlg.runOnData(systems[0], systems[0]+"/origFun.csv", 100, 0.15);
-
-        System.out.println("error is: " + err);
+        double[][] allErrs = new double[15][9];
+        
+        for(int i = 0; i < 15; ++i){
+            for(int j = 0; j < 9; ++j){
+                allErrs[i][j] = RunKMAlg.runOnData(systems[3], systems[3]+"/origFun.csv",
+                        i*30+10, j*0.05);
+            }
+        }
+        
+        Matrix.write(allErrs, "allErrors.csv");
+        
+        
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
         System.out.println("\nTime taken: " + duration/1000 + " seconds");
@@ -84,7 +93,7 @@ public class RunKMAlg {
         err = R.estimateAllSample(estiFun, origFun);
         //R.estimateAllSample(sysName+"/estiComplete.csv", sysName+"/completeFun.csv");
         
-        Matrix.print(fCoefs);
+        //Matrix.print(fCoefs);
         
         return(err);
     }

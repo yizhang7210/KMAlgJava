@@ -141,6 +141,7 @@ title('Distribution of Fourier Coefficients by level');
 
 print(sprintf("error is: %f", error));
 
+allErr <- as.matrix(read.csv("allErrors.csv", sep=" ", header=F, skip = 1))
 
-
+min(allErr);
 
