@@ -28,7 +28,7 @@ public class RunKMAlg {
             for(int j = 0; j < 9; ++j){
                 allErrs[i][j] = RunKMAlg.runOnData(systems[3], systems[3]+"/origFun.csv",
                         i*30+10, j*0.05);
-            }
+            }   
         }
         
         Matrix.write(allErrs, "allErrors.csv");
