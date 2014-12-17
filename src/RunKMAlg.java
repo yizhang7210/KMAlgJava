@@ -1,4 +1,7 @@
 
+import java.util.Arrays;
+
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -20,26 +23,30 @@ public class RunKMAlg {
 
         String [] systems = {"Apache", "X264", "LLVM", "BDBC"};
         
+        String sys = systems[1];
+        
         //RunKMAlg.runOnTest(12, 0.05, 0.1, 50);
         
-        double[][] allErrs = new double[15][9];
+        int[] sampleSizes = {16, 32, 48, 81};
+        double[] thetas = new double[30];
         
-        for(int i = 0; i < 15; ++i){
-            for(int j = 0; j < 9; ++j){
-                allErrs[i][j] = RunKMAlg.runOnData(systems[3], systems[3]+"/origFun.csv",
-                        i*30+10, j*0.05);
-            }   
+        for(int i = 0; i < thetas.length; ++i){
+            thetas[i] = 0.02 + i*0.5/thetas.length;
         }
         
-        Matrix.write(allErrs, "allErrors.csv");
+        System.out.println("The thetas are: " + Arrays.toString(thetas));
+        
+        double[][] allErrs;
+        
+        allErrs = RunKMAlg.multiRun(sys, sampleSizes, thetas, 15);
+        
+        Matrix.write(allErrs, sys+"/allErrors.csv");
         
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
         System.out.println("\nTime taken: " + duration/1000 + " seconds");
     }
-    
-    
     
     
     public static void runOnTest(int n, double ep, double del, int t){
@@ -96,6 +103,32 @@ public class RunKMAlg {
         //Matrix.print(fCoefs);
         
         return(err);
+    }
+    
+    public static double[][] multiRun(String sysName, int[] sampleSizes, 
+            double[] thetas, int repeat){
+        
+        int numSizes = sampleSizes.length;
+        int numThetas = thetas.length;
+        
+        String origFun = sysName + "/origFun.csv";
+        
+        double[][][] allErrors = new double[numSizes][numThetas][repeat];
+        double[][] meanErrors = new double[numSizes][numThetas];
+        
+        for(int i = 0; i < numSizes; ++i){
+            for(int j = 0; j < numThetas; ++j){
+                // Fill in the errors
+                for(int k = 0; k < repeat; ++k){
+                    allErrors[i][j][k] = RunKMAlg.runOnData(sysName, origFun,
+                            sampleSizes[i], thetas[j]);
+                }
+                // Get the average
+                meanErrors[i][j] = Matrix.mean(allErrors[i][j]);
+            }
+        }
+        
+        return(meanErrors);
     }
     
 }

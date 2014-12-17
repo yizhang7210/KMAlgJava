@@ -104,6 +104,10 @@ public class Matrix {
     
     public static void write(double[][] mat, String file){
         
+        if(mat.length == 0){
+            return;
+        }
+        
         try{
             PrintWriter w = new PrintWriter(file);
             

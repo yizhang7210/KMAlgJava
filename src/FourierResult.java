@@ -45,6 +45,10 @@ public class FourierResult {
     }
     
     public double estimateAllSample(String newName, String origFun){
+        
+        if(this.fCoefs.length == 0){
+            return(Double.POSITIVE_INFINITY);
+        }
 
         double[][] allSample = Matrix.read(origFun);
 

@@ -7,7 +7,7 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-sys <- 'BDBC';
+sys <- 'Apache';
 
 if(isTest){
   origPath <- paste(sys, '/origFun.csv', sep='');
@@ -140,8 +140,4 @@ plot(0:n, sumCoef, type='l', xlab='Coefficients at level', ylab='Sum of coeffici
 title(paste(sys, ': Distribution of Fourier Coefficients by level', sep=""));
 
 print(sprintf("error is: %f", error));
-
-#allErr <- as.matrix(read.csv("allErrors.csv", sep=" ", header=F, skip = 1))
-
-#min(allErr);
 
