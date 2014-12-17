@@ -7,7 +7,7 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-sys <- 'X264';
+sys <- 'BDBJ';
 
 if(isTest){
   origPath <- paste(sys, '/origFun.csv', sep='');
@@ -15,14 +15,14 @@ if(isTest){
   
 }else{
   
-  origPath <- paste(sys, '/origFun.csv', sep='');
-  estiPath <- paste(sys, '/estiFun.csv', sep='');
+  origPath <- paste(sys, '/rawFun.csv', sep='');
+  estiPath <- paste(sys, '/estiRawFun.csv', sep='');
   
   origAllPath <- paste(sys, '/completeFun.csv', sep='');
   estiAllPath <- paste(sys, '/estiComplete.csv', sep='');
 }
 
-origCoefPath <- paste(sys, '/origCoef.csv', sep='');
+origCoefPath <- paste(sys, '/origCoefPos.csv', sep='');
 estiCoefPath <- paste(sys, '/estiCoef.csv', sep='');
 
 #==============================================================================
@@ -90,55 +90,55 @@ title('Error at all points');
 #=====================================================================
 # Comparing Fourier coefficients
 
-origCoefs<- as.matrix(read.csv(origCoefPath, sep = "", header = F, skip = 1));
-estiCoefs <- as.matrix(read.csv(estiCoefPath, sep = "", header = F, skip = 1));
-
-origCoefs <- origCoefs[do.call(order, as.data.frame(origCoefs)),]
-if(nrow(estiCoefs) > 1){
-  estiCoefs <- estiCoefs[do.call(order, as.data.frame(estiCoefs)),]
-}
-
-#================================================
-# Plot
-plot(origCoefs[,n+1], type = 'l', xlab = 'x', ylab = 'h(x)', col = 2);
-
-# The real, f(x):
-points(estiCoefs[,n+1], col = 4, cex=0.8);
-
-# Titles and legends and others:
-title('Original and Estimated Coefficients Comparison')
-legend('topright', legend = c("Estimated h(x)", "Real f(x)"), 
-       lwd = c(2.5, 2.5), col = c(4,2));
-
-
-#=========================================================
-# Look at the original coefs ordered by weight
-coefOrd <- order(rowSums(origCoefs[,1:n]));
-orderedOrigCoefs <- origCoefs[coefOrd,];
-
-coefRange <- 1:2^n;
-plot(orderedOrigCoefs[coefRange,n+1]^2, type='p',col=2,xlab='z',ylab='coef(z)',cex=0.4);
-title(paste(sys, ': Distribution of Fourier Coefficients', sep=""))
-
-#===============================================================
-# Coefficients grouped by weight
-
-sumCoef <- matrix(0,1,n+1);
-cut <- choose(n, 0:n);
-cuts <- cut;
-
-#orderedCoefVals <- orderedOrigCoefs[,n+1];
-orderedCoefVals <- orderedOrigCoefs[,n+1]^2;
-
-sumCoef[1] <- orderedCoefVals[1];
-
-for(i in 2:(n+1)){
-  cuts[i] <- sum(cut[1:i]);
-  sumCoef[i] <- sum(orderedCoefVals[1:cuts[i]]) - sum(sumCoef[1:(i-1)]);
-}
-
-plot(0:n, sumCoef, type='l', xlab='Coefficients at level', ylab='Sum of coefficients squared');
-title(paste(sys, ': Distribution of Fourier Coefficients by level', sep=""));
+# origCoefs<- as.matrix(read.csv(origCoefPath, sep = "", header = F, skip = 1));
+# estiCoefs <- as.matrix(read.csv(estiCoefPath, sep = "", header = F, skip = 1));
+# 
+# origCoefs <- origCoefs[do.call(order, as.data.frame(origCoefs)),]
+# if(nrow(estiCoefs) > 1){
+#   estiCoefs <- estiCoefs[do.call(order, as.data.frame(estiCoefs)),]
+# }
+# 
+# #================================================
+# # Plot
+# plot(origCoefs[,n+1], type = 'l', xlab = 'x', ylab = 'h(x)', col = 2);
+# 
+# # The real, f(x):
+# points(estiCoefs[,n+1], col = 4, cex=0.8);
+# 
+# # Titles and legends and others:
+# title('Original and Estimated Coefficients Comparison')
+# legend('topright', legend = c("Estimated h(x)", "Real f(x)"), 
+#        lwd = c(2.5, 2.5), col = c(4,2));
+# 
+# 
+# #=========================================================
+# # Look at the original coefs ordered by weight
+# coefOrd <- order(rowSums(origCoefs[,1:n]));
+# orderedOrigCoefs <- origCoefs[coefOrd,];
+# 
+# coefRange <- 1:2^n;
+# plot(orderedOrigCoefs[coefRange,n+1]^2, type='p',col=2,xlab='z',ylab='coef(z)',cex=0.4);
+# title(paste(sys, ': Distribution of Fourier Coefficients', sep=""))
+# 
+# #===============================================================
+# # Coefficients grouped by weight
+# 
+# sumCoef <- matrix(0,1,n+1);
+# cut <- choose(n, 0:n);
+# cuts <- cut;
+# 
+# #orderedCoefVals <- orderedOrigCoefs[,n+1];
+# orderedCoefVals <- orderedOrigCoefs[,n+1]^2;
+# 
+# sumCoef[1] <- orderedCoefVals[1];
+# 
+# for(i in 2:(n+1)){
+#   cuts[i] <- sum(cut[1:i]);
+#   sumCoef[i] <- sum(orderedCoefVals[1:cuts[i]]) - sum(sumCoef[1:(i-1)]);
+# }
+# 
+# plot(0:n, sumCoef, type='l', xlab='Coefficients at level', ylab='Sum of coefficients squared');
+# title(paste(sys, ': Distribution of Fourier Coefficients by level', sep=""));
 
 print(sprintf("error is: %f", error));
 

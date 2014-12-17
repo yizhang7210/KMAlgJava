@@ -23,9 +23,8 @@ public class RunKMAlg {
 
         String [] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ"};
         
-        String sys = systems[1];
-        
-        //RunKMAlg.runOnTest(12, 0.05, 0.1, 50);
+        String sys = systems[4];
+
         /*
         int[] sampleSizes = {9, 18, 27, 29};
         double[] thetas = new double[30];
@@ -41,9 +40,9 @@ public class RunKMAlg {
         allErrs = RunKMAlg.multiRun(sys, sampleSizes, 4, thetas, 15);
         
         Matrix.write(allErrs, sys+"/allErrors.csv");
-        */
+        */        
         
-        double err = RunKMAlg.runOnData(sys, sys+"/origFun.csv", 7, 140, 0.15);
+        double err = RunKMAlg.runOnData(sys, sys+"/origFun.csv", 16, 48, 0.16);
         
         System.out.println(err);
         
@@ -85,7 +84,8 @@ public class RunKMAlg {
     }
     
     
-    public static double runOnData(String sysName, String origFun, int maxLevel, int numSample, double theta){
+    public static double runOnData(String sysName, String origFun, 
+            int maxLevel, int numSample, double theta){
         
         double err;
         
@@ -104,7 +104,7 @@ public class RunKMAlg {
         err = R.estimateAllSample(estiFun, origFun);
         //R.estimateAllSample(sysName+"/estiComplete.csv", sysName+"/completeFun.csv");
         
-        //Matrix.print(fCoefs);
+        Matrix.print(fCoefs);
         
         return(err);
     }
