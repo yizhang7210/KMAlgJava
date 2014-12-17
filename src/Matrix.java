@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import org.apache.commons.math3.util.CombinatoricsUtils;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -88,6 +89,10 @@ public class Matrix {
     }
     
     public static void print(double [][] mat){
+        
+        if(mat.length == 0){
+            return;
+        }
         int m = mat.length;
         int n = mat[0].length;
         
@@ -144,14 +149,18 @@ public class Matrix {
         return(max);
     }
     
-    public static double mean(double[] vec){
+    public static double sum(double[] vec){
         double sum = 0;
         
         for(int i = 0; i < vec.length; ++i){
-            sum += vec[i];
+            sum+= vec[i];
         }
-        
-        return(sum/vec.length);
+        return(sum);
+    }
+    
+    
+    public static double mean(double[] vec){        
+        return(Matrix.sum(vec)/vec.length);
     }
     
     public static double max(double[] vec){
@@ -176,5 +185,20 @@ public class Matrix {
         }
         
         return(min);
+    }
+    
+    public static int numUpToLevel(int n, int level){
+        
+        if(level > n){
+            level = n;
+        }
+        
+        int num = 0;
+        
+        for(int i = 0; i <= level; ++i){
+            num += CombinatoricsUtils.binomialCoefficient(n, i);
+        }
+        
+        return(num);
     }
 }

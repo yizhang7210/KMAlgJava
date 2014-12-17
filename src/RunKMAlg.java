@@ -26,22 +26,26 @@ public class RunKMAlg {
         String sys = systems[1];
         
         //RunKMAlg.runOnTest(12, 0.05, 0.1, 50);
-        
-        int[] sampleSizes = {16, 32, 48, 81};
+        /*
+        int[] sampleSizes = {9, 18, 27, 29};
         double[] thetas = new double[30];
         
         for(int i = 0; i < thetas.length; ++i){
-            thetas[i] = 0.02 + i*0.5/thetas.length;
+            thetas[i] = i*0.5/thetas.length;
         }
         
         System.out.println("The thetas are: " + Arrays.toString(thetas));
         
         double[][] allErrs;
         
-        allErrs = RunKMAlg.multiRun(sys, sampleSizes, thetas, 15);
+        allErrs = RunKMAlg.multiRun(sys, sampleSizes, 4, thetas, 15);
         
         Matrix.write(allErrs, sys+"/allErrors.csv");
+        */
         
+        double err = RunKMAlg.runOnData(sys, sys+"/origFun.csv", 7, 140, 0.15);
+        
+        System.out.println(err);
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
@@ -68,7 +72,7 @@ public class RunKMAlg {
 
         TrivialLearner L = new TrivialLearner("TestSys", origFun);
         
-        double[][] fCoefs = L.learn(numSample, 1.0/t, true);
+        double[][] fCoefs = L.learn(numSample, 1.0/t, (int) Math.ceil(n/2));
         //double[][] fCoefs = L.oldLearn(numSample, t, true);
         
         Matrix.write(fCoefs, estiCoef);
@@ -81,7 +85,7 @@ public class RunKMAlg {
     }
     
     
-    public static double runOnData(String sysName, String origFun, int numSample, double theta){
+    public static double runOnData(String sysName, String origFun, int maxLevel, int numSample, double theta){
         
         double err;
         
@@ -90,7 +94,7 @@ public class RunKMAlg {
         
         TrivialLearner L = new TrivialLearner(sysName, origFun);
         
-        double[][] fCoefs = L.learn(numSample, theta, true);
+        double[][] fCoefs = L.learn(numSample, theta, maxLevel);
         //double[][] fCoefs = L.oldLearn(numSample, (int) theta, true);
         
         Matrix.write(fCoefs, estiCoef);
@@ -105,7 +109,7 @@ public class RunKMAlg {
         return(err);
     }
     
-    public static double[][] multiRun(String sysName, int[] sampleSizes, 
+    public static double[][] multiRun(String sysName, int[] sampleSizes, int maxLevel,
             double[] thetas, int repeat){
         
         int numSizes = sampleSizes.length;
@@ -121,7 +125,7 @@ public class RunKMAlg {
                 // Fill in the errors
                 for(int k = 0; k < repeat; ++k){
                     allErrors[i][j][k] = RunKMAlg.runOnData(sysName, origFun,
-                            sampleSizes[i], thetas[j]);
+                            maxLevel, sampleSizes[i], thetas[j]);
                 }
                 // Get the average
                 meanErrors[i][j] = Matrix.mean(allErrors[i][j]);

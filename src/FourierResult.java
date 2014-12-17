@@ -64,14 +64,15 @@ public class FourierResult {
             double oldVal = allSample[i][n];
             double newVal = this.h(input)*m/Math.pow(2, n);
             
-            errors[i] = Math.abs(newVal - oldVal)/Math.abs(oldVal);
-            
+            //errors[i] = Math.abs(newVal - oldVal)/Math.abs(oldVal);
+            errors[i] = Math.abs(newVal - oldVal)*Math.abs(newVal-oldVal);
             allSample[i][n] = newVal;
         }
 
         Matrix.write(allSample, newName);
 
-        return(Matrix.mean(errors));
+        return(Matrix.sum(errors)/Math.pow(2, n));
+        //return(Matrix.mean(errors));
     }
     
     

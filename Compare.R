@@ -7,7 +7,7 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-sys <- 'BDBJ';
+sys <- 'X264';
 
 if(isTest){
   origPath <- paste(sys, '/origFun.csv', sep='');
@@ -77,7 +77,8 @@ lines(origVals[range], col = 2);
 title('Original and Estimated Function Comparison')
 legend('topright', legend = c("Estimated h(x)", "Real f(x)"), 
        lwd = c(2.5, 2.5), col = c(4,2));
-errors <- as.matrix(abs(origTable[, n+1] - estiTable[, n+1])/abs(origTable[,n+1]));
+#errors <- as.matrix(abs(origTable[, n+1] - estiTable[, n+1])/abs(origTable[,n+1]));
+errors <- as.matrix(abs((origVals - estiVals)/origVals));
 maxerror <- max(errors);
 minerror <- min(errors);
 error <- mean(errors);

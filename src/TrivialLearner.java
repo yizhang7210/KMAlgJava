@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+
 /**
  * Trivial Learner: implemented the low-level algorithm for learning Boolean
  * functions f: {0,1}^n --> R.
@@ -108,7 +109,7 @@ public class TrivialLearner {
     }  
     
 
-    public double[][] learn(int numSamples, double theta, Boolean sorted){
+    public double[][] learn(int numSamples, double theta, int maxLevel){
         
         int n = this.numFeatures;
         
@@ -134,7 +135,7 @@ public class TrivialLearner {
         
         // Initialize the Fourier coefficients.
         double[][] allCoefs = new double [(int) Math.pow(2, n)][n + 1];
-            
+        
         Comparator<double[]> comp = new Comparator<double[]>(){
             @Override
             public int compare(double[] a, double [] b){
@@ -146,21 +147,21 @@ public class TrivialLearner {
         int nonZeroCount = 0;
         while(i < allCoefs.length){
             double [] vec = Matrix.intToVec(i, n);
+            
+            if(Matrix.sum(vec) <= maxLevel){
+                double val = this.approx(vec, sampleToUse);
 
-            double val = this.approx(vec, sampleToUse);
-
-            if(Math.abs(val) > theta){
-                allCoefs[i] = Arrays.copyOf(vec, n+1);
-                allCoefs[i][n] = val;
-                ++nonZeroCount;
+                if(Math.abs(val) > theta){
+                    allCoefs[i] = Arrays.copyOf(vec, n+1);
+                    allCoefs[i][n] = val;
+                    ++nonZeroCount;
+                }
             }
 
             ++i;
         }
         
-        if(sorted){
-            Arrays.sort(allCoefs, comp);
-        }
+        Arrays.sort(allCoefs, comp);
         
         allCoefs = Arrays.copyOfRange(allCoefs, 0, nonZeroCount);
 
