@@ -7,7 +7,7 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-sys <- 'Apache';
+sys <- 'BDBJ';
 
 if(isTest){
   origPath <- paste(sys, '/origFun.csv', sep='');

@@ -21,7 +21,7 @@ public class RunKMAlg {
         // Start timer:
         long startTime = System.currentTimeMillis();
 
-        String [] systems = {"Apache", "X264", "LLVM", "BDBC"};
+        String [] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ"};
         
         String sys = systems[1];
         
