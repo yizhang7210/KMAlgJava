@@ -1,6 +1,6 @@
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
 
-sysNum <- 4;
+sysNum <- 1;
 
 sys <- systems[sysNum];
 
@@ -8,7 +8,7 @@ sampleSizes <- rbind(c(9, 18, 27, 29), c(16, 32, 48, 81),
                      c(11, 22, 33, 62), c(18, 36, 54, 139),
                      c(26, 48, 52, 78));
 
-l <- 40;
+l <- 50;
 
 thetas <- seq(from=0,by=1/(2*l), length=l)
 
@@ -25,7 +25,7 @@ if(sysNum == 5){
 
 minErr <- min(allErr[is.finite(allErr)]);
 maxErr <- max(allErr[is.finite(allErr)]);
-rowMinErr <- matrix(apply(allErr,1,min),4,1);
+rowMinErr <- matrix(apply(allErr,1,min),nrow(allErr),1);
 print("Minimum error for each sample size is:");
 print(rowMinErr);
 
