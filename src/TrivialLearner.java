@@ -23,6 +23,7 @@ public class TrivialLearner {
     private final String sysName;
     private final String sampleLoc;
     private final double[][] allSamples;
+    public double[] transformParam;
     
     /**
      * Constructor: provide the name of the system and the location of samples
@@ -35,6 +36,7 @@ public class TrivialLearner {
         this.allSamples = this.readSample(sampleLoc);
         this.numObs = this.allSamples.length;
         this.numFeatures = this.allSamples[0].length - 1;
+        this.transformParam = new double[2];
     }
     
     
@@ -133,6 +135,8 @@ public class TrivialLearner {
             sampleToUse[i] = this.allSamples[numList.get(i)];
         }
         
+        sampleToUse = this.normalizeSample(sampleToUse);
+        
         // Initialize the Fourier coefficients.
         double[][] allCoefs = new double [(int) Math.pow(2, n)][n + 1];
         
@@ -211,7 +215,6 @@ public class TrivialLearner {
             
             allCoefs = Arrays.copyOfRange(allCoefs, 0, numCoefs);
             
-            
         }else{
             for(int i = 0; i < allCoefs.length; ++i){
 
@@ -227,6 +230,32 @@ public class TrivialLearner {
         }
                
         return(allCoefs);
+    }
+    
+    private double[][] normalizeSample(double[][] origSample){
+        
+        int m = origSample.length;
+        int n = origSample[0].length;
+        
+        double[] vals = new double[m];        
+        for(int i = 0; i < m; ++i){
+            vals[i] = origSample[i][n-1];
+        }
+        
+        double ave = Matrix.mean(vals);
+        for(int i = 0; i < m; ++i){
+            origSample[i][n-1] = origSample[i][n-1] - ave;
+        }
+        
+        double max = Matrix.maxAbsCol(origSample, n-1);
+        for(int i = 0; i < m; ++i){
+            origSample[i][n-1] = origSample[i][n-1]/(max);
+        }
+        
+        this.transformParam[0] = ave;
+        this.transformParam[1] = max;
+        
+        return(origSample);
     }
     
     

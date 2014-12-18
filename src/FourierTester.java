@@ -66,8 +66,10 @@ public class FourierTester {
 
         double[][] fCoefs = Matrix.read(origCoefs);
         FourierResult R = new FourierResult(fCoefs);
+        
+        double[] transform = {0,1};
 
-        R.estimateAllSample(origFun, origFun);
+        R.estimateAllSample(origFun, origFun, transform);
 
         double[][] fun = Matrix.read(origFun);
 

@@ -23,28 +23,27 @@ public class RunKMAlg {
 
         String [] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ"};
         
-        String sys = systems[4];
+        String sys = systems[0];
 
-        /*
-        int[] sampleSizes = {9, 18, 27, 29};
-        double[] thetas = new double[30];
+
+        int[] sampleSizes = {9,18,27,29};
+        double[] thetas = new double[50];
         
         for(int i = 0; i < thetas.length; ++i){
-            thetas[i] = i*0.5/thetas.length;
+            thetas[i] = i*0.4/thetas.length;
         }
         
         System.out.println("The thetas are: " + Arrays.toString(thetas));
         
         double[][] allErrs;
         
-        allErrs = RunKMAlg.multiRun(sys, sampleSizes, 4, thetas, 15);
+        allErrs = RunKMAlg.multiRun(sys, sampleSizes, 9, thetas, 15);
         
-        Matrix.write(allErrs, sys+"/allErrors.csv");
-        */        
+        Matrix.write(allErrs, sys+"/allErrors.csv");      
         
-        double err = RunKMAlg.runOnData(sys, sys+"/origFun.csv", 16, 48, 0.16);
+        //double err = RunKMAlg.runOnData(sys, sys+"/rawFun.csv", 3, 30, 0.2);
         
-        System.out.println(err);
+        //System.out.println(err);
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
@@ -78,7 +77,7 @@ public class RunKMAlg {
         
         FourierResult R = new FourierResult(fCoefs);
         
-        R.estimateAllSample(estiFun, origFun);
+        R.estimateAllSample(estiFun, origFun, L.transformParam);
         
         Matrix.print(fCoefs);      
     }
@@ -90,7 +89,7 @@ public class RunKMAlg {
         double err;
         
         String estiCoef = sysName + "/estiCoef.csv";
-        String estiFun = sysName + "/estiFun.csv";
+        String estiFun = sysName + "/estiRawFun.csv";
         
         TrivialLearner L = new TrivialLearner(sysName, origFun);
         
@@ -101,10 +100,10 @@ public class RunKMAlg {
         
         FourierResult R = new FourierResult(fCoefs);
         
-        err = R.estimateAllSample(estiFun, origFun);
+        err = R.estimateAllSample(estiFun, origFun, L.transformParam);
         //R.estimateAllSample(sysName+"/estiComplete.csv", sysName+"/completeFun.csv");
         
-        Matrix.print(fCoefs);
+        //Matrix.print(fCoefs);
         
         return(err);
     }
@@ -115,7 +114,7 @@ public class RunKMAlg {
         int numSizes = sampleSizes.length;
         int numThetas = thetas.length;
         
-        String origFun = sysName + "/origFun.csv";
+        String origFun = sysName + "/rawFun.csv";
         
         double[][][] allErrors = new double[numSizes][numThetas][repeat];
         double[][] meanErrors = new double[numSizes][numThetas];

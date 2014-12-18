@@ -141,8 +141,9 @@ public class Matrix {
         double max = -1;
         
         for(int i = 0; i < m; ++i){
-            if(mat[i][col] > max){
-                max = mat[i][col];
+            double val = Math.abs(mat[i][col]);
+            if(val > max){
+                max = val;
             }
         }
         

@@ -44,7 +44,8 @@ public class FourierResult {
         return(val);
     }
     
-    public double estimateAllSample(String newName, String origFun){
+    public double estimateAllSample(String newName, String origFun,
+            double[] transformParam){
         
         if(this.fCoefs.length == 0){
             return(Double.POSITIVE_INFINITY);
@@ -56,6 +57,9 @@ public class FourierResult {
         int n = allSample[0].length - 1;
         
         double[] errors = new double [m];
+        
+        double shift = transformParam[0];
+        double scale = transformParam[1];
 
         for(int i = 0; i < m;++i){
             
@@ -63,16 +67,17 @@ public class FourierResult {
             
             double oldVal = allSample[i][n];
             double newVal = this.h(input)*m/Math.pow(2, n);
+            newVal = newVal*scale + shift;
             
-            //errors[i] = Math.abs(newVal - oldVal)/Math.abs(oldVal);
-            errors[i] = Math.abs(newVal - oldVal)*Math.abs(newVal-oldVal);
+            errors[i] = Math.abs(newVal - oldVal)/Math.abs(oldVal);
+            //errors[i] = Math.abs(newVal - oldVal)*Math.abs(newVal-oldVal);
             allSample[i][n] = newVal;
         }
 
         Matrix.write(allSample, newName);
 
-        return(Matrix.sum(errors)/Math.pow(2, n));
-        //return(Matrix.mean(errors));
+        //return(Matrix.sum(errors)/Math.pow(2, n));
+        return(Matrix.mean(errors));
     }
     
     
