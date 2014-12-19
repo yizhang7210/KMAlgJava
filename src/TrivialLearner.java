@@ -22,8 +22,10 @@ public class TrivialLearner {
     public final int numFeatures;
     private final String sysName;
     private final String sampleLoc;
-    private final double[][] allSamples;
+    public final double[][] allSamples;
+    public double[][] testSamples;
     public double[] transformParam;
+    public double[][] fCoefs;
     
     /**
      * Constructor: provide the name of the system and the location of samples
@@ -111,7 +113,7 @@ public class TrivialLearner {
     }  
     
 
-    public double[][] learn(int numSamples, double theta, int maxLevel){
+    public void learn(int numSamples, double theta, int maxLevel){
         
         int n = this.numFeatures;
         
@@ -129,14 +131,20 @@ public class TrivialLearner {
         
         Collections.shuffle(numList);
         
-        double[][] sampleToUse = new double [numSamples][n +1];
+        double[][] trainingSamples = new double [numSamples][n+1];
+        this.testSamples = new double[this.numObs-numSamples][n+1];
         
         for(int i = 0; i < numSamples; ++i){
-            sampleToUse[i] = this.allSamples[numList.get(i)];
+            trainingSamples[i] = Arrays.copyOf(this.allSamples[numList.get(i)],n+1);
         }
         
-        sampleToUse = this.normalizeSample(sampleToUse);
+        trainingSamples = this.normalizeSample(trainingSamples);
         
+        for(int i = 0; i < this.testSamples.length;++i){
+            this.testSamples[i] = this.allSamples[numList.get(i+numSamples)];
+        }
+        
+        Matrix.print(this.allSamples);
         // Initialize the Fourier coefficients.
         double[][] allCoefs = new double [(int) Math.pow(2, n)][n + 1];
         
@@ -153,7 +161,7 @@ public class TrivialLearner {
             double [] vec = Matrix.intToVec(i, n);
             
             if(Matrix.sum(vec) <= maxLevel){
-                double val = this.approx(vec, sampleToUse);
+                double val = this.approx(vec, trainingSamples);
 
                 if(Math.abs(val) > theta){
                     allCoefs[i] = Arrays.copyOf(vec, n+1);
@@ -169,7 +177,7 @@ public class TrivialLearner {
         
         allCoefs = Arrays.copyOfRange(allCoefs, 0, nonZeroCount);
 
-        return(allCoefs);
+        this.fCoefs = allCoefs;
     }
     
     public double[][] oldLearn(int numSamples, int numCoefs, Boolean sorted){
@@ -243,11 +251,13 @@ public class TrivialLearner {
         }
         
         double ave = Matrix.mean(vals);
+        //double ave = 1427.65625;
         for(int i = 0; i < m; ++i){
             origSample[i][n-1] = origSample[i][n-1] - ave;
         }
         
         double max = Matrix.maxAbsCol(origSample, n-1);
+        //double max = 1212.34375;
         for(int i = 0; i < m; ++i){
             origSample[i][n-1] = origSample[i][n-1]/(max);
         }
@@ -258,5 +268,55 @@ public class TrivialLearner {
         return(origSample);
     }
     
+    public double h(double[] x){
+        
+        double val = 0;
+        
+        int m = this.fCoefs.length;
+        int n = this.fCoefs[0].length- 1;
+        
+        
+        for(int i = 0; i < m;++i){
+            
+            double[] z = Arrays.copyOfRange(this.fCoefs[i], 0, n);
+            
+            val = val + Matrix.character(z, x)*this.fCoefs[i][n];
+        }
+
+        return(val);
+    }
+        
+    public double estimateSample(String newName, double[][] testSet){
+        
+        if(this.fCoefs.length == 0){
+            return(Double.POSITIVE_INFINITY);
+        }
+
+        int m = testSet.length;
+        int n = testSet[0].length - 1;
+        
+        double[] errors = new double [m];
+        
+        double shift = this.transformParam[0];
+        double scale = this.transformParam[1];
+
+        for(int i = 0; i < m;++i){
+            
+            double [] input = Arrays.copyOfRange(testSet[i], 0, n);
+            
+            double oldVal = testSet[i][n];
+            double newVal = this.h(input)*m/Math.pow(2, n);
+            newVal = newVal*scale + shift;
+            
+            errors[i] = Math.abs(newVal - oldVal)/Math.abs(oldVal);
+            //errors[i] = Math.abs(newVal - oldVal)*Math.abs(newVal-oldVal);
+            testSet[i][n] = newVal;
+        }
+
+        Matrix.write(testSet, newName);
+
+        //return(Matrix.sum(errors)/Math.pow(2, n));
+        return(Matrix.mean(errors));
+    }
     
 }

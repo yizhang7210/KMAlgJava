@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 
 /*
@@ -201,5 +202,21 @@ public class Matrix {
         }
         
         return(num);
+    }
+    
+    public static double median(double[] vec){
+        
+        int n = vec.length;
+        
+        Arrays.sort(vec);
+        
+        double m;
+        if(n%2 == 0){
+            m = (vec[n/2] + vec[n/2 + 1])/2;
+        }else{
+            m = vec[(n+1)/2];
+        }
+        
+        return(m);
     }
 }

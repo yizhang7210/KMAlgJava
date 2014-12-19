@@ -24,26 +24,28 @@ public class RunKMAlg {
         String [] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ"};
         
         String sys = systems[0];
-
-
-        int[] sampleSizes = {9,18,27,29};
+        
+        /*
+        int sampleSize = 81;
+        int[] maxLevels = {0,1,2,3,4,5,6,7,8,9,10};
         double[] thetas = new double[50];
         
         for(int i = 0; i < thetas.length; ++i){
-            thetas[i] = i*0.4/thetas.length;
+            thetas[i] = i*0.5/thetas.length;
         }
         
         System.out.println("The thetas are: " + Arrays.toString(thetas));
         
         double[][] allErrs;
         
-        allErrs = RunKMAlg.multiRun(sys, sampleSizes, 9, thetas, 15);
+        allErrs = RunKMAlg.multiRun(sys, sampleSize, maxLevels, thetas, 15);
         
-        Matrix.write(allErrs, sys+"/allErrors.csv");      
+        Matrix.write(allErrs, sys+"/allErrors.csv");
+        */
         
-        //double err = RunKMAlg.runOnData(sys, sys+"/rawFun.csv", 3, 30, 0.2);
+        double err = RunKMAlg.runOnData(sys, sys+"/rawFun.csv", 3, 30, 0.22);
         
-        //System.out.println(err);
+        System.out.println(err);
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
@@ -70,16 +72,14 @@ public class RunKMAlg {
 
         TrivialLearner L = new TrivialLearner("TestSys", origFun);
         
-        double[][] fCoefs = L.learn(numSample, 1.0/t, (int) Math.ceil(n/2));
+        L.learn(numSample, 1.0/t, (int) Math.ceil(n/2));
         //double[][] fCoefs = L.oldLearn(numSample, t, true);
         
-        Matrix.write(fCoefs, estiCoef);
+        Matrix.write(L.fCoefs, estiCoef);
         
-        FourierResult R = new FourierResult(fCoefs);
+        L.estimateSample(estiFun, L.testSamples);
         
-        R.estimateAllSample(estiFun, origFun, L.transformParam);
-        
-        Matrix.print(fCoefs);      
+        Matrix.print(L.fCoefs);      
     }
     
     
@@ -93,38 +93,35 @@ public class RunKMAlg {
         
         TrivialLearner L = new TrivialLearner(sysName, origFun);
         
-        double[][] fCoefs = L.learn(numSample, theta, maxLevel);
+        L.learn(numSample, theta, maxLevel);
         //double[][] fCoefs = L.oldLearn(numSample, (int) theta, true);
         
-        Matrix.write(fCoefs, estiCoef);
+        Matrix.write(L.fCoefs, estiCoef);
         
-        FourierResult R = new FourierResult(fCoefs);
-        
-        err = R.estimateAllSample(estiFun, origFun, L.transformParam);
-        //R.estimateAllSample(sysName+"/estiComplete.csv", sysName+"/completeFun.csv");
+        err = L.estimateSample(estiFun, L.allSamples);
         
         //Matrix.print(fCoefs);
         
         return(err);
     }
     
-    public static double[][] multiRun(String sysName, int[] sampleSizes, int maxLevel,
+    public static double[][] multiRun(String sysName, int sampleSize, int[] maxLevel,
             double[] thetas, int repeat){
         
-        int numSizes = sampleSizes.length;
+        int numLevels = maxLevel.length;
         int numThetas = thetas.length;
         
         String origFun = sysName + "/rawFun.csv";
         
-        double[][][] allErrors = new double[numSizes][numThetas][repeat];
-        double[][] meanErrors = new double[numSizes][numThetas];
+        double[][][] allErrors = new double[numLevels][numThetas][repeat];
+        double[][] meanErrors = new double[numLevels][numThetas];
         
-        for(int i = 0; i < numSizes; ++i){
+        for(int i = 0; i < numLevels; ++i){
             for(int j = 0; j < numThetas; ++j){
                 // Fill in the errors
                 for(int k = 0; k < repeat; ++k){
                     allErrors[i][j][k] = RunKMAlg.runOnData(sysName, origFun,
-                            maxLevel, sampleSizes[i], thetas[j]);
+                            maxLevel[i], sampleSize, thetas[j]);
                 }
                 // Get the average
                 meanErrors[i][j] = Matrix.mean(allErrors[i][j]);

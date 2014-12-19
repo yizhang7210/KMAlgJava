@@ -65,11 +65,11 @@ public class FourierTester {
         FourierTester.GenerateTestToFile(origFun, dim, noObs);
 
         double[][] fCoefs = Matrix.read(origCoefs);
-        FourierResult R = new FourierResult(fCoefs);
+        double[][] test = Matrix.read(origFun);
         
-        double[] transform = {0,1};
-
-        R.estimateAllSample(origFun, origFun, transform);
+        TrivialLearner L = new TrivialLearner("Test", origFun);
+        L.fCoefs = fCoefs;
+        L.estimateSample(origFun, test);
 
         double[][] fun = Matrix.read(origFun);
 
