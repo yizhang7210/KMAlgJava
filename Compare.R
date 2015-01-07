@@ -1,5 +1,5 @@
 isTest = F;
-isHome = T;
+isHome = F;
 
 if(isHome){
   setwd('/home/yzhang/00ME/Education/UW/CS860/JavaImp/');
@@ -8,7 +8,7 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
-sysNum <- 1;
+sysNum <- 3;
 sys <- systems[sysNum];
 
 if(isTest){
@@ -84,7 +84,7 @@ errors <- as.matrix(abs((origVals - estiVals)/origVals));
 maxerror <- max(errors);
 minerror <- min(errors);
 error <- mean(errors);
-error2 <- sum((origTable[, n+1] - estiTable[, n+1])^2)/(2^n);
+error2 <- sum((origTable[, n+1] - estiTable[, n+1])^2)/sum(origTable[,n+1]^2);
 
 plot(errors[range], type='l', xlab = 'x', ylab = 'error at x', col = 4);
 title('Error at all points');
