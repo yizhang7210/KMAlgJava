@@ -22,13 +22,18 @@ public class RunKMAlg {
         long startTime = System.currentTimeMillis();
 
         String [] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ"};
+        int [] dims = {9, 16, 11, 18, 26};
+        int [] sizes = {29, 81, 62, 139, 48};
+    
         
-        String sys = systems[0];
+        int choice = 4;
         
-        /*
-        int sampleSize = 81;
-        int[] maxLevels = {0,1,2,3,4,5,6,7,8,9,10};
-        double[] thetas = new double[50];
+        int n = dims[choice];
+        String sys = systems[choice];
+        
+        int [] sampleSizes = {n, 2*n, 3*n, sizes[choice]};
+        //int[] maxLevels = {0,1,2,3,4,5,6,7,8,9,10};
+        double[] thetas = new double[30];
         
         for(int i = 0; i < thetas.length; ++i){
             thetas[i] = i*0.5/thetas.length;
@@ -38,14 +43,13 @@ public class RunKMAlg {
         
         double[][] allErrs;
         
-        allErrs = RunKMAlg.multiRun(sys, sampleSize, maxLevels, thetas, 15);
+        allErrs = RunKMAlg.multiRun(sys, sampleSizes, thetas, 15);
         
         Matrix.write(allErrs, sys+"/allErrors.csv");
-        */
+
+        //double err = RunKMAlg.runOnData(sys, sys+"/rawFun.csv", 3, 30, 0.22);
         
-        double err = RunKMAlg.runOnData(sys, sys+"/rawFun.csv", 3, 30, 0.22);
-        
-        System.out.println(err);
+        //System.out.println(err);
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
@@ -72,7 +76,7 @@ public class RunKMAlg {
 
         TrivialLearner L = new TrivialLearner("TestSys", origFun);
         
-        L.learn(numSample, 1.0/t, (int) Math.ceil(n/2));
+        L.learn(numSample, 1.0/t);//, (int) Math.ceil(n/2));
         //double[][] fCoefs = L.oldLearn(numSample, t, true);
         
         Matrix.write(L.fCoefs, estiCoef);
@@ -83,8 +87,8 @@ public class RunKMAlg {
     }
     
     
-    public static double runOnData(String sysName, String origFun, 
-            int maxLevel, int numSample, double theta){
+    public static double runOnData(String sysName, String origFun, //int maxLevel, 
+            int numSample, double theta){
         
         double err;
         
@@ -93,7 +97,7 @@ public class RunKMAlg {
         
         TrivialLearner L = new TrivialLearner(sysName, origFun);
         
-        L.learn(numSample, theta, maxLevel);
+        L.learn(numSample, theta);//, maxLevel);
         //double[][] fCoefs = L.oldLearn(numSample, (int) theta, true);
         
         Matrix.write(L.fCoefs, estiCoef);
@@ -105,23 +109,23 @@ public class RunKMAlg {
         return(err);
     }
     
-    public static double[][] multiRun(String sysName, int sampleSize, int[] maxLevel,
+    public static double[][] multiRun(String sysName, int [] sampleSizes, //int[] maxLevel,
             double[] thetas, int repeat){
         
-        int numLevels = maxLevel.length;
+        int numSizes = sampleSizes.length;
         int numThetas = thetas.length;
         
         String origFun = sysName + "/rawFun.csv";
         
-        double[][][] allErrors = new double[numLevels][numThetas][repeat];
-        double[][] meanErrors = new double[numLevels][numThetas];
+        double[][][] allErrors = new double[numSizes][numThetas][repeat];
+        double[][] meanErrors = new double[numSizes][numThetas];
         
-        for(int i = 0; i < numLevels; ++i){
+        for(int i = 0; i < numSizes; ++i){
             for(int j = 0; j < numThetas; ++j){
                 // Fill in the errors
                 for(int k = 0; k < repeat; ++k){
                     allErrors[i][j][k] = RunKMAlg.runOnData(sysName, origFun,
-                            maxLevel[i], sampleSize, thetas[j]);
+                            sampleSizes[i], thetas[j]);
                 }
                 // Get the average
                 meanErrors[i][j] = Matrix.mean(allErrors[i][j]);

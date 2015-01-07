@@ -1,16 +1,26 @@
+isTest = F;
+isHome = T;
+
+if(isHome){
+  setwd('/home/yzhang/00ME/Education/UW/CS860/JavaImp/');
+}else{
+  setwd('/home/y825zhan/00ME/CS860/JavaImp/');
+}
+
+
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
 
-sysNum <- 2;
+sysNum <- 5;
 
 sys <- systems[sysNum];
 
-#sampleSizes <- rbind(c(9, 18, 27, 29), c(16, 32, 48, 81),
-#                     c(11, 22, 33, 62), c(18, 36, 54, 139),
-#                     c(26, 48, 52, 78));
+sampleSizes <- rbind(c(9, 18, 27, 29), c(16, 32, 48, 81),
+                     c(11, 22, 33, 62), c(18, 36, 54, 139),
+                     c(26, 48, 52, 78));
 
-levels <- c(0,1,2,3,4,5,6,7,8,9,10);
+#levels <- c(0,1,2,3,4,5,6,7,8,9,10);
 
-l <- 50;
+l <- 30;
 
 thetas <- seq(from=0,by=1/(2*l), length=l)
 
@@ -33,6 +43,6 @@ print(rowMinErr);
 
 #levels <- seq(minErr, maxErr-0.1, by=0.8);
 
-contour(levels, thetas, allErrMod, xlab='Number of samples', ylab='theta');
+contour(sampleSizes[sysNum,], thetas, allErrMod, xlab='Number of samples', ylab='theta');
 title(paste(sys, ": Error with different parameters"))
 
