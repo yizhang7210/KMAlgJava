@@ -11,6 +11,7 @@ import org.ejml.simple.SimpleMatrix;
 /**
  * Fourier Learner: implemented the Kushilevitz-Mansour algorithm as well as the
  * low degree algorithm for learning Boolean functions f: {0,1}^n --> R.
+ * Mostly unused.
  *
  */
 
