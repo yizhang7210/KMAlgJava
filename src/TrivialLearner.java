@@ -305,16 +305,16 @@ public class TrivialLearner {
             double newVal = this.h(input) * m / Math.pow(2, n);
             newVal = newVal * scale + shift;
 
-            //errors[i] = Math.abs(newVal - oldVal)/Math.abs(oldVal);
-            errors[i] = Math.abs(newVal - oldVal) * Math.abs(newVal - oldVal);
+            errors[i] = Math.abs(newVal - oldVal)/Math.abs(oldVal);
+            //errors[i] = Math.abs(newVal - oldVal) * Math.abs(newVal - oldVal);
             oldVals[i] = oldVal*oldVal;
             testSet[i][n] = newVal;
         }
 
         Matrix.write(testSet, newName);
 
-        return (Matrix.sum(errors) / Matrix.sum(oldVals));
-        //return(Matrix.mean(errors));
+        //return (Matrix.sum(errors) / Matrix.sum(oldVals));
+        return(Matrix.mean(errors));
     }
 
 }
