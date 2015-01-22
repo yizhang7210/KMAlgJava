@@ -1,5 +1,5 @@
 isTest = F;
-isHome = F;
+isHome = T;
 
 if(isHome){
   setwd('/home/yzhang/00ME/Education/UW/CS860/JavaImp/');
@@ -89,9 +89,9 @@ error2 <- sum((origTable[, n+1] - estiTable[, n+1])^2)/sum(origTable[,n+1]^2);
 plot(errors[range], type='l', xlab = 'x', ylab = 'error at x', col = 4);
 title('Error at all points');
 
-#=====================================================================
+# #=====================================================================
 # Comparing Fourier coefficients
-
+# 
 # origCoefs<- as.matrix(read.csv(origCoefPath, sep = "", header = F, skip = 1));
 # estiCoefs <- as.matrix(read.csv(estiCoefPath, sep = "", header = F, skip = 1));
 # 
@@ -111,8 +111,8 @@ title('Error at all points');
 # title('Original and Estimated Coefficients Comparison')
 # legend('topright', legend = c("Estimated h(x)", "Real f(x)"), 
 #        lwd = c(2.5, 2.5), col = c(4,2));
-# 
-# 
+
+
 # #=========================================================
 # # Look at the original coefs ordered by weight
 # coefOrd <- order(rowSums(origCoefs[,1:n]));

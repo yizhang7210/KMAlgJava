@@ -26,7 +26,7 @@ public class RunKMAlg {
         int [] sizes = {29, 81, 62, 139, 48};
     
         
-        int choice = 0;
+        int choice = 2;
         
         int n = dims[choice];
         String sys = systems[choice];
@@ -43,7 +43,7 @@ public class RunKMAlg {
         
         double[][] allErrs;
         
-        allErrs = RunKMAlg.multiRun(sys, sampleSizes, thetas, 15);
+        //allErrs = RunKMAlg.multiRun(sys, sampleSizes, thetas, 15);
         
         
         //double[] bestTheta = {thetas[12]};
@@ -52,11 +52,11 @@ public class RunKMAlg {
         
         //allErrs = RunKMAlg.multiRun(sys, bestSampleSize, bestTheta, 10);
         
-        Matrix.write(allErrs, sys+"/allErrors.csv");
+        //Matrix.write(allErrs, sys+"/allErrors.csv");
 
-        //double err = RunKMAlg.runOnData(sys, sys+"/rawFun.csv", 3, 30, 0.22);
+        double err = RunKMAlg.runOnData(sys, sys+"/rawFun.csv",  3000, 0);
         
-        //System.out.println(err);
+        System.out.println(err);
         
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
