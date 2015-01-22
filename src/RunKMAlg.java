@@ -26,7 +26,7 @@ public class RunKMAlg {
         int [] sizes = {29, 81, 62, 139, 48};
     
         
-        int choice = 3;
+        int choice = 0;
         
         int n = dims[choice];
         String sys = systems[choice];
