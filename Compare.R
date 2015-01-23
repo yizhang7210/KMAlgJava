@@ -8,7 +8,7 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
-sysNum <- 3;
+sysNum <- 2;
 sys <- systems[sysNum];
 
 if(isTest){

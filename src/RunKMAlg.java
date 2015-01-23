@@ -26,7 +26,7 @@ public class RunKMAlg {
         int [] sizes = {29, 81, 62, 139, 48};
     
         
-        int choice = 2;
+        int choice = 1;
         
         int n = dims[choice];
         String sys = systems[choice];
@@ -54,7 +54,7 @@ public class RunKMAlg {
         
         //Matrix.write(allErrs, sys+"/allErrors.csv");
 
-        double err = RunKMAlg.runOnData(sys, sys+"/rawFun.csv",  3000, 0);
+        double err = RunKMAlg.runOnData(sys, sys+"/rawFun.csv", 81, 0.2);
         
         System.out.println(err);
         
