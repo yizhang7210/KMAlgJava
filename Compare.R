@@ -8,7 +8,7 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
-sysNum <- 2;
+sysNum <- 5;
 sys <- systems[sysNum];
 
 if(isTest){
@@ -20,12 +20,11 @@ if(isTest){
   origPath <- paste(sys, '/rawFun.csv', sep='');
   estiPath <- paste(sys, '/estiRawFun.csv', sep='');
   
-  origAllPath <- paste(sys, '/completeFun.csv', sep='');
-  estiAllPath <- paste(sys, '/estiComplete.csv', sep='');
 }
 
-origCoefPath <- paste(sys, '/origCoefPos.csv', sep='');
+origCoefPath <- paste(sys, '/normedCoef.csv', sep='');
 estiCoefPath <- paste(sys, '/estiCoef.csv', sep='');
+
 
 #==============================================================================
 origTable <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
@@ -33,24 +32,6 @@ estiTable <- as.matrix(read.csv(estiPath, sep = "", header = F, skip = 1));
 
 n <- ncol(origTable) - 1;
 noObs <- nrow(origTable);
-
-
-# #=============================================================================
-# # Checking how it does outside of the sample
-# origAll <- as.matrix(read.csv(origAllPath, sep = "", header = F, skip = 1));
-# estiAll <- as.matrix(read.csv(estiAllPath, sep = "", header = F, skip = 1));
-# 
-# origNon <- rbind(origTable[,1:n], origAll[,1:n]);
-# estiNon <- rbind(estiTable[,1:n], estiAll[,1:n]);
-# nonOrd <- !(duplicated(origNon,fromLast = T) | duplicated(origNon));
-# 
-# origNon <- rbind(origTable, origAll)[nonOrd,];
-# estiNon <- rbind(estiTable, estiAll)[nonOrd,];
-# 
-# # Should be 0;
-# plot(estiNon[,n+1], type='l');
-# title('Value of Non-Sample');
-
 
 
 #==========================================================
@@ -89,28 +70,50 @@ error2 <- sum((origTable[, n+1] - estiTable[, n+1])^2)/sum(origTable[,n+1]^2);
 plot(errors[range], type='l', xlab = 'x', ylab = 'error at x', col = 4);
 title('Error at all points');
 
-# #=====================================================================
-# Comparing Fourier coefficients
-# 
-# origCoefs<- as.matrix(read.csv(origCoefPath, sep = "", header = F, skip = 1));
-# estiCoefs <- as.matrix(read.csv(estiCoefPath, sep = "", header = F, skip = 1));
-# 
-# origCoefs <- origCoefs[do.call(order, as.data.frame(origCoefs)),]
-# if(nrow(estiCoefs) > 1){
-#   estiCoefs <- estiCoefs[do.call(order, as.data.frame(estiCoefs)),]
-# }
-# 
-# #================================================
-# # Plot
-# plot(origCoefs[,n+1], type = 'l', xlab = 'x', ylab = 'h(x)', col = 2);
-# 
-# # The real, f(x):
-# points(estiCoefs[,n+1], col = 4, cex=0.8);
-# 
-# # Titles and legends and others:
-# title('Original and Estimated Coefficients Comparison')
-# legend('topright', legend = c("Estimated h(x)", "Real f(x)"), 
-#        lwd = c(2.5, 2.5), col = c(4,2));
+#=====================================================================
+#Comparing Fourier coefficients
+
+origCoefs<- as.matrix(read.csv(origCoefPath, sep = "", header = F, skip = 1));
+estiCoefs <- as.matrix(read.csv(estiCoefPath, sep = "", header = F, skip = 1));
+
+origCoefs <- origCoefs[do.call(order, as.data.frame(origCoefs)),]
+if(nrow(estiCoefs) > 1){
+  estiCoefs <- estiCoefs[do.call(order, as.data.frame(estiCoefs)),]
+}
+
+coefOrd <- order(abs(origCoefs[,n+1]), decreasing=T);
+orderedOrigCoefs <- origCoefs[coefOrd,];
+#orderedEstiCoefs <- estiCoefs[coefOrd,];
+
+
+#================================================
+# Plot
+plot(origCoefs[,n+1], type = 'l', xlab = 'x', ylab = 'h(x)', col = 2);
+
+# The real, f(x):
+points(estiCoefs[,n+1], col = 4, cex=0.8);
+
+# Titles and legends and others:
+title('Original and Estimated Coefficients Comparison')
+legend('topright', legend = c("Estimated h(x)", "Real f(x)"), 
+       lwd = c(2.5, 2.5), col = c(4,2));
+
+#=================================================
+# Plot the ordered ones
+
+# Original
+plot(abs(orderedOrigCoefs[,n+1]), type='p',xlab='z',ylab='Fourier Coefficient of z', cex=0.8);
+
+title(sprintf('%s: Actual Fourier Coefficients\n (absolute value in decreasing order)', sys))
+
+
+
+# Estimate
+#points(orderedEstiCoefs[,n+1], col=4,cex=0.8);
+
+#title('Original and Estimated Coefficients in Decreasing Order');
+#legend('topright', legend=c("Estimated", "Real"), lwd=c(2.5, 2.5), col=c(4,2));
+
 
 
 # #=========================================================

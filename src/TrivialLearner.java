@@ -114,7 +114,7 @@ public class TrivialLearner {
 
         int n = this.numFeatures;
 
-        // Warn is there aren't enough samples
+        // Warn if there aren't enough samples
         if (numSamples > this.numObs) {
             System.out.println("Warning: Don't have that many samples.");
             numSamples = this.numObs;
