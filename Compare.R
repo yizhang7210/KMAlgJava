@@ -8,7 +8,7 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
-sysNum <- 5;
+sysNum <- 3;
 sys <- systems[sysNum];
 
 if(isTest){
@@ -82,8 +82,19 @@ if(nrow(estiCoefs) > 1){
 }
 
 coefOrd <- order(abs(origCoefs[,n+1]), decreasing=T);
-orderedOrigCoefs <- origCoefs[coefOrd,];
+orderedOrigCoefs <- origCoefs[coefOrd,n+1];
 #orderedEstiCoefs <- estiCoefs[coefOrd,];
+absCoefs <- abs(orderedOrigCoefs);
+
+mark <- sum(absCoefs)*0.75;
+
+i <- 1;
+while(sum(absCoefs[1:i]) < mark){
+  i <- i+1;
+}
+
+print(i)
+print(i/(2^n));
 
 
 #================================================
@@ -102,7 +113,7 @@ legend('topright', legend = c("Estimated h(x)", "Real f(x)"),
 # Plot the ordered ones
 
 # Original
-plot(abs(orderedOrigCoefs[,n+1]), type='p',xlab='z',ylab='Fourier Coefficient of z', cex=0.8);
+plot(abs(orderedOrigCoefs), type='p',xlab='z',ylab='Fourier Coefficient of z', cex=0.8);
 
 title(sprintf('%s: Actual Fourier Coefficients\n (absolute value in decreasing order)', sys))
 
