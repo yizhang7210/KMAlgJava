@@ -23,6 +23,7 @@ public class RunKMAlg {
 
         String [] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ"};
         int [] dims = {9, 16, 11, 18, 26};
+        // int[] realDims = {8,13, 10. 16, 17};
         int [] sizes = {29, 81, 62, 139, 48};
     
         

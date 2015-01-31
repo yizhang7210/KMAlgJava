@@ -7,11 +7,11 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-setwd('/home/yzhang/00ME/Education/UW/CS860/JavaImp/RelError');
+setwd('/home/yzhang/00ME/Education/UW/CS860/JavaImp/L2Error');
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
 
-sysNum <- 1;
+sysNum <- 2;
 
 sys <- systems[sysNum];
 
@@ -39,9 +39,22 @@ if(sysNum == 5){
 
 minErr <- min(allErr[is.finite(allErr)]);
 maxErr <- max(allErr[is.finite(allErr)]);
-rowMinErr <- matrix(apply(allErr,1,min),nrow(allErr),1);
+rowMinErr <- matrix(apply(allErrMod,1,min),nrow(allErr),1);
 print("Minimum error for each sample size is:");
 print(rowMinErr);
+
+minIndex <- matrix(0,4,1)
+for(i in 1:4){
+  minIndex[i] <- match(rowMinErr[i], allErrMod[i,])
+}
+
+print("best theta")
+print(thetas[minIndex[4]])
+
+print(allErrMod[4,13])
+
+
+
 
 #levels <- seq(minErr, maxErr-0.1, by=0.8);
 
