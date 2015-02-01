@@ -8,7 +8,7 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
-sysNum <- 3;
+sysNum <- 4;
 sys <- systems[sysNum];
 
 if(isTest){
@@ -86,15 +86,20 @@ orderedOrigCoefs <- origCoefs[coefOrd,n+1];
 #orderedEstiCoefs <- estiCoefs[coefOrd,];
 absCoefs <- abs(orderedOrigCoefs);
 
-mark <- sum(absCoefs)*0.75;
+mark <- sum(absCoefs)*0.95;
+#mark <- 0.005;
 
 i <- 1;
 while(sum(absCoefs[1:i]) < mark){
+#while(absCoefs[i] > mark){
   i <- i+1;
 }
 
 print(i)
 print(i/(2^n));
+
+print("Percentage");
+print(sum(absCoefs[1:600])/sum(absCoefs));
 
 
 #================================================
