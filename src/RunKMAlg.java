@@ -22,18 +22,18 @@ public class RunKMAlg {
         long startTime = System.currentTimeMillis();
 
         String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ"};
-        int[] dims = {9, 16, 11, 18, 26};
+        //int[] dims = {9, 16, 11, 18, 26};
         int[] realDims = {8, 13, 10, 16, 17};
         int[] sizes = {29, 81, 62, 139, 48};
-        int[] ts = {163, 383, 689, 587, 51716};
+        //int[] ts = {163, 383, 689, 587, 51716};
 
-        int choice = 3;
+        int choice = 4;
 
-        int n = dims[choice];
+        //int n = dims[choice];
         int nn = realDims[choice];
         String sys = systems[choice];
 
-        int[] sampleSizes = {n, 2 * n, 3 * n, sizes[choice]};
+        //int[] sampleSizes = {n, 2 * n, 3 * n, sizes[choice]};
         //int[] maxLevels = {0,1,2,3,4,5,6,7,8,9,10};
         double[] thetas = new double[30];
 
@@ -51,19 +51,31 @@ public class RunKMAlg {
         //int[] bestSampleSize = {sizes[choice]};
         //allErrs = RunKMAlg.multiRun(sys, bestSampleSize, bestTheta, 10);
         //Matrix.write(allErrs, sys+"/allErrors.csv");
-        
-        
+
+        /*Experiment 1
+         
         int numRuns = 20;
         double [][] expOneErr = new double[1][numRuns];
         
         expOneErr[0] = RunKMAlg.expOneRun(sys, 100, nn, numRuns);
         Matrix.write(expOneErr, sys +"/expOneErr.csv");
-        
+         
         double shouldBeErr = (0.6932 * (nn + 1) + 2.3026) / 50 * ts[choice];
-
+         
         System.out.println("Error should be within " + shouldBeErr);
-
-        //System.out.println(err);
+         */
+        
+        /* Experiment 2*/
+        int numRuns = 10;
+        double [][] expTwoErr = new double[2][numRuns];
+        
+        expTwoErr[0] = RunKMAlg.expOneRun(sys, sizes[choice], nn, 10);
+        expTwoErr[1][0] = System.currentTimeMillis() - startTime;
+        Matrix.write(expTwoErr, sys+"/expTwoErr.csv");
+        
+        Matrix.print(expTwoErr);
+        
+        //System.out.println(expTwoErr[0][0]);
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
         System.out.println("\nTime taken: " + duration / 1000 + " seconds");
@@ -145,12 +157,12 @@ public class RunKMAlg {
         return (meanErrors);
     }
 
-    public static double[] expOneRun(String sysName, int sampleSize, 
+    public static double[] expOneRun(String sysName, int sampleSize,
             int realDim, int repeat) {
 
         double[] errors = new double[repeat];
         String origFun = sysName + "/rawFun.csv";
-        
+
         for (int i = 0; i < repeat; ++i) {
             errors[i] = RunKMAlg.runOnData(sysName, origFun, sampleSize, 2.0 / realDim);
         }
