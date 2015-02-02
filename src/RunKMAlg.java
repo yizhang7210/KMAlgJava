@@ -13,68 +13,35 @@ import java.util.Arrays;
  */
 public class RunKMAlg {
 
-    /**
-     * @param args the command line arguments
-     */
+    private static final int numSys = 5;
+    private static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ"};
+    private static final int[] dims = {9, 16, 11, 18, 26};
+    private static final int[] realDims = {8, 13, 10, 16, 17};
+    private static final int[] sampleSizes = {29, 81, 62, 139, 48};
+    private static final int[] ts = {163, 383, 689, 587, 51716};
+    private static double[] fNorms = new double[numSys];
+
     public static void main(String[] args) {
-        // TODO code application logic here
+
         // Start timer:
         long startTime = System.currentTimeMillis();
 
-        String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ"};
-        //int[] dims = {9, 16, 11, 18, 26};
-        int[] realDims = {8, 13, 10, 16, 17};
-        int[] sizes = {29, 81, 62, 139, 48};
-        //int[] ts = {163, 383, 689, 587, 51716};
-
-        int choice = 4;
-
-        //int n = dims[choice];
-        int nn = realDims[choice];
-        String sys = systems[choice];
-
-        //int[] sampleSizes = {n, 2 * n, 3 * n, sizes[choice]};
-        //int[] maxLevels = {0,1,2,3,4,5,6,7,8,9,10};
-        double[] thetas = new double[30];
-
+        //Experiment 0: Parameter Tuning:
         /*
-         for(int i = 0; i < thetas.length; ++i){
-         thetas[i] = i*0.5/thetas.length;
+         double[][][] tuneParamErrors = new double[RunKMAlg.numSys][4][30];
+         for (int sysNum = 0; sysNum < RunKMAlg.numSys; ++sysNum) {
+         tuneParamErrors[sysNum] = RunKMAlg.tuneParam(sysNum);
          }
-        
-         System.out.println("The thetas are: " + Arrays.toString(thetas));
-        
-         double[][] allErrs;
          */
-        //allErrs = RunKMAlg.multiRun(sys, sampleSizes, thetas, 15);
-        //double[] bestTheta = {thetas[12]};
-        //int[] bestSampleSize = {sizes[choice]};
-        //allErrs = RunKMAlg.multiRun(sys, bestSampleSize, bestTheta, 10);
-        //Matrix.write(allErrs, sys+"/allErrors.csv");
-
-        /*Experiment 1
+        //Experiment 1: Verifying Theoretical Guarantee:
+        
+        //double[][] expOneErr = RunKMAlg.expOneRun();
+        //Matrix.print(expOneErr);
          
-        int numRuns = 20;
-        double [][] expOneErr = new double[1][numRuns];
-        
-        expOneErr[0] = RunKMAlg.expOneRun(sys, 100, nn, numRuns);
-        Matrix.write(expOneErr, sys +"/expOneErr.csv");
-         
-        double shouldBeErr = (0.6932 * (nn + 1) + 2.3026) / 50 * ts[choice];
-         
-        System.out.println("Error should be within " + shouldBeErr);
-         */
-        
-        /* Experiment 2*/
-        int numRuns = 10;
-        double [][] expTwoErr = new double[2][numRuns];
-        
-        expTwoErr[0] = RunKMAlg.expOneRun(sys, sizes[choice], nn, 10);
-        expTwoErr[1][0] = System.currentTimeMillis() - startTime;
-        Matrix.write(expTwoErr, sys+"/expTwoErr.csv");
-        
+        // Experiment 2: Comparing to other methods
+        double[][] expTwoErr = RunKMAlg.expTwoRun();
         Matrix.print(expTwoErr);
-        
+
         //System.out.println(expTwoErr[0][0]);
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
@@ -110,11 +77,13 @@ public class RunKMAlg {
         Matrix.print(L.fCoefs);
     }
 
-    public static double runOnData(String sysName, String origFun, //int maxLevel, 
+    public static double runOnData(int sysNum, String origFun, //int maxLevel, 
             int numSample, double theta) {
 
         double err;
 
+        String sysName = RunKMAlg.systems[sysNum];
+        
         String estiCoef = sysName + "/estiCoef.csv";
         String estiFun = sysName + "/estiRawFun.csv";
 
@@ -126,19 +95,34 @@ public class RunKMAlg {
         Matrix.write(L.fCoefs, estiCoef);
 
         err = L.estimateSample(estiFun, L.allSamples);
-
+        
+        RunKMAlg.fNorms[sysNum] = L.fNorm;
         //Matrix.print(fCoefs);
         return (err);
     }
 
-    public static double[][] multiRun(String sysName, int[] sampleSizes, //int[] maxLevel,
-            double[] thetas, int repeat) {
+    public static double[][] tuneParam(int sysNum) {
 
-        int numSizes = sampleSizes.length;
+        // Setup
+        String sysName = RunKMAlg.systems[sysNum];
+        int n = RunKMAlg.realDims[sysNum];
+        int[] numSamples = {n, 2 * n, 3 * n, RunKMAlg.sampleSizes[sysNum]};
+        int repeat = 15;
+
+        double[] thetas = new double[30];
+        for (int i = 0; i < thetas.length; ++i) {
+            thetas[i] = i * 0.5 / thetas.length;
+        }
+
+        System.out.println("The thetas are: " + Arrays.toString(thetas));
+
+        int numSizes = numSamples.length;
         int numThetas = thetas.length;
 
         String origFun = sysName + "/rawFun.csv";
+        String allErrFile = sysName + "/allErrors.csv";
 
+        // Run algorithm on various parameters
         double[][][] allErrors = new double[numSizes][numThetas][repeat];
         double[][] meanErrors = new double[numSizes][numThetas];
 
@@ -146,7 +130,7 @@ public class RunKMAlg {
             for (int j = 0; j < numThetas; ++j) {
                 // Fill in the errors
                 for (int k = 0; k < repeat; ++k) {
-                    allErrors[i][j][k] = RunKMAlg.runOnData(sysName, origFun,
+                    allErrors[i][j][k] = RunKMAlg.runOnData(sysNum, origFun,
                             sampleSizes[i], thetas[j]);
                 }
                 // Get the average
@@ -154,18 +138,67 @@ public class RunKMAlg {
             }
         }
 
+        Matrix.write(meanErrors, allErrFile);
         return (meanErrors);
     }
 
-    public static double[] expOneRun(String sysName, int sampleSize,
-            int realDim, int repeat) {
+    public static double[][] expOneRun() {
 
-        double[] errors = new double[repeat];
-        String origFun = sysName + "/rawFun.csv";
+        int repeat = 20;
+        int sampleSize = 100;
+        String expOneErr = "expOneErr.csv";
 
-        for (int i = 0; i < repeat; ++i) {
-            errors[i] = RunKMAlg.runOnData(sysName, origFun, sampleSize, 2.0 / realDim);
+        double[][] errors = new double[RunKMAlg.numSys][repeat];
+
+        for (int sysNum = 0; sysNum < RunKMAlg.numSys; ++sysNum) {
+
+            String sysName = RunKMAlg.systems[sysNum];
+            int n = RunKMAlg.realDims[sysNum];
+            int t = RunKMAlg.ts[sysNum];
+
+            String origFun = sysName + "/rawFun.csv";
+
+            for (int i = 0; i < repeat; ++i) {
+                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, origFun, sampleSize, 2.5 / n);
+            }
+
+            double theoErr = (Math.log(2) * (n + 1) + Math.log(10)) / 50 * t;
+            System.out.println("Error should be within " + theoErr);
         }
+
+        Matrix.write(errors, expOneErr);
+
+        return (errors);
+    }
+
+    public static double[][] expTwoRun() {
+
+        int repeat = 20;
+        String expTwoErr = "expTwoErr.csv";
+
+        double[][] errors = new double[RunKMAlg.numSys][repeat + 1];
+
+        for (int sysNum = 0; sysNum < RunKMAlg.numSys; ++sysNum) {
+
+            String sysName = RunKMAlg.systems[sysNum];
+            int n = RunKMAlg.realDims[sysNum];
+            int t = RunKMAlg.ts[sysNum];
+            int sampleSize = RunKMAlg.sampleSizes[sysNum];
+
+            String origFun = sysName + "/rawFun.csv";
+
+            long startTime = System.currentTimeMillis();
+            for (int i = 0; i < repeat; ++i) {
+                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, origFun, sampleSize, 2.0/ n);
+            }
+            errors[sysNum][repeat] = System.currentTimeMillis() - startTime;
+            
+            double theoErr = (2.0*t*(Math.log(2)*(n+1) + Math.log(10))/sampleSize);// /RunKMAlg.fNorms[sysNum];
+            
+            System.out.println("90% confidence interval is: "+ theoErr);
+        }
+
+        Matrix.write(errors, expTwoErr);
 
         return (errors);
     }

@@ -7,37 +7,28 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
-dims <- c(8, 13, 10, 16, 17)
-sparsities <- c(163, 383, 689, 587, 51716);
-
-sysNum <- 1;
+numSys <- 5;
 numRuns <- 20;
 
-n <- dims[sysNum];
-sys <- systems[sysNum];
-t <- sparsities[sysNum];
+ts <- c(163, 383, 689, 587, 51716);
+ns <- c(8,13,10,16,17)
 
 #errPath <- paste(sys, '/expOneErr.csv', sep='');
-errPath <- paste('ExpOneErrs/',sys,'.csv', sep='');
+errPath <- "ExpOneErrs/expOneErr.csv"
 
 expOneErrors <- as.matrix(read.csv(errPath, sep = "", header = F, skip = 1));
 
-expOneErrors <- expOneErrors[,order(expOneErrors), drop=F]
-
-ave <- mean(expOneErrors[!is.infinite(expOneErrors)])
-
-theoErr <- (log(2)*(n+1) + log(10))/50 * t
-
-
-print("90 percentile is:")
-print(1 - length(expOneErrors[expOneErrors>theoErr])/numRuns)
-
-print("The average is:")
-print(ave)
-
-print("Error should be below:")
-print(theoErr)
+for(i in 1:numSys){
+  print(i)
+  theoErr <- (log(2)*(ns[i]+1) + log(10))/50 * ts[i];
+  thisRow <- expOneErrors[i,];
+  expOneErrors[i,] <- thisRow[order(thisRow)]
+  rightPercent <- length(thisRow[thisRow < theoErr])/numRuns
+  print(sprintf("theoretical error is %f", theoErr))
+  print(sprintf("percentage of runs below error is %f", rightPercent))
+  ave <- mean(thisRow[1:15]);
+  print(sprintf("average is %f", ave));
+}
 
 
 
