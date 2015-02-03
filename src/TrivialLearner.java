@@ -177,7 +177,7 @@ public class TrivialLearner {
         allCoefs = Arrays.copyOfRange(allCoefs, 0, nonZeroCount);
 
         this.fCoefs = allCoefs;
-        this.allSamples = this.normalizeSample(allSamples);
+        //this.allSamples = this.normalizeSample(allSamples);
     }
 
     public double[][] oldLearn(int numSamples, int numCoefs, Boolean sorted) {
@@ -306,7 +306,7 @@ public class TrivialLearner {
 
             double oldVal = testSet[i][n];
             double newVal = this.h(input) * m / Math.pow(2, n);
-            //newVal = newVal * scale + shift;
+            newVal = newVal * scale + shift;
 
             //errors[i] = Math.abs(newVal - oldVal) / Math.abs(oldVal);
             errors[i] = Math.abs(newVal - oldVal) * Math.abs(newVal - oldVal);
@@ -317,7 +317,7 @@ public class TrivialLearner {
         Matrix.write(testSet, newName);
 
         this.fNorm = Matrix.sum(oldVals);
-        return (Matrix.sum(errors));// / this.fNorm);
+        return (Matrix.sum(errors) / this.fNorm);
         //return (Matrix.mean(errors));
     }
 

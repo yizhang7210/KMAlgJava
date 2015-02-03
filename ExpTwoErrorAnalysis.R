@@ -15,8 +15,8 @@ ns <- c(8,13,10,16,17)
 nns <- c(9,16,11, 18, 26);
 sizes <- c(29, 81, 62, 139, 48);
 
-#errPath <- paste(sys, '/expOneErr.csv', sep='');
-errPath <- "ExpOneErrs/expTwoErr.csv"
+errPath <- 'expTwoErr.csv'
+#errPath <- "ExpOneErrs/expTwoErr.csv"
 
 expTwoErrors <- as.matrix(read.csv(errPath, sep = "", header = F, skip = 1));
 
