@@ -250,11 +250,11 @@ public class TrivialLearner {
             vals[i] = origSample[i][n - 1];
         }
 
-        double ave = Matrix.mean(vals);
+        //double ave = Matrix.mean(vals);
         //double ave = 1427.65625;
-        for (int i = 0; i < m; ++i) {
-            origSample[i][n - 1] = origSample[i][n - 1] - ave;
-        }
+        //for (int i = 0; i < m; ++i) {
+        //    origSample[i][n - 1] = origSample[i][n - 1] - ave;
+        //}
 
         double max = Matrix.maxAbsCol(origSample, n - 1);
         //double max = 1212.34375;
@@ -262,7 +262,7 @@ public class TrivialLearner {
             origSample[i][n - 1] = origSample[i][n - 1] / (max);
         }
 
-        this.transformParam[0] = ave;
+        this.transformParam[0] = 0;//ave;
         this.transformParam[1] = max;
 
         return (origSample);

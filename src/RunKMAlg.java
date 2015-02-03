@@ -27,12 +27,12 @@ public class RunKMAlg {
         long startTime = System.currentTimeMillis();
 
         //Experiment 0: Parameter Tuning:
-        /*
-         double[][][] tuneParamErrors = new double[RunKMAlg.numSys][4][30];
-         for (int sysNum = 0; sysNum < RunKMAlg.numSys; ++sysNum) {
-         tuneParamErrors[sysNum] = RunKMAlg.tuneParam(sysNum);
-         }
-         */
+        
+        //double[][][] tuneParamErrors = new double[RunKMAlg.numSys][4][30];
+        //for (int sysNum = 0; sysNum < 3; ++sysNum) {
+        //tuneParamErrors[sysNum] = RunKMAlg.tuneParam(sysNum);
+        //}
+        
         //Experiment 1: Verifying Theoretical Guarantee:
         
         //double[][] expOneErr = RunKMAlg.expOneRun();
@@ -107,7 +107,7 @@ public class RunKMAlg {
         String sysName = RunKMAlg.systems[sysNum];
         int n = RunKMAlg.realDims[sysNum];
         int[] numSamples = {n, 2 * n, 3 * n, RunKMAlg.sampleSizes[sysNum]};
-        int repeat = 15;
+        int repeat = 5;
 
         double[] thetas = new double[30];
         for (int i = 0; i < thetas.length; ++i) {
@@ -189,7 +189,7 @@ public class RunKMAlg {
 
             long startTime = System.currentTimeMillis();
             for (int i = 0; i < repeat; ++i) {
-                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, origFun, sampleSize, 2.0/ n);
+                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, origFun, sampleSize, 0.1);
             }
             errors[sysNum][repeat] = System.currentTimeMillis() - startTime;
             
