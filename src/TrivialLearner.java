@@ -177,7 +177,7 @@ public class TrivialLearner {
         allCoefs = Arrays.copyOfRange(allCoefs, 0, nonZeroCount);
 
         this.fCoefs = allCoefs;
-        //this.allSamples = this.normalizeSample(allSamples);
+        this.allSamples = this.normalizeSample(allSamples);
     }
 
     public double[][] oldLearn(int numSamples, int numCoefs, Boolean sorted) {
@@ -251,18 +251,18 @@ public class TrivialLearner {
         }
 
         //double ave = Matrix.mean(vals);
-        //double ave = 1427.65625;
-        //for (int i = 0; i < m; ++i) {
-        //    origSample[i][n - 1] = origSample[i][n - 1] - ave;
-        //}
+        double ave = 8.272677;//1427.65625;
+        for (int i = 0; i < m; ++i) {
+            origSample[i][n - 1] = origSample[i][n - 1] - ave;
+        }
 
-        double max = Matrix.maxAbsCol(origSample, n - 1);
-        //double max = 1212.34375;
+        //double max = Matrix.maxAbsCol(origSample, n - 1);
+        double max = 30.81237;//1212.34375;
         for (int i = 0; i < m; ++i) {
             origSample[i][n - 1] = origSample[i][n - 1] / (max);
         }
 
-        this.transformParam[0] = 0;//ave;
+        this.transformParam[0] = ave;
         this.transformParam[1] = max;
 
         return (origSample);
@@ -306,7 +306,7 @@ public class TrivialLearner {
 
             double oldVal = testSet[i][n];
             double newVal = this.h(input) * m / Math.pow(2, n);
-            newVal = newVal * scale + shift;
+            //newVal = newVal * scale + shift;
 
             //errors[i] = Math.abs(newVal - oldVal) / Math.abs(oldVal);
             errors[i] = Math.abs(newVal - oldVal) * Math.abs(newVal - oldVal);
@@ -317,7 +317,7 @@ public class TrivialLearner {
         Matrix.write(testSet, newName);
 
         this.fNorm = Matrix.sum(oldVals);
-        return (Matrix.sum(errors) / this.fNorm);
+        return (Matrix.sum(errors));// / this.fNorm);
         //return (Matrix.mean(errors));
     }
 

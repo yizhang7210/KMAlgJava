@@ -26,11 +26,33 @@ public class RunKMAlg {
         // Start timer:
         long startTime = System.currentTimeMillis();
 
+        
+        int sysNum = 3;
+        
+        String sysName = RunKMAlg.systems[sysNum];
+        int numSamples = RunKMAlg.sampleSizes[sysNum];
+        
+        String origFun = sysName + "/rawFun.csv";
+        
+        double err = RunKMAlg.runOnData(sysNum, origFun, numSamples, 0.1166666);
+        
+        System.out.println(sysName + " has error: " + err);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         //Experiment 0: Parameter Tuning:
         
         //double[][][] tuneParamErrors = new double[RunKMAlg.numSys][4][30];
-        //for (int sysNum = 0; sysNum < 3; ++sysNum) {
-        //tuneParamErrors[sysNum] = RunKMAlg.tuneParam(sysNum);
+        //for (int sysNum = 0; sysNum < 1; ++sysNum) {
+        //tuneParamErrors[sysNum] = RunKMAlg.tuneParam(3);
         //}
         
         //Experiment 1: Verifying Theoretical Guarantee:
@@ -39,8 +61,8 @@ public class RunKMAlg {
         //Matrix.print(expOneErr);
          
         // Experiment 2: Comparing to other methods
-        double[][] expTwoErr = RunKMAlg.expTwoRun();
-        Matrix.print(expTwoErr);
+        //double[][] expTwoErr = RunKMAlg.expTwoRun();
+        //Matrix.print(expTwoErr);
 
         //System.out.println(expTwoErr[0][0]);
         // End timer:

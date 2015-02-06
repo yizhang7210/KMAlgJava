@@ -11,7 +11,7 @@ if(isHome){
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
 
-sysNum <- 1;
+sysNum <- 4;
 
 sys <- systems[sysNum];
 

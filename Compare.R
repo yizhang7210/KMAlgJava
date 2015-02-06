@@ -17,7 +17,7 @@ if(isTest){
   
 }else{
   
-  origPath <- paste(sys, '/rawFun.csv', sep='');
+  origPath <- paste(sys, '/normedFun.csv', sep='');
   estiPath <- paste(sys, '/estiRawFun.csv', sep='');
   
 }
@@ -65,7 +65,7 @@ errors <- as.matrix(abs((origVals - estiVals)/origVals));
 maxerror <- max(errors);
 minerror <- min(errors);
 error <- mean(errors);
-error2 <- sum((origTable[, n+1] - estiTable[, n+1])^2)/sum(origTable[,n+1]^2);
+error2 <- sum((origTable[, n+1] - estiTable[, n+1])^2)#/sum(origTable[,n+1]^2);
 
 plot(errors[range], type='l', xlab = 'x', ylab = 'error at x', col = 4);
 title('Error at all points');
@@ -117,10 +117,10 @@ legend('topright', legend = c("Estimated h(x)", "Real f(x)"),
 #=================================================
 # Plot the ordered ones
 
-# Original
-plot(abs(orderedOrigCoefs), type='p',xlab='z',ylab='Fourier Coefficient of z', cex=0.8);
-
-title(sprintf('%s: Actual Fourier Coefficients\n (absolute value in decreasing order)', sys))
+# # Original
+# plot(abs(orderedOrigCoefs), type='p',xlab='z',ylab='Fourier Coefficient of z', cex=0.8);
+# 
+# title(sprintf('%s: Actual Fourier Coefficients\n (absolute value in decreasing order)', sys))
 
 
 
@@ -161,5 +161,21 @@ title(sprintf('%s: Actual Fourier Coefficients\n (absolute value in decreasing o
 # plot(0:n, sumCoef, type='l', xlab='Coefficients at level', ylab='Sum of coefficients squared');
 # title(paste(sys, ': Distribution of Fourier Coefficients by level', sep=""));
 
-print(sprintf("error is: %f", error));
+print(sprintf("relative error is: %f", error));
+print(sprintf("L2 error is: %f", error2));
 
+
+# 
+# # compare dimensions
+# 
+# f <- function(x){
+#   200*(log(2)*x+log(10))
+# }
+# 
+# g <- function(x){
+#   choose(x, 2)
+# }
+# 
+# x <- 280:290
+# plot(x, g(x), type='l');
+# lines(x, f(x))
