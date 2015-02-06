@@ -10,7 +10,8 @@ if(isHome){
 numSys <- 5;
 numRuns <- 20;
 
-ts <- c(163, 383, 689, 587, 51716);
+#ts <- c(163, 383, 689, 587, 51716);
+ts <- c(51, 138, 309, 474, 39846)
 ns <- c(8,13,10,16,17)
 
 #errPath <- paste(sys, '/expOneErr.csv', sep='');

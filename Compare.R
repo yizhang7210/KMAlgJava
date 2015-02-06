@@ -8,7 +8,7 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
-sysNum <- 4;
+sysNum <- 3;
 sys <- systems[sysNum];
 
 if(isTest){
@@ -81,25 +81,26 @@ if(nrow(estiCoefs) > 1){
   estiCoefs <- estiCoefs[do.call(order, as.data.frame(estiCoefs)),]
 }
 
-coefOrd <- order(abs(origCoefs[,n+1]), decreasing=T);
+coefOrd <- order((origCoefs[,n+1])^2, decreasing=T);
 orderedOrigCoefs <- origCoefs[coefOrd,n+1];
 #orderedEstiCoefs <- estiCoefs[coefOrd,];
-absCoefs <- abs(orderedOrigCoefs);
+squaredCoefs <- orderedOrigCoefs^2;
 
-mark <- sum(absCoefs)*0.95;
+mark <- sum(squaredCoefs)*0.99;
 #mark <- 0.005;
 
 i <- 1;
-while(sum(absCoefs[1:i]) < mark){
+while(sum(squaredCoefs[1:i]) < mark){
 #while(absCoefs[i] > mark){
   i <- i+1;
 }
 
+print("Number of coefficients having 99% weight:")
 print(i)
 print(i/(2^n));
 
 print("Percentage");
-print(sum(absCoefs[1:600])/sum(absCoefs));
+print(sum(squaredCoefs[1:i])/sum(squaredCoefs));
 
 
 #================================================
@@ -115,12 +116,12 @@ legend('topright', legend = c("Estimated h(x)", "Real f(x)"),
        lwd = c(2.5, 2.5), col = c(4,2));
 
 #=================================================
-# Plot the ordered ones
+#Plot the ordered ones
 
-# # Original
-# plot(abs(orderedOrigCoefs), type='p',xlab='z',ylab='Fourier Coefficient of z', cex=0.8);
-# 
-# title(sprintf('%s: Actual Fourier Coefficients\n (absolute value in decreasing order)', sys))
+# Original
+plot(squaredCoefs, type='p',xlab='z',ylab='Fourier Coefficient of z squared', cex=0.8);
+
+title(sprintf('%s: Actual Fourier Coefficients\n (squared in decreasing order)', sys))
 
 
 
