@@ -45,7 +45,9 @@ public class FourierTester {
                     writer.print((int) thisVec[j] + " ");
                 }
                 
-                double coef = 2*Math.random() - 1;
+                //double coef = 2*Math.random() - 1;
+                double coef = Math.random()*20;
+                //double coef = Math.signum(Math.random()-0.5)*(Math.random()*0.8+0.2);
                 
                 writer.println(coef);
             }
@@ -84,7 +86,7 @@ public class FourierTester {
         double[][] coefs = Matrix.read(origCoefs);
 
         for(int i = 0; i < coefs.length; ++i){
-            coefs[i][dim] = coefs[i][dim]/max;
+            //coefs[i][dim] = coefs[i][dim]/max;
         }
 
         Matrix.write(coefs, origCoefs);            

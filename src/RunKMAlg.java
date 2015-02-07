@@ -26,7 +26,7 @@ public class RunKMAlg {
         // Start timer:
         long startTime = System.currentTimeMillis();
 
-        
+        /*
         int sysNum = 3;
         
         String sysName = RunKMAlg.systems[sysNum];
@@ -37,14 +37,25 @@ public class RunKMAlg {
         double err = RunKMAlg.runOnData(sysNum, origFun, numSamples, 0.1166666);
         
         System.out.println(sysName + " has error: " + err);
+        */
         
         
+        //RunKMAlg.runOnTest(12, 0.1, 0.1, 50);
         
+        String origFun = "Test/origFun.csv";
+        String estiCoef = "Test/estiCoef.csv";
+        String estiFun = "Test/estiFun.csv";
+
+        TrivialLearner L = new TrivialLearner("Test", origFun);
+
+        L.learn(4100, 0.001);//, maxLevel);
+        //double[][] fCoefs = L.oldLearn(numSample, (int) theta, true);
+
+        Matrix.write(L.fCoefs, estiCoef);
+
+        double err = L.estimateSample(estiFun, L.allSamples);
         
-        
-        
-        
-        
+        System.out.println(err);
         
         
         
@@ -77,7 +88,7 @@ public class RunKMAlg {
         String estiFun = "Test/estiFun.csv";
         String estiCoef = "Test/estiCoef.csv";
 
-        int numSample = (int) Math.ceil(2 / (ep * ep) * ((n + 1) * Math.log(2) + Math.log(1 / del)));
+        int numSample = (int) Math.ceil(2.0 / (ep * ep) * ((n + 1) * Math.log(2) + Math.log(1.0 / del)));
 
         double err = t * ep * ep;
 
@@ -89,14 +100,15 @@ public class RunKMAlg {
 
         TrivialLearner L = new TrivialLearner("TestSys", origFun);
 
-        L.learn(numSample, 1.0 / t);//, (int) Math.ceil(n/2));
+        //L.learn(numSample, 0.01);//, (int) Math.ceil(n/2));
         //double[][] fCoefs = L.oldLearn(numSample, t, true);
-
+        L.learn(5000, 0.0);
+        
         Matrix.write(L.fCoefs, estiCoef);
 
-        L.estimateSample(estiFun, L.testSamples);
+        L.estimateSample(estiFun, L.allSamples);
 
-        Matrix.print(L.fCoefs);
+        //Matrix.print(L.fCoefs);
     }
 
     public static double runOnData(int sysNum, String origFun, //int maxLevel, 

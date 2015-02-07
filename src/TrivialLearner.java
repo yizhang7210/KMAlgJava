@@ -311,7 +311,7 @@ public class TrivialLearner {
             //errors[i] = Math.abs(newVal - oldVal) / Math.abs(oldVal);
             errors[i] = Math.abs(newVal - oldVal) * Math.abs(newVal - oldVal);
             oldVals[i] = oldVal * oldVal;
-            testSet[i][n] = newVal;
+            testSet[i][n] = newVal*scale+shift;
         }
 
         Matrix.write(testSet, newName);

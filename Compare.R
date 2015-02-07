@@ -1,4 +1,4 @@
-isTest = F;
+isTest = T;
 isHome = T;
 
 if(isHome){
@@ -12,18 +12,21 @@ sysNum <- 3;
 sys <- systems[sysNum];
 
 if(isTest){
-  origPath <- paste(sys, '/origFun.csv', sep='');
-  estiPath <- paste(sys, '/estiFun.csv', sep='');
+  origPath <- 'Test/origFun.csv'
+  estiPath <- 'Test/estiFun.csv'
+  origCoefPath <- 'Test/origCoef.csv'
+  estiCoefPath <- 'Test/estiCoef.csv'
   
 }else{
   
   origPath <- paste(sys, '/normedFun.csv', sep='');
   estiPath <- paste(sys, '/estiRawFun.csv', sep='');
+  origCoefPath <- paste(sys, '/normedCoef.csv', sep='');
+  estiCoefPath <- paste(sys, '/estiCoef.csv', sep='');
+  
   
 }
 
-origCoefPath <- paste(sys, '/normedCoef.csv', sep='');
-estiCoefPath <- paste(sys, '/estiCoef.csv', sep='');
 
 
 #==============================================================================
@@ -105,7 +108,7 @@ print(sum(squaredCoefs[1:i])/sum(squaredCoefs));
 
 #================================================
 # Plot
-plot(origCoefs[,n+1], type = 'l', xlab = 'x', ylab = 'h(x)', col = 2);
+plot(origCoefs[,n+1], type = 'p', xlab = 'x', ylab = 'h(x)', col = 2);
 
 # The real, f(x):
 points(estiCoefs[,n+1], col = 4, cex=0.8);
