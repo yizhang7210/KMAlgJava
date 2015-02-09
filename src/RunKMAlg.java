@@ -46,7 +46,7 @@ public class RunKMAlg {
         String estiCoef = "Test/estiCoef.csv";
         String estiFun = "Test/estiFun.csv";
 
-        TrivialLearner L = new TrivialLearner("Test", origFun);
+        FourierLearner L = new FourierLearner("Test", origFun);
 
         L.learn(4100, 0.001);//, maxLevel);
         //double[][] fCoefs = L.oldLearn(numSample, (int) theta, true);
@@ -98,7 +98,7 @@ public class RunKMAlg {
 
         FourierTester.GenerateTestFromFourierToFile(origCoef, origFun, n, (int) Math.pow(2, n), t);
 
-        TrivialLearner L = new TrivialLearner("TestSys", origFun);
+        FourierLearner L = new FourierLearner("TestSys", origFun);
 
         //L.learn(numSample, 0.01);//, (int) Math.ceil(n/2));
         //double[][] fCoefs = L.oldLearn(numSample, t, true);
@@ -121,7 +121,7 @@ public class RunKMAlg {
         String estiCoef = sysName + "/estiCoef.csv";
         String estiFun = sysName + "/estiRawFun.csv";
 
-        TrivialLearner L = new TrivialLearner(sysName, origFun);
+        FourierLearner L = new FourierLearner(sysName, origFun);
 
         L.learn(numSample, theta);//, maxLevel);
         //double[][] fCoefs = L.oldLearn(numSample, (int) theta, true);

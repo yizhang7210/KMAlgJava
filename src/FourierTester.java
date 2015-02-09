@@ -69,7 +69,7 @@ public class FourierTester {
         double[][] fCoefs = Matrix.read(origCoefs);
         double[][] test = Matrix.read(origFun);
         
-        TrivialLearner L = new TrivialLearner("Test", origFun);
+        FourierLearner L = new FourierLearner("Test", origFun);
         L.fCoefs = fCoefs;
         L.estimateSample(origFun, test);
 
