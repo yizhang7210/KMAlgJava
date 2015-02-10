@@ -34,7 +34,7 @@ public class RunKMAlg {
         
         String origFun = sysName + "/rawFun.csv";
         
-        double err = RunKMAlg.runOnData(sysNum, origFun, numSamples, 0.1166666);
+        double err = RunKMAlg.runOnData(sysNum, origFun, numSamples, 0.12);
         
         System.out.println(sysName + " has error: " + err);
         */
@@ -42,16 +42,18 @@ public class RunKMAlg {
         
         //RunKMAlg.runOnTest(12, 0.1, 0.1, 50);
         
-        String origFun = "AA/rawFun.csv";
-        String estiCoef = "AA/origCoef.csv";
-        String estiFun = "Test/estiFun.csv";
+        //String origFun = "AA/rawFun.csv";
+        //String estiCoef = "AA/origCoef.csv";
+        //String estiFun = "Test/estiFun.csv";
+        
+        
         
         //Experiment 0: Parameter Tuning:
         
-        //double[][][] tuneParamErrors = new double[RunKMAlg.numSys][4][30];
-        //for (int sysNum = 5; sysNum < 6; ++sysNum) {
-        //tuneParamErrors[sysNum] = RunKMAlg.tuneParam(0);
-        //}
+        double[][][] tuneParamErrors = new double[RunKMAlg.numSys][4][30];
+        for (int sysNum = 0; sysNum < 1; ++sysNum) {
+        tuneParamErrors[sysNum] = RunKMAlg.tuneParam(3);
+        }
         
         //Experiment 1: Verifying Theoretical Guarantee:
         
@@ -227,12 +229,18 @@ public class RunKMAlg {
         
         String origFun = sysName + "/rawFun.csv";
         String origCoef = sysName + "/rawCoef.csv";
+        String origDeriv = sysName + "/rawDeriv.csv";
+        
         String normedFun = sysName + "/normedFun.csv";
         String normedCoef = sysName + "/normedCOef.csv";
+        String normedDeriv = sysName + "/normedDeriv.csv";
         
         PreProcessor.getCoef(origFun, origCoef);
+        PreProcessor.getDerivative(origCoef, origDeriv);
+        
         PreProcessor.normalizeFun(origFun, normedFun);
         PreProcessor.getCoef(normedFun, normedCoef);
+        PreProcessor.getDerivative(normedFun, normedDeriv);
         
     }
     

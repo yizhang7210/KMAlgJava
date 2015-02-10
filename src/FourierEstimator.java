@@ -47,8 +47,9 @@ public class FourierEstimator {
         int m = testSet.length;
 
         if (this.fCoefs.length == 0) {
-            double[][] infinity = {{Double.POSITIVE_INFINITY}};
-            Matrix.write(infinity, estiFunLoc);
+            testSet[0][this.n] = Double.POSITIVE_INFINITY;
+            Matrix.write(testSet, estiFunLoc);
+            return;
         }
 
         for (int i = 0; i < m; ++i) {
@@ -56,7 +57,7 @@ public class FourierEstimator {
 
             double newVal = this.h(input) * m / Math.pow(2, this.n);
 
-            testSet[i][n] = newVal;
+            testSet[i][this.n] = newVal;
         }
 
         Matrix.write(testSet, estiFunLoc);
