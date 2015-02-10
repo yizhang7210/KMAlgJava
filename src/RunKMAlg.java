@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class RunKMAlg {
 
     private static final int numSys = 5;
-    private static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ"};
+    private static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ", "AA"};
     private static final int[] dims = {9, 16, 11, 18, 26};
     private static final int[] realDims = {8, 13, 10, 16, 17};
     private static final int[] sampleSizes = {29, 81, 62, 139, 48};
@@ -42,28 +42,15 @@ public class RunKMAlg {
         
         //RunKMAlg.runOnTest(12, 0.1, 0.1, 50);
         
-        String origFun = "Test/origFun.csv";
-        String estiCoef = "Test/estiCoef.csv";
+        String origFun = "AA/rawFun.csv";
+        String estiCoef = "AA/origCoef.csv";
         String estiFun = "Test/estiFun.csv";
-
-        FourierLearner L = new FourierLearner("Test", origFun);
-
-        L.learn(4100, 0.001);//, maxLevel);
-        //double[][] fCoefs = L.oldLearn(numSample, (int) theta, true);
-
-        Matrix.write(L.fCoefs, estiCoef);
-
-        double err = L.estimateSample(estiFun, L.allSamples);
-        
-        System.out.println(err);
-        
-        
         
         //Experiment 0: Parameter Tuning:
         
         //double[][][] tuneParamErrors = new double[RunKMAlg.numSys][4][30];
-        //for (int sysNum = 0; sysNum < 1; ++sysNum) {
-        //tuneParamErrors[sysNum] = RunKMAlg.tuneParam(3);
+        //for (int sysNum = 5; sysNum < 6; ++sysNum) {
+        //tuneParamErrors[sysNum] = RunKMAlg.tuneParam(0);
         //}
         
         //Experiment 1: Verifying Theoretical Guarantee:
@@ -118,20 +105,17 @@ public class RunKMAlg {
 
         String sysName = RunKMAlg.systems[sysNum];
         
-        String estiCoef = sysName + "/estiCoef.csv";
-        String estiFun = sysName + "/estiRawFun.csv";
+        String estiCoef = sysName + "/estiNormedCoef.csv";
+        String estiFun = sysName + "/estiNormedFun.csv";
 
-        FourierLearner L = new FourierLearner(sysName, origFun);
+        FourierLearn L = new FourierLearn(sysName, origFun);
 
-        L.learn(numSample, theta);//, maxLevel);
-        //double[][] fCoefs = L.oldLearn(numSample, (int) theta, true);
-
-        Matrix.write(L.fCoefs, estiCoef);
-
-        err = L.estimateSample(estiFun, L.allSamples);
+        FourierEstimator E = L.learn(numSample, theta);
         
-        RunKMAlg.fNorms[sysNum] = L.fNorm;
-        //Matrix.print(fCoefs);
+        Matrix.write(E.fCoefs, estiCoef);
+        E.estimateSamples(origFun, estiFun);
+        err = E.getError(origFun, estiFun);
+
         return (err);
     }
 
@@ -236,5 +220,22 @@ public class RunKMAlg {
 
         return (errors);
     }
+    
+    public static void preProcess(int sysNum){
+        
+        String sysName = RunKMAlg.systems[sysNum];
+        
+        String origFun = sysName + "/rawFun.csv";
+        String origCoef = sysName + "/rawCoef.csv";
+        String normedFun = sysName + "/normedFun.csv";
+        String normedCoef = sysName + "/normedCOef.csv";
+        
+        PreProcessor.getCoef(origFun, origCoef);
+        PreProcessor.normalizeFun(origFun, normedFun);
+        PreProcessor.getCoef(normedFun, normedCoef);
+        
+    }
+    
+    
 
 }

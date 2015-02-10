@@ -180,66 +180,6 @@ public class FourierLearner {
         this.allSamples = this.normalizeSample(allSamples);
     }
 
-    public double[][] oldLearn(int numSamples, int numCoefs, Boolean sorted) {
-
-        int n = this.numFeatures;
-
-        if (numSamples > this.numObs) {
-            System.out.println("Warning: Don't have that many samples.");
-            numSamples = this.numObs;
-        }
-
-        List<Integer> numList = new ArrayList<>(this.numObs);
-        for (int i = 0; i < this.numObs; ++i) {
-            numList.add(i, i);
-        }
-
-        Collections.shuffle(numList);
-
-        double[][] sampleToUse = new double[numSamples][n + 1];
-
-        for (int i = 0; i < numSamples; ++i) {
-            sampleToUse[i] = this.allSamples[numList.get(i)];
-        }
-
-        double[][] allCoefs = new double[(int) Math.pow(2, n)][n + 1];
-
-        if (sorted) {
-
-            Comparator<double[]> comp = new Comparator<double[]>() {
-                @Override
-                public int compare(double[] a, double[] b) {
-                    return Double.compare(Math.abs(b[b.length - 1]), Math.abs(a[a.length - 1]));
-                }
-            };
-
-            for (int i = 0; i < allCoefs.length; ++i) {
-                double[] vec = Matrix.intToVec(i, n);
-                allCoefs[i] = Arrays.copyOf(vec, n + 1);
-                allCoefs[i][n] = this.approx(vec, sampleToUse);
-            }
-
-            Arrays.sort(allCoefs, comp);
-
-            allCoefs = Arrays.copyOfRange(allCoefs, 0, numCoefs);
-
-        } else {
-            for (int i = 0; i < allCoefs.length; ++i) {
-
-                double[] vec = Matrix.intToVec(i, n);
-
-                allCoefs[i] = Arrays.copyOf(vec, n + 1);
-
-                if (i < numCoefs) {
-                    allCoefs[i][n] = this.approx(vec, sampleToUse);
-                }
-
-            }
-        }
-
-        return (allCoefs);
-    }
-
     private double[][] normalizeSample(double[][] origSample) {
 
         int m = origSample.length;
