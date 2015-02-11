@@ -37,9 +37,9 @@ public class RunKMAlg {
         
          System.out.println(sysName + " has error: " + err);
          */
-        RunKMAlg.runOnTest(15, 0.1, 0.1, 50);
-        //double err = RunKMAlg.runOnData(0, "Apache/rawFun.csv", 50, 0.22);
-        //System.out.println(err);
+        //RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
+        double err = RunKMAlg.runOnData(0, "Apache/rawFun.csv", 50, 0.16);
+        System.out.println(err);
         
         
         
@@ -89,7 +89,7 @@ public class RunKMAlg {
         FourierTester.GenerateTestFromFourierToFile(origCoefLoc, origFunLoc, n, (int) Math.pow(2, n), t);
 
         Processor.normalizeFun(origFunLoc, normedFunLoc);
-        Processor.getCoef(normedFunLoc, normedCoefLoc);
+        Processor.getCoef(normedFunLoc, normedCoefLoc, t);
 
         FourierLearner L = new FourierLearner("Test", origFunLoc);
 
@@ -104,7 +104,7 @@ public class RunKMAlg {
         double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
         double[][] estiRawFun = Processor.denormalizeSample(estiNormedFun, E.scale, E.shift);
         Matrix.write(estiRawFun, estiRawFunLoc);
-        Processor.getCoef(estiRawFunLoc, estiRawCoefLoc);
+        Processor.getCoef(estiRawFunLoc, estiRawCoefLoc, E.fCoefs.length);
 
         System.out.println("Real error is: " + err);
 
@@ -131,10 +131,10 @@ public class RunKMAlg {
         E.estimateSamples(origFun, estiNormedFunLoc);
         err = E.getError(origFun, estiNormedFunLoc);
 
-        double[][] estiNormedFun = Matrix.read(estiNormedCoefLoc);
+        double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
         double[][] estiRawFun = Processor.denormalizeSample(estiNormedFun, E.scale, E.shift);
         Matrix.write(estiRawFun, estiRawFunLoc);
-        Processor.getCoef(estiRawFunLoc, estiRawCoefLoc);
+        Processor.getCoef(estiRawFunLoc, estiRawCoefLoc, E.fCoefs.length);
 
         return (err);
     }
@@ -251,10 +251,10 @@ public class RunKMAlg {
         String normedFun = sysName + "/normedFun.csv";
         String normedCoef = sysName + "/normedCoef.csv";
 
-        Processor.getCoef(origFun, origCoef);
+        Processor.getCoef(origFun, origCoef, Integer.MAX_VALUE);
 
         Processor.normalizeFun(origFun, normedFun);
-        Processor.getCoef(normedFun, normedCoef);
+        Processor.getCoef(normedFun, normedCoef, Integer.MAX_VALUE);
 
     }
 

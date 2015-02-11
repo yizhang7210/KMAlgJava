@@ -8,15 +8,14 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
-sysNum <- 6;
+sysNum <- 1;
 sys <- systems[sysNum];
 
 origPath <- paste(sys, '/rawFun.csv', sep='');
 estiPath <- paste(sys, '/estiRawFun.csv', sep='');
-origCoefPath <- paste(sys, '/normedCoef.csv', sep='');
-estiCoefPath <- paste(sys, '/estiNormedCoef.csv', sep='');
 
-
+origCoefPath <- paste(sys, '/rawCoef.csv', sep='');
+estiCoefPath <- paste(sys, '/estiRawCoef.csv', sep='');
 
 #==============================================================================
 origTable <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));

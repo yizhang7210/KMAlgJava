@@ -1,3 +1,6 @@
+
+import java.util.Arrays;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,11 +13,13 @@
  */
 public class Processor {
 
-    public static void getCoef(String origFileLoc, String coefLoc) {
+    public static void getCoef(String origFileLoc, String coefLoc, int range) {
         
         double[][] origFun = Matrix.read(origFileLoc);
         
         double[][] fCoefs = FourierLearner.estimateAllCoefs(origFun);
+        
+        fCoefs = Arrays.copyOfRange(fCoefs, 0, range);
 
         Matrix.write(fCoefs, coefLoc);
     }
