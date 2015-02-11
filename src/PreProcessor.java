@@ -14,13 +14,9 @@ public class PreProcessor {
         
         double[][] origFun = Matrix.read(origFileLoc);
         
-        double[][] fCoefs = FourierLearn.estimateAllCoefs(origFun);
+        double[][] fCoefs = FourierLearner.estimateAllCoefs(origFun);
 
         Matrix.write(fCoefs, coefLoc);
-    }
-
-    public static void getDerivative(String origFileLoc, String derivLoc) {
-
     }
 
     public static void normalizeFun(String origFileLoc, String normalizedLoc) {

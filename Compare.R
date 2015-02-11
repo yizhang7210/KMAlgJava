@@ -12,7 +12,7 @@ sysNum <- 3;
 sys <- systems[sysNum];
 
 if(isTest){
-  origPath <- 'Test/origFun.csv'
+  origPath <- 'Test/normedFun.csv'
   estiPath <- 'Test/estiFun.csv'
   origCoefPath <- 'Test/origCoef.csv'
   estiCoefPath <- 'Test/estiCoef.csv'

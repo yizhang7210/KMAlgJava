@@ -16,10 +16,6 @@ import java.util.List;
  */
 public class FourierTester {
     
-    public FourierTester(){
-        
-    }
-    
     public static void GenerateTestToFile(String fileName, int dim, int noObs){
         
         int total = (int) Math.pow(2, dim);
@@ -67,29 +63,10 @@ public class FourierTester {
         FourierTester.GenerateTestToFile(origFun, dim, noObs);
 
         double[][] fCoefs = Matrix.read(origCoefs);
-        double[][] test = Matrix.read(origFun);
         
-        FourierLearner L = new FourierLearner("Test", origFun);
-        L.fCoefs = fCoefs;
-        L.estimateSample(origFun, test);
-
-        double[][] fun = Matrix.read(origFun);
-
-        double max = Matrix.maxAbsCol(fun, dim);
-
-        for(int i = 0; i < fun.length; ++i){
-            fun[i][dim] = fun[i][dim]/max;
-        }
-
-        Matrix.write(fun, origFun);            
-
-        double[][] coefs = Matrix.read(origCoefs);
-
-        for(int i = 0; i < coefs.length; ++i){
-            //coefs[i][dim] = coefs[i][dim]/max;
-        }
-
-        Matrix.write(coefs, origCoefs);            
+        FourierEstimator E = new FourierEstimator(fCoefs, 3, 20);
+        
+        E.estimateSamples(origFun, origFun);
         
     }
     
