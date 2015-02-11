@@ -75,7 +75,7 @@ public class FourierLearner {
 
         double[][] trainingSamples = FourierLearner.drawSamples(this.allSamples, numSamples);
 
-        double[][][] normedResult = PreProcessor.normalizeSample(trainingSamples);
+        double[][][] normedResult = Processor.normalizeSample(trainingSamples);
 
         double shift = normedResult[0][0][0];
         double scale = normedResult[0][0][1];

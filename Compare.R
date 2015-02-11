@@ -1,4 +1,4 @@
-isTest = T;
+
 isHome = T;
 
 if(isHome){
@@ -7,7 +7,7 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ");
+systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
 sysNum <- 3;
 sys <- systems[sysNum];
 
