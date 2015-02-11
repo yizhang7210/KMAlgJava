@@ -37,7 +37,7 @@ public class RunKMAlg {
         
          System.out.println(sysName + " has error: " + err);
          */
-        RunKMAlg.runOnTest(12, 0.1, 0.1, 50);
+        RunKMAlg.runOnTest(15, 0.1, 0.1, 50);
         //double err = RunKMAlg.runOnData(0, "Apache/rawFun.csv", 50, 0.22);
         //System.out.println(err);
         
@@ -95,13 +95,13 @@ public class RunKMAlg {
 
         //L.learn(numSample, 0.01);//, (int) Math.ceil(n/2));
         //double[][] fCoefs = L.oldLearn(numSample, t, true);
-        FourierEstimator E = L.learn(numSample, 0.01);
+        FourierEstimator E = L.learn(numSample, 0.02);
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
         E.estimateSamples(origFunLoc, estiNormedFunLoc);
         err = E.getError(origFunLoc, estiNormedFunLoc);
 
-        double[][] estiNormedFun = Matrix.read(estiNormedCoefLoc);
+        double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
         double[][] estiRawFun = Processor.denormalizeSample(estiNormedFun, E.scale, E.shift);
         Matrix.write(estiRawFun, estiRawFunLoc);
         Processor.getCoef(estiRawFunLoc, estiRawCoefLoc);

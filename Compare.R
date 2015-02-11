@@ -8,24 +8,13 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
-sysNum <- 3;
+sysNum <- 6;
 sys <- systems[sysNum];
 
-if(isTest){
-  origPath <- 'Test/normedFun.csv'
-  estiPath <- 'Test/estiFun.csv'
-  origCoefPath <- 'Test/origCoef.csv'
-  estiCoefPath <- 'Test/estiCoef.csv'
-  
-}else{
-  
-  origPath <- paste(sys, '/normedFun.csv', sep='');
-  estiPath <- paste(sys, '/estiRawFun.csv', sep='');
-  origCoefPath <- paste(sys, '/normedCoef.csv', sep='');
-  estiCoefPath <- paste(sys, '/estiCoef.csv', sep='');
-  
-  
-}
+origPath <- paste(sys, '/rawFun.csv', sep='');
+estiPath <- paste(sys, '/estiRawFun.csv', sep='');
+origCoefPath <- paste(sys, '/normedCoef.csv', sep='');
+estiCoefPath <- paste(sys, '/estiNormedCoef.csv', sep='');
 
 
 
