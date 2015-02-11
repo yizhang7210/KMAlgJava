@@ -38,7 +38,7 @@ public class RunKMAlg {
          System.out.println(sysName + " has error: " + err);
          */
         //RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
-        double err = RunKMAlg.runOnData(0, "Apache/rawFun.csv", 50, 0.16);
+        double err = RunKMAlg.runOnData(3, "BDBC/rawFun.csv", 1000, 0.1);
         System.out.println(err);
         
         
