@@ -72,7 +72,7 @@ public class FourierEstimator {
 
         double err = 0, oldVal, newVal;
         for (int i = 0; i < m; ++i) {
-            oldVal = (origFun[i][this.n] - this.shift) / this.scale;
+            oldVal = origFun[i][this.n];
             newVal = estiFun[i][this.n];
             err += (oldVal - newVal) * (oldVal - newVal);
         }

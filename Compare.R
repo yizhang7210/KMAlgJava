@@ -8,7 +8,7 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
-sysNum <- 4;
+sysNum <- 6;
 sys <- systems[sysNum];
 
 origPath <- paste(sys, '/rawFun.csv', sep='');
@@ -26,7 +26,7 @@ noObs <- nrow(origTable);
 
 
 #==========================================================
-# Checking how it does inside the sample
+# Compare raw function values:
 range = 1:noObs;
 
 ord = order(origTable[,n+1], decreasing=T);
@@ -39,8 +39,7 @@ estiVals = estiTable[,n+1][ord];
 minVal = min(estiVals[range], origVals[range]);
 maxVal = max(estiVals[range], origVals[range]);
 
-
-
+# Plot and compare, the estimated first:
 plot(estiVals[range], type = 'l', xlab = 'x', ylab = 'h(x)', col = 4,
      ylim = c(minVal*0.95,maxVal*1.05));
 
@@ -61,8 +60,11 @@ error2 <- sum((origTable[, n+1] - estiTable[, n+1])^2)#/sum(origTable[,n+1]^2);
 plot(errors[range], type='l', xlab = 'x', ylab = 'error at x', col = 4);
 title('Error at all points');
 
+print(sprintf("relative error is: %f", error));
+print(sprintf("L2 error is: %f", error2));
+
 #=====================================================================
-#Comparing Fourier coefficients
+# Determine sparsity:
 
 origCoefs<- as.matrix(read.csv(origCoefPath, sep = "", header = F, skip = 1));
 estiCoefs <- as.matrix(read.csv(estiCoefPath, sep = "", header = F, skip = 1));
@@ -95,10 +97,12 @@ print(sum(squaredCoefs[1:i])/sum(squaredCoefs));
 
 
 #================================================
-# Plot
-plot(origCoefs[,n+1], type = 'p', xlab = 'x', ylab = 'h(x)', col = 2);
+# Compare Fourier Coefficients:
 
-# The real, f(x):
+# Real:
+plot(origCoefs[,n+1], type = 'p', xlab = 'x', ylab = 'Coef(x)', col = 2);
+
+# Estimate:
 points(estiCoefs[,n+1], col = 4, cex=0.8);
 
 # Titles and legends and others:
@@ -114,60 +118,28 @@ plot(squaredCoefs, type='p',xlab='z',ylab='Fourier Coefficient of z squared', ce
 
 title(sprintf('%s: Actual Fourier Coefficients\n (squared in decreasing order)', sys))
 
+ 
+#===============================================================
+# Coefficients grouped by weight
+
+coefByLevel <- matrix(0, 1, n+1);
+for(i in 1:nrow(origCoefs)){
+  coefByLevel[sum(origCoefs[i,1:n])] <- coefByLevel[sum(origCoefs[i,1:n])] + origCoefs[i,n+1]^2
+}
+
+plot(0:n, coefByLevel, type='o', xlab='Coefficients at level', ylab='Sum of coefficients squared');
+title(paste(sys, ': Distribution of Fourier Coefficients by level', sep=""));
 
 
-# Estimate
-#points(orderedEstiCoefs[,n+1], col=4,cex=0.8);
-
-#title('Original and Estimated Coefficients in Decreasing Order');
-#legend('topright', legend=c("Estimated", "Real"), lwd=c(2.5, 2.5), col=c(4,2));
 
 
 
-# #=========================================================
-# # Look at the original coefs ordered by weight
-# coefOrd <- order(rowSums(origCoefs[,1:n]));
-# orderedOrigCoefs <- origCoefs[coefOrd,];
-# 
-# coefRange <- 1:2^n;
-# plot(orderedOrigCoefs[coefRange,n+1]^2, type='p',col=2,xlab='z',ylab='coef(z)',cex=0.4);
-# title(paste(sys, ': Distribution of Fourier Coefficients', sep=""))
-# 
-# #===============================================================
-# # Coefficients grouped by weight
-# 
-# sumCoef <- matrix(0,1,n+1);
-# cut <- choose(n, 0:n);
-# cuts <- cut;
-# 
-# #orderedCoefVals <- orderedOrigCoefs[,n+1];
-# orderedCoefVals <- orderedOrigCoefs[,n+1]^2;
-# 
-# sumCoef[1] <- orderedCoefVals[1];
-# 
-# for(i in 2:(n+1)){
-#   cuts[i] <- sum(cut[1:i]);
-#   sumCoef[i] <- sum(orderedCoefVals[1:cuts[i]]) - sum(sumCoef[1:(i-1)]);
-# }
-# 
-# plot(0:n, sumCoef, type='l', xlab='Coefficients at level', ylab='Sum of coefficients squared');
-# title(paste(sys, ': Distribution of Fourier Coefficients by level', sep=""));
-
-print(sprintf("relative error is: %f", error));
-print(sprintf("L2 error is: %f", error2));
 
 
-# 
-# # compare dimensions
-# 
-# f <- function(x){
-#   200*(log(2)*x+log(10))
-# }
-# 
-# g <- function(x){
-#   choose(x, 2)
-# }
-# 
-# x <- 280:290
-# plot(x, g(x), type='l');
-# lines(x, f(x))
+
+
+
+
+
+
+

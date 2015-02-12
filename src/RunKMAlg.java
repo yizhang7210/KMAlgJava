@@ -37,13 +37,10 @@ public class RunKMAlg {
         
          System.out.println(sysName + " has error: " + err);
          */
-        //RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
-        double err = RunKMAlg.runOnData(3, "BDBC/rawFun.csv", 1000, 0.1);
-        System.out.println(err);
-        
-        
-        
-        
+        RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
+        //double err = RunKMAlg.runOnData(1, 100, 0.2);
+        //System.out.println(err);
+
         // Standard suite.------------------------------------
         //PreProcess:
         //for(int sysNum = 0; sysNum < 5; sysNum ++){
@@ -99,44 +96,53 @@ public class RunKMAlg {
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
         E.estimateSamples(origFunLoc, estiNormedFunLoc);
-        err = E.getError(origFunLoc, estiNormedFunLoc);
 
         double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
         double[][] estiRawFun = Processor.denormalizeSample(estiNormedFun, E.scale, E.shift);
         Matrix.write(estiRawFun, estiRawFunLoc);
         Processor.getCoef(estiRawFunLoc, estiRawCoefLoc, E.fCoefs.length);
 
-        System.out.println("Real error is: " + err);
+        double errNormed = E.getError(normedFunLoc, estiNormedFunLoc);
+        double errRaw = E.getError(origFunLoc, estiRawFunLoc);
 
+        System.out.println("Normalized Error is: " + errNormed);
+        System.out.println("Raw Error is: " + errRaw);
         //Matrix.print(L.fCoefs);
     }
 
-    public static double runOnData(int sysNum, String origFun, //int maxLevel, 
-            int numSample, double theta) {
-
-        double err;
+    public static double runOnData(int sysNum, int numSample, double theta) {
 
         String sysName = RunKMAlg.systems[sysNum];
+
+        String origFunLoc = sysName + "/rawFun.csv";
+        //String origCoefLoc = sysName + "/rawCoef.csv";
+        String normedFunLoc = sysName + "/normedFun.csv";
+        //String normedCoefLoc = sysName + "/normedCoef.csv";
 
         String estiNormedCoefLoc = sysName + "/estiNormedCoef.csv";
         String estiNormedFunLoc = sysName + "/estiNormedFun.csv";
         String estiRawFunLoc = sysName + "/estiRawFun.csv";
         String estiRawCoefLoc = sysName + "/estiRawCoef.csv";
 
-        FourierLearner L = new FourierLearner(sysName, origFun);
+        FourierLearner L = new FourierLearner(sysName, origFunLoc);
 
         FourierEstimator E = L.learn(numSample, theta);
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
-        E.estimateSamples(origFun, estiNormedFunLoc);
-        err = E.getError(origFun, estiNormedFunLoc);
+        E.estimateSamples(origFunLoc, estiNormedFunLoc);
 
         double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
         double[][] estiRawFun = Processor.denormalizeSample(estiNormedFun, E.scale, E.shift);
         Matrix.write(estiRawFun, estiRawFunLoc);
         Processor.getCoef(estiRawFunLoc, estiRawCoefLoc, E.fCoefs.length);
 
-        return (err);
+        double errNormed = E.getError(normedFunLoc, estiNormedFunLoc);
+        double errRaw = E.getError(origFunLoc, estiRawFunLoc);
+
+        System.out.println("Normalized Error is: " + errNormed);
+        System.out.println("Raw Error is: " + errRaw);
+        System.out.println(E.scale);
+        return (errNormed);
     }
 
     public static double[][] tuneParam(int sysNum) {
@@ -157,7 +163,6 @@ public class RunKMAlg {
         int numSizes = numSamples.length;
         int numThetas = thetas.length;
 
-        String origFun = sysName + "/rawFun.csv";
         String allErrFile = sysName + "/allErrors.csv";
 
         // Run algorithm on various parameters
@@ -168,7 +173,7 @@ public class RunKMAlg {
             for (int j = 0; j < numThetas; ++j) {
                 // Fill in the errors
                 for (int k = 0; k < repeat; ++k) {
-                    allErrors[i][j][k] = RunKMAlg.runOnData(sysNum, origFun,
+                    allErrors[i][j][k] = RunKMAlg.runOnData(sysNum, 
                             sampleSizes[i], thetas[j]);
                 }
                 // Get the average
@@ -194,10 +199,8 @@ public class RunKMAlg {
             int n = RunKMAlg.realDims[sysNum];
             int t = RunKMAlg.ts[sysNum];
 
-            String origFun = sysName + "/rawFun.csv";
-
             for (int i = 0; i < repeat; ++i) {
-                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, origFun, sampleSize, 2.5 / n);
+                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, sampleSize, 2.5 / n);
             }
 
             double theoErr = (Math.log(2) * (n + 1) + Math.log(10)) / 50 * t;
@@ -223,11 +226,9 @@ public class RunKMAlg {
             int t = RunKMAlg.ts[sysNum];
             int sampleSize = RunKMAlg.sampleSizes[sysNum];
 
-            String origFun = sysName + "/rawFun.csv";
-
             long startTime = System.currentTimeMillis();
             for (int i = 0; i < repeat; ++i) {
-                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, origFun, sampleSize, 0.1);
+                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, sampleSize, 0.1);
             }
             errors[sysNum][repeat] = System.currentTimeMillis() - startTime;
 
