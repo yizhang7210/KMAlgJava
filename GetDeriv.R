@@ -9,10 +9,11 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
-sysNum <- 1;
+sysNum <- 5;
 sys <- systems[sysNum];
 
 origPath <- paste(sys, '/rawFun.csv', sep='');
+derivPath <- paste(sys, '/AllDerivs.csv', sep='');
 
 origFun <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
 
@@ -34,17 +35,34 @@ h <- function(x){
   }
 }
 
-
-newDim <- n-1;
-
-derivFun <- matrix(0, 2^newDim, newDim+1);
-
-for(i in 1:2^newDim){
+getDerivAlong <- function(index){
   
-  inputVec <- rev(as.integer(intToBits(i-1))[1:newDim]);
+  newDim <- n-1;
   
-  derivFun[i,1:newDim] <- inputVec
-  derivFun[i,(newDim+1)] <- h(c(1,inputVec)) - h(c(0,inputVec))
+  derivFun <- matrix(0, 2^newDim, 1);
+  
+  for(i in 1:2^newDim){
+    
+    inputVec <- rev(as.integer(intToBits(i-1))[1:newDim]);
+    
+    derivFun[i,] <- h(append(inputVec,1,index-1)) - h(append(inputVec,0,index-1))
+  }
+  
+  return(derivFun[])
+  
 }
 
+getDerivFun <- function(){
+  
+  derivFun <- matrix(0, 2^(n-1), n);
+  
+  for(i in 1:n){
+    derivFun[,i] <- getDerivAlong(i);
+  }
+  
+  return(derivFun)
+}
 
+derivs <- getDerivFun();
+
+write.csv(derivs, derivPath, row.names=F, quote=F)
