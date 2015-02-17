@@ -8,7 +8,7 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
-sysNum <- 6;
+sysNum <- 1;
 sys <- systems[sysNum];
 
 origPath <- paste(sys, '/rawFun.csv', sep='');

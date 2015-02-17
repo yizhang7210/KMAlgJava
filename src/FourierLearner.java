@@ -118,6 +118,12 @@ public class FourierLearner {
         for (int i = 0; i < numSamples; ++i) {
             trainingSamples[i] = Arrays.copyOf(theSamples[numList.get(i)], n + 1);
         }
+        
+        double[][] testSamples = new double[m - numSamples][n+1];
+        for(int j = 0; j < m - numSamples; ++j){
+            testSamples[j] = Arrays.copyOf(theSamples[numList.get(j+numSamples)], n+1);
+        }
+        
 
         return (trainingSamples);
 

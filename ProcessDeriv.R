@@ -8,7 +8,7 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
-sysNum <- 6;
+sysNum <- 4;
 sys <- systems[sysNum];
 
 derivPath <- paste(sys, '/AllDerivs.csv', sep='');
@@ -17,12 +17,18 @@ derivs <- as.matrix(read.csv(derivPath, sep = ","));
 
 n = ncol(derivs);
 
+posRates <- matrix(0, n, 1);
+
 for(i in 1:n){
   thisDerivs <- derivs[,i];
   
   thisDerivs <- thisDerivs[!is.na(thisDerivs)];
   
   if(length(thisDerivs) > 0){
+    
+    print("Positive rate is:");
+    posRates[i] <- length(thisDerivs[thisDerivs>0])/length(thisDerivs);
+    print(posRates[i]);
     
     plot(thisDerivs, type='p', cex=0.4);
     
@@ -31,6 +37,11 @@ for(i in 1:n){
   }
 
 }
+
+posRates <- ifelse(posRates>0, posRates, 1-posRates)
+
+print("Average Positive Rate is:");
+print(mean(posRates))
 
 
 

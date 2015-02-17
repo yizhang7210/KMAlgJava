@@ -25,19 +25,17 @@ public class RunKMAlg {
         // Start timer:
         long startTime = System.currentTimeMillis();
 
-        /*
-         int sysNum = 3;
+        
+         int sysNum = 0;
         
          String sysName = RunKMAlg.systems[sysNum];
          int numSamples = RunKMAlg.sampleSizes[sysNum];
         
-         String origFun = sysName + "/rawFun.csv";
-        
-         double err = RunKMAlg.runOnData(sysNum, origFun, numSamples, 0.12);
+         double err = RunKMAlg.runOnData(sysNum, 100, 0.08);
         
          System.out.println(sysName + " has error: " + err);
-         */
-        RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
+        
+        //RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
         //double err = RunKMAlg.runOnData(1, 100, 0.2);
         //System.out.println(err);
 
@@ -95,7 +93,7 @@ public class RunKMAlg {
         FourierEstimator E = L.learn(numSample, 0.02);
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
-        E.estimateSamples(origFunLoc, estiNormedFunLoc);
+        E.estimateSamples(estiNormedFunLoc);
 
         double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
         double[][] estiRawFun = Processor.denormalizeSample(estiNormedFun, E.scale, E.shift);
@@ -129,7 +127,7 @@ public class RunKMAlg {
         FourierEstimator E = L.learn(numSample, theta);
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
-        E.estimateSamples(origFunLoc, estiNormedFunLoc);
+        E.estimateSamples(estiNormedFunLoc);
 
         double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
         double[][] estiRawFun = Processor.denormalizeSample(estiNormedFun, E.scale, E.shift);
