@@ -31,7 +31,7 @@ public class RunKMAlg {
          String sysName = RunKMAlg.systems[sysNum];
          int numSamples = RunKMAlg.sampleSizes[sysNum];
         
-         double err = RunKMAlg.runOnData(sysNum, 100, 0.08);
+         double err = RunKMAlg.runOnData(sysNum, 150, 0.075);
         
          System.out.println(sysName + " has error: " + err);
         
@@ -93,7 +93,7 @@ public class RunKMAlg {
         FourierEstimator E = L.learn(numSample, 0.02);
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
-        E.estimateSamples(estiNormedFunLoc);
+        E.estimateSamples(origFunLoc, estiNormedFunLoc);
 
         double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
         double[][] estiRawFun = Processor.denormalizeSample(estiNormedFun, E.scale, E.shift);
@@ -127,7 +127,7 @@ public class RunKMAlg {
         FourierEstimator E = L.learn(numSample, theta);
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
-        E.estimateSamples(estiNormedFunLoc);
+        E.estimateSamples(origFunLoc, estiNormedFunLoc);
 
         double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
         double[][] estiRawFun = Processor.denormalizeSample(estiNormedFun, E.scale, E.shift);

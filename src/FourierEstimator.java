@@ -13,19 +13,17 @@ import java.util.Arrays;
 public class FourierEstimator {
 
     public final double[][] fCoefs;
-    public double[][] funToEstimate;
     private final int t;
     private final int n;
     public double scale;
     public double shift;
 
-    public FourierEstimator(double[][] fCoefs, double scale, double shift, double[][] mat) {
+    public FourierEstimator(double[][] fCoefs, double scale, double shift) {
         this.fCoefs = fCoefs;
         this.t = fCoefs.length;
         this.n = fCoefs.length > 0 ? fCoefs[0].length - 1 : 0;
         this.scale = scale;
         this.shift = shift;
-        this.funToEstimate = mat;
 
     }
 
@@ -43,18 +41,11 @@ public class FourierEstimator {
         return (val);
     }
 
-    public void estimateSamples(String estiFunLoc) {
-        
-        double[][] testSet = this.funToEstimate;  
-        
+    public void estimateSamples(String origFunLoc, String estiFunLoc) {
+
+        double[][] testSet = Matrix.read(origFunLoc);
         int m = testSet.length;
 
-        if(m == 0){
-            System.out.print("No Test Samples.");
-            double[][] errMat = {{-1}};
-            Matrix.write(errMat, estiFunLoc);
-        }
-        
         if (this.fCoefs.length == 0) {
             testSet[0][this.n] = Double.POSITIVE_INFINITY;
             Matrix.write(testSet, estiFunLoc);
@@ -85,8 +76,8 @@ public class FourierEstimator {
             newVal = estiFun[i][this.n];
             err += (oldVal - newVal) * (oldVal - newVal);
         }
-        
-        return(err/m);
+
+        return (err / m);
 
     }
 

@@ -63,11 +63,10 @@ public class FourierTester {
         FourierTester.GenerateTestToFile(origFun, dim, noObs);
 
         double[][] fCoefs = Matrix.read(origCoefs);
-        double[][] origMat = Matrix.read(origFun);
 
-        FourierEstimator E = new FourierEstimator(fCoefs, 3, 20, origMat);
+        FourierEstimator E = new FourierEstimator(fCoefs, 3, 20);
 
-        E.estimateSamples(origFun);
+        E.estimateSamples(origFun, origFun);
 
     }
 

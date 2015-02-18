@@ -74,7 +74,7 @@ public class FourierLearner {
     public FourierEstimator learn(int numSamples, double theta) {
 
         double[][] trainingSamples = FourierLearner.drawSamples(this.allSamples, numSamples);
-
+        
         double[][][] normedResult = Processor.normalizeSample(trainingSamples);
 
         double shift = normedResult[0][0][0];
@@ -119,12 +119,6 @@ public class FourierLearner {
             trainingSamples[i] = Arrays.copyOf(theSamples[numList.get(i)], n + 1);
         }
         
-        double[][] testSamples = new double[m - numSamples][n+1];
-        for(int j = 0; j < m - numSamples; ++j){
-            testSamples[j] = Arrays.copyOf(theSamples[numList.get(j+numSamples)], n+1);
-        }
-        
-
         return (trainingSamples);
 
     }
