@@ -18,6 +18,7 @@ public class RunKMAlg {
     private static final int[] dims = {9, 16, 11, 18, 26};
     private static final int[] realDims = {8, 13, 10, 16, 17};
     private static final int[] sampleSizes = {29, 81, 62, 139, 48};
+    private static final int[] noObs = {192, 1152, 1024, 2560, 180};
     private static final int[] ts = {163, 383, 689, 587, 51716};
 
     public static void main(String[] args) {
@@ -26,14 +27,14 @@ public class RunKMAlg {
         long startTime = System.currentTimeMillis();
 
         
-         int sysNum = 0;
+        //int sysNum = 0;
         
-         String sysName = RunKMAlg.systems[sysNum];
-         int numSamples = RunKMAlg.sampleSizes[sysNum];
+        //String sysName = RunKMAlg.systems[sysNum];
+        //int numSamples = RunKMAlg.sampleSizes[sysNum];
         
-         double err = RunKMAlg.runOnData(sysNum, 150, 0.075);
+        //double err = RunKMAlg.runOnData(sysNum, 100, 0.25);
         
-         System.out.println(sysName + " has error: " + err);
+        //System.out.println(sysName + " has error: " + err);
         
         //RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
         //double err = RunKMAlg.runOnData(1, 100, 0.2);
@@ -50,8 +51,8 @@ public class RunKMAlg {
         //tuneParamErrors[sysNum] = RunKMAlg.tuneParam(3);
         //}
         //Experiment 1: Verifying Theoretical Guarantee:
-        //double[][] expOneErr = RunKMAlg.expOneRun();
-        //Matrix.print(expOneErr);
+        double[][] expOneErr = RunKMAlg.expOneRun();
+        Matrix.print(expOneErr);
         // Experiment 2: Comparing to other methods
         //double[][] expTwoErr = RunKMAlg.expTwoRun();
         //Matrix.print(expTwoErr);
@@ -137,9 +138,10 @@ public class RunKMAlg {
         double errNormed = E.getError(normedFunLoc, estiNormedFunLoc);
         double errRaw = E.getError(origFunLoc, estiRawFunLoc);
 
-        System.out.println("Normalized Error is: " + errNormed);
-        System.out.println("Raw Error is: " + errRaw);
-        System.out.println(E.scale);
+        //System.out.println("Normalized Error is: " + errNormed);
+        //System.out.println("Raw Error is: " + errRaw);
+        //System.out.println(E.scale);
+        
         return (errNormed);
     }
 
@@ -191,18 +193,19 @@ public class RunKMAlg {
 
         double[][] errors = new double[RunKMAlg.numSys][repeat];
 
-        for (int sysNum = 0; sysNum < RunKMAlg.numSys; ++sysNum) {
+        for (int sysNum = 3; sysNum < 4; ++sysNum) {
 
-            String sysName = RunKMAlg.systems[sysNum];
+            //String sysName = RunKMAlg.systems[sysNum];
             int n = RunKMAlg.realDims[sysNum];
             int t = RunKMAlg.ts[sysNum];
+            int m = RunKMAlg.noObs[sysNum];
 
             for (int i = 0; i < repeat; ++i) {
-                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, sampleSize, 2.5 / n);
+                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, sampleSize, 2.0 / n);
             }
 
             double theoErr = (Math.log(2) * (n + 1) + Math.log(10)) / 50 * t;
-            System.out.println("Error should be within " + theoErr);
+            System.out.println("Error should be within " + theoErr/m);
         }
 
         Matrix.write(errors, expOneErr);
