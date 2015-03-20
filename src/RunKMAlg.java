@@ -27,14 +27,14 @@ public class RunKMAlg {
         long startTime = System.currentTimeMillis();
 
         
-        //int sysNum = 0;
+        int sysNum = 0;
         
-        //String sysName = RunKMAlg.systems[sysNum];
-        //int numSamples = RunKMAlg.sampleSizes[sysNum];
+        String sysName = RunKMAlg.systems[sysNum];
+        int numSamples = RunKMAlg.sampleSizes[sysNum];
         
-        //double err = RunKMAlg.runOnData(sysNum, 100, 0.25);
+        double err = RunKMAlg.runOnData(sysNum, 1000, 0);
         
-        //System.out.println(sysName + " has error: " + err);
+        System.out.println(sysName + " has error: " + err);
         
         //RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
         //double err = RunKMAlg.runOnData(1, 100, 0.2);
@@ -51,8 +51,8 @@ public class RunKMAlg {
         //tuneParamErrors[sysNum] = RunKMAlg.tuneParam(3);
         //}
         //Experiment 1: Verifying Theoretical Guarantee:
-        double[][] expOneErr = RunKMAlg.expOneRun();
-        Matrix.print(expOneErr);
+        //double[][] expOneErr = RunKMAlg.expOneRun();
+        //Matrix.print(expOneErr);
         // Experiment 2: Comparing to other methods
         //double[][] expTwoErr = RunKMAlg.expTwoRun();
         //Matrix.print(expTwoErr);
@@ -128,7 +128,8 @@ public class RunKMAlg {
         FourierEstimator E = L.learn(numSample, theta);
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
-        E.estimateSamples(origFunLoc, estiNormedFunLoc);
+        //E.estimateSamples(origFunLoc, estiNormedFunLoc);
+        E.estimateSamples(sysName+"/completeFun.csv", sysName+"/completeFun.csv");
 
         double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
         double[][] estiRawFun = Processor.denormalizeSample(estiNormedFun, E.scale, E.shift);
@@ -193,7 +194,7 @@ public class RunKMAlg {
 
         double[][] errors = new double[RunKMAlg.numSys][repeat];
 
-        for (int sysNum = 3; sysNum < 4; ++sysNum) {
+        for (int sysNum = 0; sysNum < RunKMAlg.numSys; ++sysNum) {
 
             //String sysName = RunKMAlg.systems[sysNum];
             int n = RunKMAlg.realDims[sysNum];

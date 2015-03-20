@@ -55,7 +55,7 @@ public class FourierEstimator {
         for (int i = 0; i < m; ++i) {
             double[] input = Arrays.copyOfRange(testSet[i], 0, this.n);
 
-            double newVal = this.h(input) * m / Math.pow(2, this.n);
+            double newVal = this.h(input);// * m / Math.pow(2, this.n);
 
             testSet[i][this.n] = newVal;
         }

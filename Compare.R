@@ -8,11 +8,11 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
-sysNum <- 5;
+sysNum <- 1;
 sys <- systems[sysNum];
 
-origPath <- paste(sys, '/rawFun.csv', sep='');
-estiPath <- paste(sys, '/estiRawFun.csv', sep='');
+origPath <- paste(sys, '/normedFun.csv', sep='');
+estiPath <- paste(sys, '/estiNormedFun.csv', sep='');
 
 origCoefPath <- paste(sys, '/normedCoef.csv', sep='');
 estiCoefPath <- paste(sys, '/estiRawCoef.csv', sep='');
@@ -131,10 +131,12 @@ plot(0:n, coefByLevel, type='o', xlab='Coefficients at level', ylab='Sum of coef
 title(paste(sys, ': Distribution of Fourier Coefficients by level', sep=""));
 
 
-
-
-
-
+# 
+# l <- rep(list(0:1), n)
+# completeInput <- cbind(as.matrix(expand.grid(l)), -1);
+# write.table(completeInput, "completeFun.csv", row.names=F, col.names=F, quote=F, sep=" ")
+# 
+# 
 
 
 
