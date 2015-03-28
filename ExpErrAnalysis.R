@@ -11,7 +11,7 @@ sampleSizes <- c(29, 81, 62, 139, 48);
 noObs <- c(192, 1152, 1024, 2560, 180);
 
 #errPath <- paste(sys, '/expOneErr.csv', sep='');
-errOnePath <- "expOneErr.good.csv"
+errOnePath <- "expOneErr.csv"
 errTwoPath <- "expTwoErr.csv"
 
 expOneErrors <- as.matrix(read.csv(errOnePath, sep = "", header = F, skip = 1));
