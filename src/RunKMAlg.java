@@ -28,7 +28,7 @@ public class RunKMAlg {
 
         //RunKMAlg.tuneParam(sysNum);
         
-        //RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
+        RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
         //double err = RunKMAlg.runOnData(1, 100, 0.2);
         //System.out.println(err);
 
@@ -43,8 +43,8 @@ public class RunKMAlg {
         //tuneParamErrors[sysNum] = RunKMAlg.tuneParam(3);
         //}
         //Experiment 1: Verifying Theoretical Guarantee:
-        double[][] expOneErr = RunKMAlg.expOneRun();
-        Matrix.print(expOneErr);
+        //double[][] expOneErr = RunKMAlg.expOneRun();
+        //Matrix.print(expOneErr);
         // Experiment 2: Comparing to other methods
         //double[][] expTwoErr = RunKMAlg.expTwoRun();
         //Matrix.print(expTwoErr);
@@ -68,7 +68,7 @@ public class RunKMAlg {
 
         int numSample = (int) Math.ceil(2.0 / (ep * ep) * ((n + 1) * Math.log(2) + Math.log(1.0 / del)));
 
-        double err = t * ep * ep;
+        double err = Math.pow(2, n) * ep * ep;
 
         System.out.println("Guanranteed error is: " + err);
         System.out.println("Total number of combinations is: " + Math.pow(2, n));
@@ -83,7 +83,7 @@ public class RunKMAlg {
 
         //L.learn(numSample, 0.01);//, (int) Math.ceil(n/2));
         //double[][] fCoefs = L.oldLearn(numSample, t, true);
-        FourierEstimator E = L.learn(numSample, 0.02);
+        FourierEstimator E = L.learn(numSample, 1.0/t);
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
         E.estimateSamples(origFunLoc, estiNormedFunLoc);
