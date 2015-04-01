@@ -28,14 +28,15 @@ public class RunKMAlg {
 
         //RunKMAlg.tuneParam(sysNum);
         
-        RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
-        //double err = RunKMAlg.runOnData(1, 100, 0.2);
-        //System.out.println(err);
+        //RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
+        double err = RunKMAlg.runOnData(0, 100, 0.18);
+        System.out.println(err);
 
         // Standard suite.------------------------------------
         //PreProcess:
         //for(int sysNum = 0; sysNum < 5; sysNum ++){
         //    RunKMAlg.preProcess(sysNum);
+        //    RunKMAlg.getSparseFun(sysNum);
         //}
         //Experiment 0: Parameter Tuning:
         //double[][][] tuneParamErrors = new double[RunKMAlg.numSys][4][30];
@@ -251,6 +252,21 @@ public class RunKMAlg {
         Processor.normalizeFun(origFun, normedFun);
         Processor.getCoef(normedFun, normedCoef, Integer.MAX_VALUE);
 
+    }
+    
+    public static void getSparseFun(int sysNum){
+        String sysName = RunKMAlg.systems[sysNum];
+        
+        String coefLoc = sysName + "/sparseCoef.csv";
+        String origFunLoc = sysName + "/normedFun.csv";
+        String sparseFunLoc = sysName + "/sparseFun.csv";
+        
+        double[][] sparseCoef = Matrix.read(coefLoc);
+        
+        FourierEstimator E = new FourierEstimator(sparseCoef, 1, 0);
+        
+        E.estimateSamples(origFunLoc, sparseFunLoc);
+        
     }
 
 }
