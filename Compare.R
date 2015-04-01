@@ -13,11 +13,11 @@ sys <- systems[sysNum];
 
 origPath <- paste(sys, '/normedFun.csv', sep='');
 estiPath <- paste(sys, '/estiNormedFun.csv', sep='');
-estiPath <- paste(sys, '/sparseFun.csv', sep='');
+#estiPath <- paste(sys, '/sparseFun.csv', sep='');
 
 origCoefPath <- paste(sys, '/normedCoef.csv', sep='');
 estiCoefPath <- paste(sys, '/estiRawCoef.csv', sep='');
-estiCoefPath <- paste(sys, '/sparseCoef.csv', sep='');
+#estiCoefPath <- paste(sys, '/sparseCoef.csv', sep='');
 
 #==============================================================================
 origTable <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
