@@ -13,13 +13,13 @@ import java.util.Arrays;
  */
 public class RunKMAlg {
 
-    private static final int numSys = 5;
-    private static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test"};
-    private static final int[] dims = {9, 16, 11, 18, 26};
-    private static final int[] realDims = {8, 13, 10, 16, 17};
-    private static final int[] sampleSizes = {29, 81, 62, 139, 48};
-    private static final int[] noObs = {192, 1152, 1024, 2560, 180};
-    private static final int[] ts = {163, 383, 689, 587, 51716};
+    public static final int numSys = 5;
+    public static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test"};
+    public static final int[] dims = {9, 16, 11, 18, 26};
+    public static final int[] realDims = {8, 13, 10, 16, 17};
+    public static final int[] sampleSizes = {29, 81, 62, 139, 48};
+    public static final int[] noObs = {192, 1152, 1024, 2560, 180};
+    public static final int[] ts = {163, 383, 689, 587, 51716};
 
     public static void main(String[] args) {
 
@@ -29,9 +29,12 @@ public class RunKMAlg {
         //RunKMAlg.tuneParam(sysNum);
         
         //RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
-        double err = RunKMAlg.runOnData(0, 100, 0.18);
-        System.out.println(err);
+        //double err = RunKMAlg.runOnData(0, 200, 0.0333);
+        //System.out.println(err);
 
+        //RunNewAlg.runOnData(0, 0.1, 0.1);
+        
+        
         // Standard suite.------------------------------------
         //PreProcess:
         //for(int sysNum = 0; sysNum < 5; sysNum ++){
@@ -84,10 +87,12 @@ public class RunKMAlg {
 
         //L.learn(numSample, 0.01);//, (int) Math.ceil(n/2));
         //double[][] fCoefs = L.oldLearn(numSample, t, true);
-        FourierEstimator E = L.learn(numSample, 1.0/t);
+        
+        double[][] samples = L.drawSamples(L.allSamples, numSample);
+        FourierEstimator E = L.learn(samples, 1.0/t);
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
-        E.estimateSamples(origFunLoc, estiNormedFunLoc);
+        E.estimateSamples(origFunLoc, estiNormedFunLoc, L.numObs);
 
         double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
         double[][] estiRawFun = Processor.denormalizeSample(estiNormedFun, E.scale, E.shift);
@@ -118,10 +123,12 @@ public class RunKMAlg {
 
         FourierLearner L = new FourierLearner(sysName, origFunLoc);
 
-        FourierEstimator E = L.learn(numSample, theta);
+        
+        double[][] sample = L.drawSamples(L.allSamples, numSample);
+        FourierEstimator E = L.learn(sample, theta);
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
-        E.estimateSamples(origFunLoc, estiNormedFunLoc);
+        E.estimateSamples(origFunLoc, estiNormedFunLoc, L.numObs);
         //E.estimateSamples(sysName+"/completeFun.csv", sysName+"/completeFun.csv");
 
         double[][] estiNormedFun = Matrix.read(estiNormedFunLoc);
@@ -265,7 +272,7 @@ public class RunKMAlg {
         
         FourierEstimator E = new FourierEstimator(sparseCoef, 1, 0);
         
-        E.estimateSamples(origFunLoc, sparseFunLoc);
+        E.estimateSamples(origFunLoc, sparseFunLoc, RunKMAlg.noObs[sysNum]);
         
     }
 

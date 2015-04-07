@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -71,9 +72,9 @@ public class FourierLearner {
         }
     }
 
-    public FourierEstimator learn(int numSamples, double theta) {
+    public FourierEstimator learn(double[][] trainingSamples, double theta) {
 
-        double[][] trainingSamples = FourierLearner.drawSamples(this.allSamples, numSamples);
+        //double[][] trainingSamples = FourierLearner.drawSamples(this.allSamples, numSamples);
         
         double[][][] normedResult = Processor.normalizeSample(trainingSamples);
 
@@ -96,10 +97,12 @@ public class FourierLearner {
 
     }
 
-    public static double[][] drawSamples(double[][] theSamples, int numSamples) {
+    public double[][] drawSamples(double[][] theSamples, int numSamples) {
 
         int m = theSamples.length;
         int n = theSamples[0].length - 1;
+        
+        Random rn = new Random();
 
         // Warn if there aren't enough samples
         if (numSamples > m) {
@@ -108,15 +111,15 @@ public class FourierLearner {
         }
 
         // Shuffle the samples
-        List<Integer> numList = new ArrayList<>(m);
-        for (int i = 0; i < m; ++i) {
-            numList.add(i, i);
+        int[] randomInds = new int[numSamples];
+        
+        for (int i = 0; i < numSamples; ++i) {
+            randomInds[i] = rn.nextInt(m);
         }
-        Collections.shuffle(numList);
 
         double[][] trainingSamples = new double[numSamples][n + 1];
         for (int i = 0; i < numSamples; ++i) {
-            trainingSamples[i] = Arrays.copyOf(theSamples[numList.get(i)], n + 1);
+            trainingSamples[i] = Arrays.copyOf(theSamples[randomInds[i]], n + 1);
         }
         
         return (trainingSamples);

@@ -66,7 +66,7 @@ public class FourierTester {
 
         FourierEstimator E = new FourierEstimator(fCoefs, 3, 20);
 
-        E.estimateSamples(origFun, origFun);
+        E.estimateSamples(origFun, origFun, (int) Math.pow(2, dim));
 
     }
 
