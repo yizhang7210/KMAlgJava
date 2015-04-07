@@ -19,7 +19,7 @@ public class RunNewAlg {
         int noObs = L.numObs;
 
         double d = 8 * desiredErr / 9;
-        long t = 1;
+        long t = 2;
         double[][] params = new double[2][5];
         params[0][0] = t;
 
@@ -34,8 +34,11 @@ public class RunNewAlg {
 
             if (numSamples > noObs) {
                 System.out.println("Run out of samples.");
-                //return;
+                return;
             }
+            
+            System.out.println("Now t is: " + params[0][0]);
+            System.out.println("And currently on "+ numSamples + " samples");
 
             double[][] trainSamples = L.drawSamples(L.allSamples, (int) m1);
             double[][] testSamples = L.drawSamples(L.allSamples, (int) m2);

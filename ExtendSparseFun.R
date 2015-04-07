@@ -1,67 +1,23 @@
-x <- list(0:1)
-fun = expand.grid(rep(x, 6))
+isHome = T;
 
-fun <- t(apply(fun, 1, rev))
-
-vals1 <- c(4,-2,4,-2,4,-2,4,-2)
-vals2 <- c(7,7,3,3,-3,-3,-7,-7)
-
-vals <- rep(vals1, each=8) + rep(vals2, 8)
-
-funVal <- cbind(fun, vals)
-
-char <- function(z, x){
-  return(1 - (sum(z*x) %% 2)*2)
+if(isHome){
+  setwd('/home/yzhang/00ME/Education/UW/CS860/JavaImp/');
+}else{
+  setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-getCoef <- function(z){
-  sum <- 0
-  for(i in 1:nrow(funVal)){
-    
-    input <- funVal[i,1:6]
-    val <- funVal[i,7]
-    
-    sum <- sum + val*char(input, z)
-  }
-  
-  return( sum/64)
-}
+systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test", "LLVM2");
+sysNum <- 7;
+sys <- systems[sysNum];
 
-coef <- apply(fun, 1, getCoef)
+origPath <- paste(sys, '/origRawFun.csv', sep='');
 
-coefVal <- cbind(fun, coef)
+origTable <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
 
+newTable <- cbind(origTable[rep(1:1024, 1024),], origTable[rep(1:1024, each=1024),]);
 
-f <- function(x){
-  
-  sum <- 0
-  
-  for(i in 1:nrow(coefVal)){
-    
-    add <- char(coefVal[i, 1:6], x)*coefVal[i,7]
-    print(add)
-    sum <- sum + add
-  }
-  
-  return(sum)
-  
-}
+newVals <- newTable[,11]+newTable[,22]
 
-x <- c(0,0,0,0,0,1)
-f(x)
+newTable <- cbind(newTable[,c(-11,-22)], newVals)
 
-newVals <- apply(fun, 1, f)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+write.table(newTable, "rawFun.csv", row.names=F, col.names=F, quote=F, sep=" ")
