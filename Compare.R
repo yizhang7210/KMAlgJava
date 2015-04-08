@@ -7,8 +7,8 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
-sysNum <- 1;
+systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test", "LLVM2");
+sysNum <- 7;
 sys <- systems[sysNum];
 
 origPath <- paste(sys, '/normedFun.csv', sep='');
@@ -29,7 +29,7 @@ noObs <- nrow(origTable);
 
 #==========================================================
 # Compare raw function values:
-range = 1:noObs;
+range = 1:20000;
 
 ord = order(origTable[,n+1], decreasing=T);
 origVals = origTable[,n+1][ord];
@@ -57,7 +57,7 @@ errors <- as.matrix(abs((origVals - estiVals)/origVals));
 maxerror <- max(errors);
 minerror <- min(errors);
 error <- mean(errors);
-error2 <- sum((origTable[, n+1] - estiTable[, n+1])^2)#/sum(origTable[,n+1]^2);
+error2 <- mean((origTable[, n+1] - estiTable[, n+1])^2)#/sum(origTable[,n+1]^2);
 
 plot(errors[range], type='l', xlab = 'x', ylab = 'error at x', col = 4);
 title('Error at all points');

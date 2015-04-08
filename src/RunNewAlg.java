@@ -14,6 +14,7 @@ public class RunNewAlg {
 
         String sysName = RunKMAlg.systems[sysNum];
         String origFunLoc = sysName + "/normedFun.csv";
+        String estiFunLoc = sysName + "/estiNormedFun.csv";
         FourierLearner L = new FourierLearner(sysName, origFunLoc);
         int n = L.numFeatures;
         int noObs = L.numObs;
@@ -36,9 +37,9 @@ public class RunNewAlg {
                 System.out.println("Run out of samples.");
                 return;
             }
-            
+
             System.out.println("Now t is: " + params[0][0]);
-            System.out.println("And currently on "+ numSamples + " samples");
+            System.out.println("And currently on " + numSamples + " samples");
 
             double[][] trainSamples = L.drawSamples(L.allSamples, (int) m1);
             double[][] testSamples = L.drawSamples(L.allSamples, (int) m2);
@@ -48,17 +49,25 @@ public class RunNewAlg {
             Matrix.write(testSamples, testSampleLoc);
 
             double theta1 = params[0][3];
-            FourierEstimator E = L.learn(trainSamples, theta1);
+            FourierEstimator E = L.newLearn(trainSamples, theta1, n / 2);
 
             E.estimateSamples(testSampleLoc, testEstimateLoc, L.numObs);
 
-            double realErr = E.getError(testSampleLoc, testEstimateLoc);
+            double estiErr = E.getError(testSampleLoc, testEstimateLoc);
+
+            System.out.println("Current estimate error is about: " + estiErr);
 
             double theta2 = params[1][3];
-            if (realErr <= theta2) {
+            if (estiErr <= theta2) {
                 System.out.println("Mission accomplished");
-                System.out.println("Error is: " + realErr);
+                System.out.println("Estimated error is: " + estiErr);
                 System.out.println("Used " + numSamples + " samples.");
+                
+                E.estimateSamples(origFunLoc, estiFunLoc, -1);
+                
+                double realErr = E.getError(origFunLoc, estiFunLoc);
+                
+                System.out.println("The real error is: "+realErr);
 
                 return;
             }
@@ -96,6 +105,5 @@ public class RunNewAlg {
 
         return (newParams);
     }
-
 
 }

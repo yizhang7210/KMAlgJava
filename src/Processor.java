@@ -17,7 +17,7 @@ public class Processor {
         
         double[][] origFun = Matrix.read(origFileLoc);
         
-        double[][] fCoefs = FourierLearner.estimateAllCoefs(origFun);
+        double[][] fCoefs = FourierLearner.estimateAllCoefs(origFun, 0);
         
         fCoefs = Arrays.copyOfRange(fCoefs, 0, range);
 

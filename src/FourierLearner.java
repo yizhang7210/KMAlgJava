@@ -2,11 +2,8 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Random;
 
 /*
@@ -74,24 +71,27 @@ public class FourierLearner {
 
     public FourierEstimator learn(double[][] trainingSamples, double theta) {
 
-        //double[][] trainingSamples = FourierLearner.drawSamples(this.allSamples, numSamples);
-        
         double[][][] normedResult = Processor.normalizeSample(trainingSamples);
 
         double shift = normedResult[0][0][0];
         double scale = normedResult[0][0][1];
         double[][] normedSamples = normedResult[1];
 
-        double[][] estiCoefs = FourierLearner.estimateAllCoefs(normedSamples);
+        double[][] estiCoefs = FourierLearner.estimateAllCoefs(normedSamples, theta);
 
-        int i = 0;
-        int m = estiCoefs.length;
-        int k = estiCoefs[0].length - 1;
-        while (i < m && Math.abs(estiCoefs[i][k]) > theta) {
-            i++;
-        }
+        return (new FourierEstimator(estiCoefs, scale, shift));
 
-        estiCoefs = Arrays.copyOfRange(estiCoefs, 0, i);
+    }
+
+    public FourierEstimator newLearn(double[][] trainingSamples, double theta, int k) {
+
+        double[][][] normedResult = Processor.normalizeSample(trainingSamples);
+
+        double shift = normedResult[0][0][0];
+        double scale = normedResult[0][0][1];
+        double[][] normedSamples = normedResult[1];
+
+        double[][] estiCoefs = FourierLearner.estimatePartCoefs(normedSamples, theta, k);
 
         return (new FourierEstimator(estiCoefs, scale, shift));
 
@@ -101,7 +101,7 @@ public class FourierLearner {
 
         int m = theSamples.length;
         int n = theSamples[0].length - 1;
-        
+
         Random rn = new Random();
 
         // Warn if there aren't enough samples
@@ -112,7 +112,7 @@ public class FourierLearner {
 
         // Shuffle the samples
         int[] randomInds = new int[numSamples];
-        
+
         for (int i = 0; i < numSamples; ++i) {
             randomInds[i] = rn.nextInt(m);
         }
@@ -121,26 +121,32 @@ public class FourierLearner {
         for (int i = 0; i < numSamples; ++i) {
             trainingSamples[i] = Arrays.copyOf(theSamples[randomInds[i]], n + 1);
         }
-        
+
         return (trainingSamples);
 
     }
 
-    public static double[][] estimateAllCoefs(double[][] trainingSamples) {
+    public static double[][] estimateAllCoefs(double[][] trainingSamples, double theta) {
 
         int n = trainingSamples[0].length - 1;
 
         double[][] allCoefs = new double[(int) Math.pow(2, n)][n + 1];
 
+        int counter = 0;
         for (int i = 0; i < allCoefs.length; ++i) {
             double[] vec = Matrix.intToVec(i, n);
 
             double val = FourierLearner.approx(vec, trainingSamples);
 
-            allCoefs[i] = Arrays.copyOf(vec, n + 1);
-            allCoefs[i][n] = val;
+            if (Math.abs(val) >= theta) {
+                allCoefs[counter] = Arrays.copyOf(vec, n + 1);
+                allCoefs[counter][n] = val;
+                counter++;
+            }
 
         }
+
+        allCoefs = Arrays.copyOfRange(allCoefs, 0, counter);
 
         Comparator<double[]> comp = (double[] a, double[] b)
                 -> Double.compare(Math.abs(b[b.length - 1]), Math.abs(a[a.length - 1]));
@@ -148,7 +154,41 @@ public class FourierLearner {
         Arrays.sort(allCoefs, comp);
 
         return (allCoefs);
+    }
 
+    public static double[][] estimatePartCoefs(double[][] trainingSamples, double theta, int k) {
+
+        int n = trainingSamples[0].length - 1;
+
+        double[][] allCoefs = new double[(int) Math.pow(2, n)][n + 1];
+
+        int counter = 0;
+        for (int i = 0; i < allCoefs.length; ++i) {
+            double[] vec = Matrix.intToVec(i, n);
+
+            if (Matrix.sum(Arrays.copyOfRange(vec, 0, k)) > 0
+                    && Matrix.sum(Arrays.copyOfRange(vec, k, vec.length)) > 0) {
+                continue;
+            }
+
+            double val = FourierLearner.approx(vec, trainingSamples);
+
+            if (Math.abs(val) >= theta) {
+                allCoefs[counter] = Arrays.copyOf(vec, n + 1);
+                allCoefs[counter][n] = val;
+                counter++;
+            }
+
+        }
+
+        allCoefs = Arrays.copyOfRange(allCoefs, 0, counter);
+
+        Comparator<double[]> comp = (double[] a, double[] b)
+                -> Double.compare(Math.abs(b[b.length - 1]), Math.abs(a[a.length - 1]));
+
+        Arrays.sort(allCoefs, comp);
+
+        return (allCoefs);
     }
 
     public static double approx(double[] alpha, double[][] sample) {

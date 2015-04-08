@@ -45,6 +45,11 @@ public class FourierEstimator {
 
         double[][] testSet = Matrix.read(origFunLoc);
         int m = testSet.length;
+        
+        if(scale == -1){
+            scale = m;
+        }
+        
 
         if (this.fCoefs.length == 0) {
             testSet[0][this.n] = Double.POSITIVE_INFINITY;
