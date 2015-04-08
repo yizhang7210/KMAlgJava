@@ -29,7 +29,7 @@ noObs <- nrow(origTable);
 
 #==========================================================
 # Compare raw function values:
-range = 1:20000;
+range = 800000:1000000;
 
 ord = order(origTable[,n+1], decreasing=T);
 origVals = origTable[,n+1][ord];
@@ -42,7 +42,7 @@ minVal = min(estiVals[range], origVals[range]);
 maxVal = max(estiVals[range], origVals[range]);
 
 # Plot and compare, the estimated first:
-plot(estiVals[range], type = 'l', xlab = 'x', ylab = 'h(x)', col = 4,
+plot(estiVals[range], type = 'p', xlab = 'x', ylab = 'h(x)', col = 4,
      ylim = c(minVal*0.95,maxVal*1.05));
 
 # The real, f(x):

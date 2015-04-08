@@ -191,16 +191,15 @@ public class FourierLearner {
         return (allCoefs);
     }
 
-    public static double approx(double[] alpha, double[][] sample) {
+    public static double approx(double[] alpha, double[][] samples) {
 
-        int m = sample.length;
-        int n = sample[0].length - 1;
+        int n = samples[0].length - 1;
 
         double A = 0;
-        for (int i = 0; i < m; ++i) {
-            A += sample[i][n] * Matrix.character(alpha, sample[i]);
+        for (double[] sample : samples) {
+            A += sample[n] * Matrix.character(alpha, sample);
         }
 
-        return (A / m);
+        return (A / samples.length);
     }
 }
