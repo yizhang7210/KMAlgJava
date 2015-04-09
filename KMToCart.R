@@ -8,11 +8,12 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
-sysNum <- 2;
+systems <- c("LLVM2", "LLVMX264");
+sysNum <- 1;
 sys <- systems[sysNum];
 
-srcPath <- 'JavaImp/Test/rawFun.csv';
-destPath <- 'RImp/TestAll.csv';
+srcPath <- paste('JavaImp/',sys,'/rawFun.csv',sep='');
+destPath <- paste('RImp/',sys,'TestAll.csv',sep='');
 
 origFun <- as.matrix(read.csv(srcPath, sep = "", header = F, skip = 1));
 n <- dim(origFun)[2] - 1;

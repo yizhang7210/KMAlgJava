@@ -27,7 +27,7 @@ public class RunKMAlg {
         //double err = RunKMAlg.runOnData(0, 200, 0.0333);
         //System.out.println(err);
 
-        RunNewAlg.runOnData(1, 0.3, 0.3, 4, 10);
+        RunNewAlg.runOnData(0, 0.3, 0.3, 4, 10);
         
         // Standard suite.------------------------------------
         //PreProcess:

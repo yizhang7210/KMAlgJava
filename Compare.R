@@ -9,7 +9,7 @@ if(isHome){
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
 systems <- c("LLVM2", "LLVMX264");
-sysNum <- 2;
+sysNum <- 1;
 sys <- systems[sysNum];
 
 origPath <- paste(sys, '/normedFun.csv', sep='');
@@ -30,7 +30,7 @@ noObs <- nrow(origTable);
 
 #==========================================================
 # Compare raw function values:
-range = seq(1, noObs, by=2000);
+range = seq(1, noObs, by=500);
 
 ord = order(origTable[,n+1], decreasing=T);
 origVals = origTable[,n+1][ord];

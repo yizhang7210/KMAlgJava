@@ -334,12 +334,5 @@ public class KMLearner {
 
     }
 
-    /**
-     * The low degree algorithm in implementation.
-     */
-    //public SimpleMatrix learnByLowLevel(int k){
-        
-        
-    //}
     
 }

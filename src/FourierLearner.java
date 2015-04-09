@@ -165,7 +165,7 @@ public class FourierLearner {
         double[][] allCoefs = new double[numCoef][n + 1];
 
         int counter = 0;
-        for (int i = 0; i < allCoefs.length; ++i) {
+        for (int i = 0; i < Math.pow(2, n); ++i) {
             double[] vec = Matrix.intToVec(i, n);
 
             if (Matrix.sum(Arrays.copyOfRange(vec, 0, k)) > 0
@@ -184,6 +184,8 @@ public class FourierLearner {
         }
 
         allCoefs = Arrays.copyOfRange(allCoefs, 0, counter);
+        
+        System.out.println("Number of large coefficients: " + counter);
 
         Comparator<double[]> comp = (double[] a, double[] b)
                 -> Double.compare(Math.abs(b[b.length - 1]), Math.abs(a[a.length - 1]));
