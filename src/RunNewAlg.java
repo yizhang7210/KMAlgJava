@@ -10,7 +10,7 @@
  */
 public class RunNewAlg {
 
-    public static void runOnData(int sysNum, double desiredErr, double delta) {
+    public static void runOnData(int sysNum, double desiredErr, double delta, double t0, int k) {
 
         String sysName = RunKMAlg.systems[sysNum];
         String origFunLoc = sysName + "/normedFun.csv";
@@ -20,7 +20,7 @@ public class RunNewAlg {
         int noObs = L.numObs;
 
         double d = 8 * desiredErr / 9;
-        long t = 2;
+        double t = t0;
         double[][] params = new double[2][5];
         params[0][0] = t;
 
@@ -35,6 +35,7 @@ public class RunNewAlg {
 
             if (numSamples > noObs) {
                 System.out.println("Run out of samples.");
+                System.out.println("Need "+ numSamples + " samples. Only have: "+noObs);
                 return;
             }
 
@@ -49,7 +50,7 @@ public class RunNewAlg {
             Matrix.write(testSamples, testSampleLoc);
 
             double theta1 = params[0][3];
-            FourierEstimator E = L.newLearn(trainSamples, theta1, n / 2);
+            FourierEstimator E = L.newLearn(trainSamples, theta1, k);
 
             E.estimateSamples(testSampleLoc, testEstimateLoc, L.numObs);
 

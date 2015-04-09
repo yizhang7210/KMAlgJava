@@ -160,7 +160,9 @@ public class FourierLearner {
 
         int n = trainingSamples[0].length - 1;
 
-        double[][] allCoefs = new double[(int) Math.pow(2, n)][n + 1];
+        int numCoef = (int) (Math.pow(2, k) + Math.pow(2, n-k));
+        
+        double[][] allCoefs = new double[numCoef][n + 1];
 
         int counter = 0;
         for (int i = 0; i < allCoefs.length; ++i) {

@@ -7,8 +7,9 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test", "LLVM2");
-sysNum <- 7;
+systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
+systems <- c("LLVM2", "LLVMX264");
+sysNum <- 2;
 sys <- systems[sysNum];
 
 origPath <- paste(sys, '/normedFun.csv', sep='');
@@ -29,7 +30,7 @@ noObs <- nrow(origTable);
 
 #==========================================================
 # Compare raw function values:
-range = 800000:1000000;
+range = seq(1, noObs, by=2000);
 
 ord = order(origTable[,n+1], decreasing=T);
 origVals = origTable[,n+1][ord];
@@ -42,7 +43,7 @@ minVal = min(estiVals[range], origVals[range]);
 maxVal = max(estiVals[range], origVals[range]);
 
 # Plot and compare, the estimated first:
-plot(estiVals[range], type = 'p', xlab = 'x', ylab = 'h(x)', col = 4,
+plot(estiVals[range], type = 'l', xlab = 'x', ylab = 'h(x)', col = 4,
      ylim = c(minVal*0.95,maxVal*1.05));
 
 # The real, f(x):

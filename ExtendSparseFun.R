@@ -7,17 +7,39 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test", "LLVM2");
-sysNum <- 7;
-sys <- systems[sysNum];
 
-origPath <- paste(sys, '/origRawFun.csv', sep='');
+sys1 <- systems[3];
+sys2 <- systems[2];
+newSys <- "LLVMX264";
 
-origTable <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
+origPath1 <- paste(sys1, '/rawFun.csv', sep='');
+origPath2 <- paste(sys2, '/rawFun.csv', sep='');
+writePath <- paste(newSys, '/rawFun.csv', sep='');
 
-newTable <- cbind(origTable[rep(1:1024, 1024),], origTable[rep(1:1024, each=1024),]);
+origTable1 <- as.matrix(read.csv(origPath1, sep = "", header = F, skip = 1));
+origTable2 <- as.matrix(read.csv(origPath2, sep = "", header = F, skip = 1));
 
-newVals <- newTable[,11]+newTable[,22]
+newTable <- cbind(origTable1[rep(1:nrow(origTable1), nrow(origTable2)),], 
+                  origTable2[rep(1:nrow(origTable2), each=nrow(origTable1)),]);
 
-newTable <- cbind(newTable[,c(-11,-22)], newVals)
+newVals <- newTable[,ncol(origTable1)]+newTable[,ncol(newTable)];
 
-write.table(newTable, "rawFun.csv", row.names=F, col.names=F, quote=F, sep=" ")
+newTable <- cbind(newTable[,c(-ncol(origTable1),-ncol(newTable))], newVals)
+colnames(newTable) <- NULL
+
+write.table(matrix(dim(newTable),1,2), writePath, row.names=F, col.names=F, quote=F, sep=" ");
+write.table(newTable, writePath, row.names=F, col.names=F, quote=F, sep=" ", append=T);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
