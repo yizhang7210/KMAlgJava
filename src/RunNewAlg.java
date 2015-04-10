@@ -13,7 +13,7 @@ public class RunNewAlg {
     public static void runOnData(int sysNum, double desiredErr, double delta, double t0, int k) {
 
         String sysName = RunKMAlg.systems[sysNum];
-        String origFunLoc = sysName + "/normedFun.csv";
+        String origFunLoc = sysName + "/normedRawFun.csv";
         String estiFunLoc = sysName + "/estiNormedFun.csv";
         FourierLearner L = new FourierLearner(sysName, origFunLoc);
         int n = L.numFeatures;
@@ -35,7 +35,7 @@ public class RunNewAlg {
 
             if (numSamples > noObs) {
                 System.out.println("Run out of samples.");
-                System.out.println("Need "+ numSamples + " samples. Only have: "+noObs);
+                System.out.println("Need " + numSamples + " samples. Only have: " + noObs);
                 return;
             }
 
@@ -63,12 +63,12 @@ public class RunNewAlg {
                 System.out.println("Mission accomplished");
                 System.out.println("Estimated error is: " + estiErr);
                 System.out.println("Used " + numSamples + " samples.");
-                
+
                 E.estimateSamples(origFunLoc, estiFunLoc, -1);
-                
+
                 double realErr = E.getError(origFunLoc, estiFunLoc);
-                
-                System.out.println("The real error is: "+realErr);
+
+                System.out.println("The real error is: " + realErr);
 
                 return;
             }

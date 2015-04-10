@@ -9,10 +9,12 @@ if(isHome){
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
 systems <- c("LLVM2", "LLVMX264");
-sysNum <- 1;
+
+
+sysNum <- 2;
 sys <- systems[sysNum];
 
-origPath <- paste(sys, '/normedFun.csv', sep='');
+origPath <- paste(sys, '/normedRawFun.csv', sep='');
 estiPath <- paste(sys, '/estiNormedFun.csv', sep='');
 #estiPath <- paste(sys, '/sparseFun.csv', sep='');
 
