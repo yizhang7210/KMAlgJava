@@ -8,8 +8,8 @@ import java.util.Arrays;
 public class RunKMAlg {
 
     public static final int numSys = 5;
-    //public static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test"};
-    public static final String[] systems = {"LLVM2", "LLVMX264"};
+    public static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test"};
+    //public static final String[] systems = {"LLVM2", "LLVMX264", "X2642", "Test2"};
     public static final int[] dims = {9, 16, 11, 18, 26};
     public static final int[] realDims = {8, 13, 10, 16, 17};
     public static final int[] sampleSizes = {29, 81, 62, 139, 48};
@@ -23,11 +23,13 @@ public class RunKMAlg {
 
         //RunKMAlg.tuneParam(sysNum);
         
-        //RunKMAlg.runOnTest(13, 0.1, 0.1, 50);
+        //RunKMAlg.runOnTest(13, 0.1, 0.1, 500);
         //double err = RunKMAlg.runOnData(0, 200, 0.0333);
         //System.out.println(err);
 
-        RunNewAlg.runOnData(1, 0.8, 0.3, 2, 10);
+        //RunKMAlg.preProcess(2);
+        
+        RunNewAlg.runOnData(5, 1, 1, 0.5, 0);
         
         // Standard suite.------------------------------------
         //PreProcess:

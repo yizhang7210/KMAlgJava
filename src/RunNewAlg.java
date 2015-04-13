@@ -13,7 +13,7 @@ public class RunNewAlg {
     public static void runOnData(int sysNum, double desiredErr, double delta, double t0, int k) {
 
         String sysName = RunKMAlg.systems[sysNum];
-        String origFunLoc = sysName + "/normedRawFun.csv";
+        String origFunLoc = sysName + "/normedFun.csv";
         String estiFunLoc = sysName + "/estiNormedFun.csv";
         FourierLearner L = new FourierLearner(sysName, origFunLoc);
         int n = L.numFeatures;

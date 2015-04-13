@@ -6,11 +6,12 @@ if(isHome){
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
 
-systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test", "LLVM2");
+systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test")
+#systems <- c("LLVM2", "LLVMX264", "Test2");
 
-sys1 <- systems[3];
+sys1 <- systems[2];
 sys2 <- systems[2];
-newSys <- "LLVMX264";
+newSys <- "X2642";
 
 origPath1 <- paste(sys1, '/rawFun.csv', sep='');
 origPath2 <- paste(sys2, '/rawFun.csv', sep='');
