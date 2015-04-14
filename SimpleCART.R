@@ -12,7 +12,7 @@ systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
 numSamples <- c(150, 81, 62, 139, 48, 2402);
 
 systems <- c("LLVM2", "LLVMX264", "X2642", "Test2");
-numSamples <- c(36081, 18838, 20351);
+numSamples <- c(92417, 18838, 20351);
 
 sysNum <- 1;
 sys <- systems[sysNum];

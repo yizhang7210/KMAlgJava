@@ -92,12 +92,14 @@ public class RunNewAlg {
 
         t = 2 * t;
 
-        double delta1 = 1 - Math.sqrt(1 - delta);
+        //double delta1 = 1 - Math.sqrt(1 - delta);
+        double delta1 = delta;
         double ep1 = d / (4 * t);
         double theta1 = 3 * ep1;
         int m1 = (int) Math.ceil(32 * t * t * (Math.log(2) * (n + 1) + Math.log(1 / delta1)) / (d * d));
 
-        double delta2 = 1 - Math.sqrt(1 - delta);
+        //double delta2 = 1 - Math.sqrt(1 - delta);
+        double delta2 = 0.1;
         double ep2 = d / 8;
         double theta2 = 5 * d / 4;
         int m2 = (int) Math.ceil(32 * Math.log(2 / delta2) / (d * d));
