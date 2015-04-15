@@ -29,7 +29,7 @@ public class RunKMAlg {
 
         //RunKMAlg.preProcess(2);
         
-        RunNewAlg.runOnData(0, 0.05, 0.99, 1, 10);
+        RunNewAlg.runOnData(0, 0.1, 0.8, 1, 10);
         
         // Standard suite.------------------------------------
         //PreProcess:
