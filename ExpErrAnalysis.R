@@ -15,7 +15,7 @@ errOnePath <- "expOneErr.csv"
 errTwoPath <- "expTwoErr.csv"
 
 expOneErrors <- as.matrix(read.csv(errOnePath, sep = "", header = F, skip = 1));
-expTwoErrors <- as.matrix(read.csv(errTwoPath, sep = "", header = F, skip = 1))
+expTwoErrors <- as.matrix(read.csv(errTwoPath, sep = "", header = F, skip = 1));
 
 # Error from Experiment 1 analysis:
 for(i in 1:numSys){
@@ -47,6 +47,8 @@ for(i in 1:numSys){
 #   print(sprintf("average is %f", ave));
 # }
 # 
+
+
 
 
 

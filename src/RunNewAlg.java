@@ -9,8 +9,35 @@
  * @author yzhang
  */
 public class RunNewAlg {
+    
+    public static final int[] splits = {8, 10, 13, 10};
+    
+    
+    public static void multiRun(int sysNum, double[] errs, int runs){
+        
+        int numErr = errs.length;
+        
+        double[][] errors = new double[numErr][runs];
+        double[][] numSamples = new double[numErr][runs];
+        
+        String expErr = RunKMAlg.systems[sysNum] + "/newResults.csv";
+        String expSample = RunKMAlg.systems[sysNum] + "/newSamples.csv";
+        
+        for(int i = 0; i < numErr; ++i){
+            for(int j = 0; j < runs; ++j){
+                
+                double[] result = runOnData(sysNum, errs[i], 0.8, 0.5, splits[sysNum]);
+                numSamples[i][j] = result[0];
+                errors[i][j] = result[1];
+            }
+        }
+        
+        Matrix.write(errors, expErr);
+        Matrix.write(numSamples, expSample);
+        
+    }    
 
-    public static void runOnData(int sysNum, double desiredErr, double delta, double t0, int k) {
+    public static double[] runOnData(int sysNum, double desiredErr, double delta, double t0, int k) {
 
         String sysName = RunKMAlg.systems[sysNum];
         String origFunLoc = sysName + "/normedFun.csv";
@@ -19,7 +46,7 @@ public class RunNewAlg {
         int n = L.numFeatures;
         int noObs = L.numObs;
 
-        double d = 8 * desiredErr / 9;
+        double d = 3 * desiredErr / 4;
         double t = t0;
         double[][] params = new double[2][5];
         params[0][0] = t;
@@ -36,7 +63,10 @@ public class RunNewAlg {
             if (numSamples > noObs) {
                 System.out.println("Run out of samples.");
                 System.out.println("Need " + numSamples + " samples. Only have: " + noObs);
-                return;
+                
+                double[] out = {Double.NaN, Double.POSITIVE_INFINITY};
+                
+                return (out);
             }
 
             System.out.println("Now t is: " + params[0][0]);
@@ -70,7 +100,9 @@ public class RunNewAlg {
 
                 System.out.println("The real error is: " + realErr);
 
-                return;
+                double[] out = {numSamples, realErr};
+                
+                return (out);
             }
 
         }
@@ -90,16 +122,16 @@ public class RunNewAlg {
 
         double t = params[0][0];
 
-        t = 2 * t;
+        t = 1.2 * t;
 
-        //double delta1 = 1 - Math.sqrt(1 - delta);
-        double delta1 = delta;
+        double delta1 = 1 - Math.sqrt(1 - delta);
+        //double delta1 = delta;
         double ep1 = d / (4 * t);
-        double theta1 = 3 * ep1;
+        double theta1 = (3 * d) / (4 * t);
         int m1 = (int) Math.ceil(32 * t * t * (Math.log(2) * (n + 1) + Math.log(1 / delta1)) / (d * d));
 
-        //double delta2 = 1 - Math.sqrt(1 - delta);
-        double delta2 = 0.1;
+        double delta2 = 1 - Math.sqrt(1 - delta);
+        //double delta2 = 0.1;
         double ep2 = d / 8;
         double theta2 = 5 * d / 4;
         int m2 = (int) Math.ceil(32 * Math.log(2 / delta2) / (d * d));

@@ -8,8 +8,8 @@ import java.util.Arrays;
 public class RunKMAlg {
 
     public static final int numSys = 5;
-    public static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test"};
-    //public static final String[] systems = {"LLVM2", "LLVMX264", "X2642", "Test2"};
+    //public static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test"};
+    public static final String[] systems = {"LLVM2", "LLVMX264", "X2642", "ApacheX264", "Test2"};
     public static final int[] dims = {9, 16, 11, 18, 26};
     public static final int[] realDims = {8, 13, 10, 16, 17};
     public static final int[] sampleSizes = {29, 81, 62, 139, 48};
@@ -22,15 +22,17 @@ public class RunKMAlg {
         long startTime = System.currentTimeMillis();
 
         //RunKMAlg.tuneParam(sysNum);
-        
         //RunKMAlg.runOnTest(13, 0.1, 0.1, 500);
         //double err = RunKMAlg.runOnData(0, 200, 0.0333);
         //System.out.println(err);
-
         //RunKMAlg.preProcess(2);
-        
-        RunNewAlg.runOnData(3, 0.3, 0.5, 0.2, 0);
-        
+        //RunNewAlg.runOnData(2, 0.1, 0.2, 0.5, 13);
+        double[] errs = {0.3, 0.2, 0.1, 0.05};
+
+        for (int i = 0; i < 4; ++i) {
+            RunNewAlg.multiRun(i, errs, 10);
+        }
+
         // Standard suite.------------------------------------
         //PreProcess:
         //for(int sysNum = 0; sysNum < 5; sysNum ++){
@@ -83,9 +85,8 @@ public class RunKMAlg {
 
         //L.learn(numSample, 0.01);//, (int) Math.ceil(n/2));
         //double[][] fCoefs = L.oldLearn(numSample, t, true);
-        
         double[][] samples = L.drawSamples(L.allSamples, numSample);
-        FourierEstimator E = L.learn(samples, 1.0/t);
+        FourierEstimator E = L.learn(samples, 1.0 / t);
 
         Matrix.write(E.fCoefs, estiNormedCoefLoc);
         E.estimateSamples(origFunLoc, estiNormedFunLoc, L.numObs);
@@ -119,7 +120,6 @@ public class RunKMAlg {
 
         FourierLearner L = new FourierLearner(sysName, origFunLoc);
 
-        
         double[][] sample = L.drawSamples(L.allSamples, numSample);
         FourierEstimator E = L.learn(sample, theta);
 
@@ -138,7 +138,6 @@ public class RunKMAlg {
         //System.out.println("Normalized Error is: " + errNormed);
         //System.out.println("Raw Error is: " + errRaw);
         //System.out.println(E.scale);
-        
         return (errNormed);
     }
 
@@ -170,7 +169,7 @@ public class RunKMAlg {
             for (int j = 0; j < numThetas; ++j) {
                 // Fill in the errors
                 for (int k = 0; k < repeat; ++k) {
-                    allErrors[i][j][k] = RunKMAlg.runOnData(sysNum, 
+                    allErrors[i][j][k] = RunKMAlg.runOnData(sysNum,
                             sampleSizes[i], thetas[j]);
                 }
                 // Get the average
@@ -202,7 +201,7 @@ public class RunKMAlg {
             }
 
             double theoErr = (Math.log(2) * (n + 1) + Math.log(10)) / 50 * t;
-            System.out.println("Error should be within " + theoErr/m);
+            System.out.println("Error should be within " + theoErr / m);
         }
 
         Matrix.write(errors, expOneErr);
@@ -251,25 +250,24 @@ public class RunKMAlg {
         String normedCoef = sysName + "/normedCoef.csv";
 
         //Processor.getCoef(origFun, origCoef, Integer.MAX_VALUE);
-
         Processor.normalizeFun(origFun, normedFun);
         //Processor.getCoef(normedFun, normedCoef, Integer.MAX_VALUE);
 
     }
-    
-    public static void getSparseFun(int sysNum){
+
+    public static void getSparseFun(int sysNum) {
         String sysName = RunKMAlg.systems[sysNum];
-        
+
         String coefLoc = sysName + "/sparseCoef.csv";
         String origFunLoc = sysName + "/normedFun.csv";
         String sparseFunLoc = sysName + "/sparseFun.csv";
-        
+
         double[][] sparseCoef = Matrix.read(coefLoc);
-        
+
         FourierEstimator E = new FourierEstimator(sparseCoef, 1, 0);
-        
+
         E.estimateSamples(origFunLoc, sparseFunLoc, RunKMAlg.noObs[sysNum]);
-        
+
     }
 
 }

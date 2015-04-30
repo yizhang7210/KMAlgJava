@@ -9,13 +9,14 @@ if(isHome){
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test")
 #systems <- c("LLVM2", "LLVMX264", "Test2");
 
-sys1 <- systems[2];
+sys1 <- systems[1];
 sys2 <- systems[2];
-newSys <- "X2642";
+newSys <- "ApacheX264";
 
 origPath1 <- paste(sys1, '/rawFun.csv', sep='');
 origPath2 <- paste(sys2, '/rawFun.csv', sep='');
 writePath <- paste(newSys, '/rawFun.csv', sep='');
+normedPath <- paste(newSys, '/normedFun.csv', sep='');
 
 origTable1 <- as.matrix(read.csv(origPath1, sep = "", header = F, skip = 1));
 origTable2 <- as.matrix(read.csv(origPath2, sep = "", header = F, skip = 1));
@@ -31,10 +32,14 @@ colnames(newTable) <- NULL
 write.table(matrix(dim(newTable),1,2), writePath, row.names=F, col.names=F, quote=F, sep=" ");
 write.table(newTable, writePath, row.names=F, col.names=F, quote=F, sep=" ", append=T);
 
+normedTable <- newTable;
 
+n <- ncol(normedTable)
+normedTable[,n] <- normedTable[,n] - mean(normedTable[,n])
+normedTable[,n] <- normedTable[,n]/max(abs(normedTable[,n]))
 
-
-
+write.table(matrix(dim(normedTable),1,2), normedPath, row.names=F, col.names=F, quote=F, sep=" ");
+write.table(normedTable, normedPath, row.names=F, col.names=F, quote=F, sep=" ", append=T);
 
 
 
