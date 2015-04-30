@@ -1,6 +1,6 @@
 
 systems <- c("ApacheX264", "LLVMX264", "X2642", "LLVM2");
-sysNum <- 4;
+sysNum <- 2;
 sys <- systems[sysNum];
 
 errPath <- paste(sys, '/Results.csv', sep='');
