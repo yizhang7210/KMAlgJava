@@ -20,13 +20,13 @@ public class RunNewAlg {
         double[][] errors = new double[numErr][runs];
         double[][] numSamples = new double[numErr][runs];
         
-        String expErr = RunKMAlg.systems[sysNum] + "/newResults.csv";
-        String expSample = RunKMAlg.systems[sysNum] + "/newSamples.csv";
+        String expErr = RunKMAlg.systems[sysNum] + "/Results.csv";
+        String expSample = RunKMAlg.systems[sysNum] + "/Samples.csv";
         
         for(int i = 0; i < numErr; ++i){
             for(int j = 0; j < runs; ++j){
-                
-                double[] result = runOnData(sysNum, errs[i], 0.8, 0.5, splits[sysNum]);
+                System.out.println("This is run: "+ j);
+                double[] result = runOnData(sysNum, errs[i], 0.8, 1/1.2, splits[sysNum]);
                 numSamples[i][j] = result[0];
                 errors[i][j] = result[1];
             }
