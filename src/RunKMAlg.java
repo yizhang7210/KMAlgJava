@@ -26,17 +26,18 @@ public class RunKMAlg {
         //double err = RunKMAlg.runOnData(0, 200, 0.0333);
         //System.out.println(err);
         //RunKMAlg.preProcess(2);
-        //RunNewAlg.runOnData(2, 0.05, 0.2, 1/1.2, 13);
+        RunNewAlg.runOnData(0, 0.1, 0.2, 1/1.2, 8);
         
         
-        double[] errs = {0.2, 0.15, 0.1};
+        //double[] errs = {0.2, 0.15, 0.1};
 
+        /*
         for (int i = 0; i < 4; ++i) {
             System.out.println("This is system "+i);
             RunNewAlg.multiRun(i, errs, 10);
         }
-                
-
+                */
+        
         // Standard suite.------------------------------------
         //PreProcess:
         //for(int sysNum = 0; sysNum < 5; sysNum ++){

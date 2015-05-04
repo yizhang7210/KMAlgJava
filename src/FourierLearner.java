@@ -148,8 +148,12 @@ public class FourierLearner {
 
         allCoefs = Arrays.copyOfRange(allCoefs, 0, counter);
 
-        Comparator<double[]> comp = (double[] a, double[] b)
-                -> Double.compare(Math.abs(b[b.length - 1]), Math.abs(a[a.length - 1]));
+        Comparator<double[]> comp = new Comparator<double[]>() {
+
+            public int compare(double[] a, double[] b) {
+                return Double.compare(Math.abs(b[b.length - 1]), Math.abs(a[a.length - 1]));
+            }
+        };
 
         Arrays.sort(allCoefs, comp);
 
@@ -187,8 +191,12 @@ public class FourierLearner {
         
         System.out.println("Number of large coefficients: " + counter);
 
-        Comparator<double[]> comp = (double[] a, double[] b)
-                -> Double.compare(Math.abs(b[b.length - 1]), Math.abs(a[a.length - 1]));
+        Comparator<double[]> comp = new Comparator<double[]>() {
+
+            public int compare(double[] a, double[] b) {
+                return Double.compare(Math.abs(b[b.length - 1]), Math.abs(a[a.length - 1]));
+            }
+        };
 
         Arrays.sort(allCoefs, comp);
 

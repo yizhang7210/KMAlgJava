@@ -130,7 +130,7 @@ public class KMLearner {
             key += Integer.toString((int) vec[i]);
         }
     
-        double val = this.allSampleMap.getOrDefault(key, 0.0);
+        double val = this.allSampleMap.get(key);
         
         return val;
     }
