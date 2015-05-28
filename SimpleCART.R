@@ -11,10 +11,10 @@ if(isHome){
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
 numSamples <- c(150, 81, 62, 139, 48, 2402);
 
-systems <- c("LLVM2", "LLVMX264", "X2642", "Test2");
-numSamples <- c(25000, 18838, 20351);
+#systems <- c("LLVM2", "LLVMX264", "X2642", "Test2");
+#numSamples <- c(25000, 18838, 20351);
 
-sysNum <- 1;
+sysNum <- 4;
 sys <- systems[sysNum];
 numSample <- numSamples[sysNum];
 
@@ -45,7 +45,9 @@ print(sprintf("Mean square error is: %f", error));
 
 # Visualization ===========================================
 
-range = seq(1, length(testVals), by=1000);
+#range = seq(1, length(testVals), by=1000);
+range=1:length(testVals)
+
 
 ord <- order(testVals, decreasing=T);
 testVals <- testVals[ord];
