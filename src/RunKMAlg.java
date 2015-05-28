@@ -9,8 +9,9 @@ public class RunKMAlg {
 
     public static final int numSys = 5;
     //public static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test"};
-    public static final String[] systems = {"ApacheX264","LLVMX264","X2642","LLVM2", "Test2"};
+    public static final String[] systems = {"ApacheX264", "LLVMX264", "X2642", "LLVM2", "Test2"};
     public static final int[] dims = {9, 16, 11, 18, 26};
+    public static final int[] ks = {8, 10, 13, 10, 10};
     public static final int[] realDims = {8, 13, 10, 16, 17};
     public static final int[] sampleSizes = {29, 81, 62, 139, 48};
     public static final int[] noObs = {192, 1152, 1024, 2560, 180};
@@ -21,44 +22,28 @@ public class RunKMAlg {
         // Start timer:
         long startTime = System.currentTimeMillis();
 
-        //RunKMAlg.tuneParam(sysNum);
-        //RunKMAlg.runOnTest(13, 0.1, 0.1, 500);
-        //double err = RunKMAlg.runOnData(0, 200, 0.0333);
-        //System.out.println(err);
-        //RunKMAlg.preProcess(2);
-        RunNewAlg.runOnData(0, 0.1, 0.2, 1/1.2, 8);
+        // Run Performance Prediction:
+        //RunKMAlg.runPerformancePrediction();
+                
         
         
-        //double[] errs = {0.2, 0.15, 0.1};
-
-        /*
-        for (int i = 0; i < 4; ++i) {
-            System.out.println("This is system "+i);
-            RunNewAlg.multiRun(i, errs, 10);
-        }
-                */
         
-        // Standard suite.------------------------------------
-        //PreProcess:
-        //for(int sysNum = 0; sysNum < 5; sysNum ++){
-        //    RunKMAlg.preProcess(sysNum);
-        //    RunKMAlg.getSparseFun(sysNum);
-        //}
-        //Experiment 0: Parameter Tuning:
-        //double[][][] tuneParamErrors = new double[RunKMAlg.numSys][4][30];
-        //for (int sysNum = 0; sysNum < 1; ++sysNum) {
-        //tuneParamErrors[sysNum] = RunKMAlg.tuneParam(3);
-        //}
-        //Experiment 1: Verifying Theoretical Guarantee:
-        //double[][] expOneErr = RunKMAlg.expOneRun();
-        //Matrix.print(expOneErr);
-        // Experiment 2: Comparing to other methods
-        //double[][] expTwoErr = RunKMAlg.expTwoRun();
-        //Matrix.print(expTwoErr);
-        //System.out.println(expTwoErr[0][0]);
+        
+        
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
         System.out.println("\nTime taken: " + duration / 1000 + " seconds");
+    }
+
+    public static void runPerformancePrediction() {
+        for (int sysNum = 0; sysNum < RunKMAlg.numSys; sysNum++) {
+            //PreProcess:
+            RunKMAlg.preProcess(sysNum);
+            RunKMAlg.getSparseFun(sysNum);
+            
+            //Run Experiments:
+            RunNewAlg.runOnData(sysNum, 0.1, 0.2, 0.5, RunKMAlg.ks[sysNum]);
+        }
     }
 
     public static void runOnTest(int n, double ep, double del, int t) {
@@ -184,64 +169,6 @@ public class RunKMAlg {
 
         Matrix.write(meanErrors, allErrFile);
         return (meanErrors);
-    }
-
-    public static double[][] expOneRun() {
-
-        int repeat = 20;
-        int sampleSize = 100;
-        String expOneErr = "expOneErr.csv";
-
-        double[][] errors = new double[RunKMAlg.numSys][repeat];
-
-        for (int sysNum = 0; sysNum < RunKMAlg.numSys; ++sysNum) {
-
-            //String sysName = RunKMAlg.systems[sysNum];
-            int n = RunKMAlg.realDims[sysNum];
-            int t = RunKMAlg.ts[sysNum];
-            int m = RunKMAlg.noObs[sysNum];
-
-            for (int i = 0; i < repeat; ++i) {
-                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, sampleSize, 2.0 / n);
-            }
-
-            double theoErr = (Math.log(2) * (n + 1) + Math.log(10)) / 50 * t;
-            System.out.println("Error should be within " + theoErr / m);
-        }
-
-        Matrix.write(errors, expOneErr);
-
-        return (errors);
-    }
-
-    public static double[][] expTwoRun() {
-
-        int repeat = 20;
-        String expTwoErr = "expTwoErr.csv";
-
-        double[][] errors = new double[RunKMAlg.numSys][repeat + 1];
-
-        for (int sysNum = 0; sysNum < RunKMAlg.numSys; ++sysNum) {
-
-            String sysName = RunKMAlg.systems[sysNum];
-            int n = RunKMAlg.realDims[sysNum];
-            int t = RunKMAlg.ts[sysNum];
-            int sampleSize = RunKMAlg.sampleSizes[sysNum];
-
-            long startTime = System.currentTimeMillis();
-            for (int i = 0; i < repeat; ++i) {
-                errors[sysNum][i] = RunKMAlg.runOnData(sysNum, sampleSize, 0.1);
-            }
-            errors[sysNum][repeat] = System.currentTimeMillis() - startTime;
-
-            double theoErr = (2.0 * t * (Math.log(2) * (n + 1) + Math.log(10)) / sampleSize);// /RunKMAlg.fNorms[sysNum];
-
-            System.out.println("90% confidence interval is: " + theoErr);
-        }
-
-        Matrix.write(errors, expTwoErr);
-
-        return (errors);
     }
 
     public static void preProcess(int sysNum) {
