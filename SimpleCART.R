@@ -3,7 +3,7 @@ library('rpart')
 isHome = T;
 
 if(isHome){
-  setwd('/home/yzhang/00ME/Education/UW/CS860/JavaImp');
+  setwd('/home/yzhang/00ME/Education/UW/Projects/Performance-Prediction/JavaImp/');
 }else{
   setwd('/home/y825zhan/00ME/CS860/JavaImp');
 }
@@ -14,11 +14,11 @@ numSamples <- c(150, 81, 62, 139, 48, 2402);
 #systems <- c("LLVM2", "LLVMX264", "X2642", "Test2");
 #numSamples <- c(25000, 18838, 20351);
 
-sysNum <- 4;
+sysNum <- 1;
 sys <- systems[sysNum];
 numSample <- numSamples[sysNum];
 
-origPath <- paste(sys, '/normedFun.csv', sep='');
+origPath <- paste(sys, '/rawFun.csv', sep='');
 
 allSample <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
 

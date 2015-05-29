@@ -32,17 +32,17 @@ noObs <- nrow(origTable);
 
 #==========================================================
 # Compare raw function values:
-range = seq(1, noObs, by=500);
+range <- seq(1, noObs, by=500);
 
-ord = order(origTable[,n+1], decreasing=T);
-origVals = origTable[,n+1][ord];
-estiVals = estiTable[,n+1][ord];
+ord <- order(origTable[,n+1], decreasing=T);
+origVals <- origTable[,n+1][ord];
+estiVals <- estiTable[,n+1][ord];
 
 
 # The estimation, h(x):
 
-minVal = min(estiVals[range], origVals[range]);
-maxVal = max(estiVals[range], origVals[range]);
+minVal <- min(estiVals[range], origVals[range]);
+maxVal <- max(estiVals[range], origVals[range]);
 
 # Plot and compare, the estimated first:
 plot(estiVals[range], type = 'l', xlab = 'x', ylab = 'h(x)', col = 4,

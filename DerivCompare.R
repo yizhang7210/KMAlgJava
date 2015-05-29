@@ -27,18 +27,20 @@ noObs <- nrow(origTable);
 
 #==========================================================
 # Compare derivatives:
-#range = seq(1, noObs, by=500);
-range = 1:noObs;
+#range <- seq(1, noObs, by=500);
+range <- 1:noObs;
 
-ord = order(origTable[,n+1], decreasing=T);
-origVals = origTable[,n+1][ord];
-estiVals = estiTable[,n+1][ord];
+ord <- order(origTable[,n+1], decreasing=T);
+origVals <- origTable[,n+1][ord];
+estiVals <- estiTable[,n+1][ord];
+
+#estiVals <- estiVals/3.5
 
 
 # The estimation, h(x):
 
-minVal = min(estiVals[range], origVals[range]);
-maxVal = max(estiVals[range], origVals[range]);
+minVal <- min(estiVals[range], origVals[range]);
+maxVal <- max(estiVals[range], origVals[range]);
 
 # Plot and compare, the estimated first:
 plot(estiVals[range], type = 'l', xlab = 'x', ylab = 'h(x)', col = 4,
