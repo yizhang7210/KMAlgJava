@@ -1,5 +1,6 @@
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,13 +19,28 @@ public class FourierEstimator {
     public double scale;
     public double shift;
 
+    public Comparator<double[]> comp;
+
     public FourierEstimator(double[][] fCoefs, double scale, double shift) {
         this.fCoefs = fCoefs;
         this.t = fCoefs.length;
         this.n = fCoefs.length > 0 ? fCoefs[0].length - 1 : 0;
         this.scale = scale;
         this.shift = shift;
+        this.comp = new Comparator<double[]>() {
 
+            @Override
+            public int compare(double[] a, double[] b) {
+
+                for (int i = 0; i < b.length; ++i) {
+                    if (a[i] < b[i]) {
+                        return -1;
+                    }
+                }
+
+                return 1;
+            }
+        };
     }
 
     private double h(double[] x) {
@@ -45,11 +61,10 @@ public class FourierEstimator {
 
         double[][] testSet = Matrix.read(origFunLoc);
         int m = testSet.length;
-        
-        if(scale == -1){
+
+        if (scale == -1) {
             scale = m;
         }
-        
 
         if (this.fCoefs.length == 0) {
             testSet[0][this.n] = Double.POSITIVE_INFINITY;
@@ -76,7 +91,7 @@ public class FourierEstimator {
         int m = origFun.length;
 
         double oldVal, newVal;
-        double [] errs = new double[m];
+        double[] errs = new double[m];
         for (int i = 0; i < m; ++i) {
             oldVal = origFun[i][this.n];
             newVal = estiFun[i][this.n];
@@ -84,6 +99,38 @@ public class FourierEstimator {
         }
 
         return Matrix.mean(errs);
+
+    }
+
+    public double getDeriv(double[] vec) {
+
+        double deriv = 0;
+
+        for (int i = 0; i < this.t; ++i) {
+            if (this.comp.compare(this.fCoefs[i], vec) > 0) {
+                deriv += this.fCoefs[i][this.n];
+            }
+        }
+
+        double multiplier = Math.pow(-2, Matrix.sum(vec));
+
+        System.out.println(deriv);
+        return deriv * multiplier;
+    }
+
+    public double[][] getAllDeriv() {
+
+        double[][] allDeriv = new double[(int) Math.pow(2, this.n)][this.n + 1];
+        
+        for(int i = 0; i < allDeriv.length; ++i){
+            
+            double[] newVec = Matrix.intToVec(i, this.n);
+            
+            allDeriv[i] = Arrays.copyOf(newVec, n+1);
+            allDeriv[i][n] = this.getDeriv(newVec);
+        }
+        
+        return allDeriv;
 
     }
 

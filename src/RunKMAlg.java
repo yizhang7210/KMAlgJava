@@ -8,8 +8,8 @@ import java.util.Arrays;
 public class RunKMAlg {
 
     public static final int numSys = 5;
-    //public static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test"};
-    public static final String[] systems = {"ApacheX264", "LLVMX264", "X2642", "LLVM2", "Test2"};
+    public static final String[] systems = {"Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test"};
+    //public static final String[] systems = {"ApacheX264", "LLVMX264", "X2642", "LLVM2", "Test2"};
     public static final int[] dims = {9, 16, 11, 18, 26};
     public static final int[] ks = {8, 10, 13, 10, 10};
     public static final int[] realDims = {8, 13, 10, 16, 17};
@@ -24,12 +24,8 @@ public class RunKMAlg {
 
         // Run Performance Prediction:
         //RunKMAlg.runPerformancePrediction();
-                
-        
-        
-        
-        
-        
+        RunKMAlg.runOnDataFI(0, 1000, 0);
+
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
         System.out.println("\nTime taken: " + duration / 1000 + " seconds");
@@ -40,10 +36,42 @@ public class RunKMAlg {
             //PreProcess:
             RunKMAlg.preProcess(sysNum);
             RunKMAlg.getSparseFun(sysNum);
-            
+
             //Run Experiments:
             RunNewAlg.runOnData(sysNum, 0.1, 0.2, 0.5, RunKMAlg.ks[sysNum]);
         }
+    }
+
+    public static void runFeatureInteraction() {
+
+    }
+
+    public static void runOnDataFI(int sysNum, int numSample, double theta) {
+
+        String sysName = RunKMAlg.systems[sysNum];
+        String origFunLoc = sysName + "/normedFun.csv";
+        String derivLoc = sysName + "/estiDerivs.csv";
+        String estiNormedFunLoc = sysName + "/estiNormedFun.csv";
+        String estiNormedCoefLoc = sysName + "/estiNormedCoef.csv";
+        FourierLearner L = new FourierLearner(sysName, origFunLoc);
+
+        // Learn
+        double[][] sample = L.drawSamples(L.allSamples, numSample);
+        FourierEstimator E = L.learn(sample, theta);
+
+        // Performance Prediction
+        boolean debug = false;
+        if (debug) {
+            Matrix.write(E.fCoefs, estiNormedCoefLoc);
+            E.estimateSamples(origFunLoc, estiNormedFunLoc, L.numObs);
+            double errNormed = E.getError(origFunLoc, estiNormedFunLoc);
+            System.out.println("The Estimated Error is: " + errNormed);
+        }
+        
+        // Derivatives
+        double[][] allDerivs = E.getAllDeriv();
+        Matrix.write(allDerivs, derivLoc);
+
     }
 
     public static void runOnTest(int n, double ep, double del, int t) {

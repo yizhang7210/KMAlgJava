@@ -77,10 +77,11 @@ public class FourierLearner {
         double scale = normedResult[0][0][1];
         double[][] normedSamples = normedResult[1];
 
-        double[][] estiCoefs = FourierLearner.estimateAllCoefs(normedSamples, theta);
-
-        return (new FourierEstimator(estiCoefs, scale, shift));
-
+        //double[][] estiCoefs = FourierLearner.estimateAllCoefs(normedSamples, theta);
+        double[][] estiCoefs = FourierLearner.estimateAllCoefs(trainingSamples, theta);
+        
+        //return (new FourierEstimator(estiCoefs, scale, shift));
+        return(new FourierEstimator(estiCoefs, 1, 0));
     }
 
     public FourierEstimator newLearn(double[][] trainingSamples, double theta, int k) {
@@ -114,7 +115,7 @@ public class FourierLearner {
         int[] randomInds = new int[numSamples];
 
         for (int i = 0; i < numSamples; ++i) {
-            randomInds[i] = rn.nextInt(m);
+            randomInds[i] = i;//rn.nextInt(m);
         }
 
         double[][] trainingSamples = new double[numSamples][n + 1];
@@ -150,6 +151,7 @@ public class FourierLearner {
 
         Comparator<double[]> comp = new Comparator<double[]>() {
 
+            @Override
             public int compare(double[] a, double[] b) {
                 return Double.compare(Math.abs(b[b.length - 1]), Math.abs(a[a.length - 1]));
             }
@@ -193,6 +195,7 @@ public class FourierLearner {
 
         Comparator<double[]> comp = new Comparator<double[]>() {
 
+            @Override
             public int compare(double[] a, double[] b) {
                 return Double.compare(Math.abs(b[b.length - 1]), Math.abs(a[a.length - 1]));
             }
