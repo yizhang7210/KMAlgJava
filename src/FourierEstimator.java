@@ -114,7 +114,6 @@ public class FourierEstimator {
 
         double multiplier = Math.pow(-2, Matrix.sum(vec));
 
-        System.out.println(deriv);
         return deriv * multiplier;
     }
 

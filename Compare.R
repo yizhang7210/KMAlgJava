@@ -2,7 +2,7 @@
 isHome = T;
 
 if(isHome){
-  setwd('/home/yzhang/00ME/Education/UW/CS860/JavaImp/');
+  setwd('/home/yzhang/00ME/Education/UW/Projects/Performance-Prediction/JavaImp/');
 }else{
   setwd('/home/y825zhan/00ME/CS860/JavaImp/');
 }
