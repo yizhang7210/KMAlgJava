@@ -9,7 +9,7 @@ if(isHome){
 }
 
 systems <- c("Apache", "X264", "LLVM", "BDBC", "BDBJ", "Test");
-numSamples <- c(150, 81, 62, 139, 48, 2402);
+numSamples <- c(100, 81, 62, 139, 48, 2402);
 
 #systems <- c("LLVM2", "LLVMX264", "X2642", "Test2");
 #numSamples <- c(25000, 18838, 20351);
@@ -18,7 +18,7 @@ sysNum <- 1;
 sys <- systems[sysNum];
 numSample <- numSamples[sysNum];
 
-origPath <- paste(sys, '/rawFun.csv', sep='');
+origPath <- paste(sys, '/normedFun.csv', sep='');
 
 allSample <- as.matrix(read.csv(origPath, sep = "", header = F, skip = 1));
 
