@@ -24,7 +24,9 @@ public class RunKMAlg {
 
         // Run Performance Prediction:
         //RunKMAlg.runPerformancePrediction();
-        RunKMAlg.runOnDataFI(2, 500, 0.05);
+        //RunKMAlg.runOnDataFI(2, 500, 0.05);
+        
+        FeatureInteraction.runOnSystem("BDBJ");
 
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
