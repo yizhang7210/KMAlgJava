@@ -27,7 +27,6 @@ public class RunKMAlg {
         //RunKMAlg.runOnDataFI(2, 500, 0.05);
         
         FeatureInteraction.runOnSystem("BDBJ");
-
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
         System.out.println("\nTime taken: " + duration / 1000 + " seconds");
