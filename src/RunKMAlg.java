@@ -26,7 +26,7 @@ public class RunKMAlg {
         //RunKMAlg.runPerformancePrediction();
         //RunKMAlg.runOnDataFI(2, 500, 0.05);
         
-        FeatureInteraction.runOnSystem("BDBJ");
+        FeatureInteraction.runOnSystem("LLVM");
         // End timer:
         double duration = System.currentTimeMillis() - startTime;
         System.out.println("\nTime taken: " + duration / 1000 + " seconds");
